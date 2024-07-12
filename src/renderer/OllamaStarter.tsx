@@ -18,6 +18,11 @@ const OllamaStarter = ({ children }: { children: React.JSX.Element }) => {
   const [textDescription, setTextDescription] = useState(textDescriptions[0]);
 
   useEffect(() => {
+    
+    window.api.startOllama().then(() => {
+      setStartingOllama(false);
+    });
+
     const timer = setInterval(() => {
       setTextDescription(
         textDescriptions[Math.floor(Math.random() * textDescriptions.length)]
