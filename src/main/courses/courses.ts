@@ -42,7 +42,8 @@ class CoursesManager {
 
   /**
    * Add a course to the list of courses.
-   * @param courseTitle The title of the course to add.
+   * @param courseTitle The title of the course.
+   * @returns The list of courses.
    */
   addCourse(courseTitle: string) {
     const course = {
@@ -51,20 +52,24 @@ class CoursesManager {
     };
     this.courses.push(course);
     this.save();
+    return this.courses;
   }
 
   /**
    * Remove a course from the list of courses.
    * @param courseId The id of the course to remove.
+   * @returns The list of courses.
    */
   removeCourse(courseId: string) {
     this.courses = this.courses.filter((course) => course.id !== courseId);
     this.save();
+    return this.courses;
   }
 
   /**
    * Update a course in the list of courses.
    * @param course The course to update.
+   * @returns The list of courses.
    */
   updateCourse(course: course) {
     this.courses = this.courses.map((c) => {
@@ -74,6 +79,7 @@ class CoursesManager {
       return c;
     });
     this.save();
+    return this.courses;
   }
 
   /**
