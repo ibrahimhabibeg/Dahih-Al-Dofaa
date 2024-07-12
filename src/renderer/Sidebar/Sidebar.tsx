@@ -1,5 +1,5 @@
 import React from "react";
-import Courses from "./Courses";
+import Courses from "./Courses/Courses";
 
 const Sidebar = () => {
   return <Courses />;

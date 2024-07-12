@@ -1,7 +1,7 @@
 import { app } from "electron";
 import path from "path";
 import fs from "fs";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 export type course = {
   id: string;
@@ -14,7 +14,7 @@ export type course = {
 class CoursesManager {
   courses: course[];
   filePath: string;
-  static instance: CoursesManager;
+  static instance: CoursesManager = null;
 
   constructor(courses: course[], filePath: string) {
     this.courses = courses;
@@ -32,7 +32,7 @@ class CoursesManager {
         const file = fs.readFileSync(filePath, "utf-8");
         const { courses } = JSON.parse(file);
         this.instance = new this(courses, filePath);
-      }else{
+      } else {
         fs.writeFileSync(filePath, JSON.stringify({ courses: [] }));
         this.instance = new this([], filePath);
       }
@@ -84,7 +84,7 @@ class CoursesManager {
 
   /**
    * Get the details of a course.
-   * @param courseId 
+   * @param courseId
    * @returns details of the course
    */
   getCourse(courseId: string) {
@@ -109,25 +109,25 @@ class CoursesManager {
 
 export const addCourse = async (courseTitle: string) => {
   const coursesManager = await CoursesManager.getInstance();
-  coursesManager.addCourse(courseTitle);
-}
+  return coursesManager.addCourse(courseTitle);
+};
 
 export const removeCourse = async (courseId: string) => {
   const coursesManager = await CoursesManager.getInstance();
-  coursesManager.removeCourse(courseId);
-}
+  return coursesManager.removeCourse(courseId);
+};
 
 export const updateCourse = async (course: course) => {
   const coursesManager = await CoursesManager.getInstance();
-  coursesManager.updateCourse(course);
-}
+  return coursesManager.updateCourse(course);
+};
 
-export const getCourse = async (courseId: string) => {  
+export const getCourse = async (courseId: string) => {
   const coursesManager = await CoursesManager.getInstance();
   return coursesManager.getCourse(courseId);
-}
+};
 
 export const getCourses = async () => {
   const coursesManager = await CoursesManager.getInstance();
   return coursesManager.getCourses();
-}
+};
