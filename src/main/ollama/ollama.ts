@@ -173,6 +173,15 @@ class OllamaManager {
 
     this.childProcess = null;
   }
+
+  /**
+   * Pull the model from the Ollama server.
+   * @param model Model name to pull.
+   * @returns {Promise<void>} Promise that resolves when the model is pulled.
+   */
+  async pull(model: string) {
+    await this.ollama.pull({model: model});
+  }
 }
 
 /**
@@ -192,3 +201,13 @@ export const stop = () => {
   const manager = OllamaManager.getInstance();
   manager.stop();
 };
+
+/**
+ * Pull the model from the Ollama server.
+ * @param model Model name to pull.
+ * @returns {Promise<void>} Promise that resolves when the model is pulled.
+ */
+export const pull = async (model: string) => {
+  const manager = OllamaManager.getInstance();
+  return manager.pull(model);
+}
