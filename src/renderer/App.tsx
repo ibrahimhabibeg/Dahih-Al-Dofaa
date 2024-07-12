@@ -1,8 +1,13 @@
 import React from "react";
-import { Typography } from "@mui/material";
+import Home from "./Home";
+import ThemeProvider from "./ThemeProvider";
 
 const App = () => {
-  return <Typography>Hello World!</Typography>;
+  return (
+    <ThemeProvider>
+      <Home />
+    </ThemeProvider>
+  );
 };
 
 export default App;
