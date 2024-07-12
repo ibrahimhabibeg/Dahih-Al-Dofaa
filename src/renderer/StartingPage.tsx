@@ -1,8 +1,8 @@
 import React from "react";
 import { Typography } from "@mui/material";
 
-const Home = () => {
+const StartingPage = () => {
   return <Typography>Hello World!</Typography>
 };
 
-export default Home;
+export default StartingPage;
