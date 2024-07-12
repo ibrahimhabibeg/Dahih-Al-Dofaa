@@ -6,12 +6,12 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import HomeLayout from "./HomeLayout";
-import StartingPage from "./StartingPage";
+import GetStartedPage from "./GetStartedPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<HomeLayout />}>
-      <Route path="/main_window" element={<StartingPage />} />
+      <Route path="/main_window" element={<GetStartedPage />} />
     </Route>
   )
 );
