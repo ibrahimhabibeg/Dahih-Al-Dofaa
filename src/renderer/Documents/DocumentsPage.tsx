@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Box, Button } from "@mui/material";
+import { Typography, Box, Button, List, Divider } from "@mui/material";
 import { Upload } from "@mui/icons-material";
 import { useParams } from "react-router-dom";
+import DocumentView from "./DocumentView";
 
 const DocumentsPage = () => {
   const { courseId } = useParams();
@@ -30,6 +31,18 @@ const DocumentsPage = () => {
     });
   };
 
+  const handleDelete = (documentId: string) => {
+    window.api.deleteDocument(documentId).then((documents) => {
+      setDocuments(documents);
+    });
+  };
+
+  const handleRename = (documentId: string, newTitle: string) => {
+    window.api.renameDocument(documentId, newTitle).then((documents) => {
+      setDocuments(documents);
+    });
+  };
+
   return (
     <Box display={"flex"} flexDirection={"column"} width={"90%"}>
       <Box
@@ -47,13 +60,22 @@ const DocumentsPage = () => {
           Import
         </Button>
       </Box>
-      <Box>
-        {documents.map((document) => (
-          <Box key={document.id} marginTop={2}>
-            <Typography>{document.title}</Typography>
-            <Typography>{document.docType}</Typography>
-          </Box>
-        ))}
+      <Box marginTop={3}>
+        <List>
+          {documents.map((document, index) => (
+            <>
+              <DocumentView
+                document={document}
+                handleDelete={() => handleDelete(document.id)}
+                handleRename={(newTitle: string) =>
+                  handleRename(document.id, newTitle)
+                }
+                key={document.id}
+              />
+              {index !== documents.length - 1 && <Divider />}
+            </>
+          ))}
+        </List>
       </Box>
     </Box>
   );
