@@ -12,7 +12,7 @@ contextBridge.exposeInMainWorld("api", {
   getCourses: () => ipcRenderer.invoke("course:getAll"),
   updateCourse: (course: course) => ipcRenderer.invoke("course:update", course),
   getChats: (courseId: string) => ipcRenderer.invoke("chat:get", courseId),
-  addChat: (courseId: string, chatName: string) =>
+  addChat: (courseId: string, chatName?: string) =>
     ipcRenderer.invoke("chat:add", courseId, chatName),
   removeChat: (chatId: string) => ipcRenderer.invoke("chat:remove", chatId),
 });

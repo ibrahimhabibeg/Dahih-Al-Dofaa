@@ -10,7 +10,7 @@ export interface IAPI {
   getCourses: () => Promise<course[]>;
   updateCourse: (course: course) => Promise<course[]>;
   getChats: (courseId: string) => Promise<chat[]>;
-  addChat: (courseId: string, chatName: string) => Promise<chat[]>;
+  addChat: (courseId: string, chatName?: string) => Promise<chat[]>;
   removeChat: (chatId: string) => Promise<chat[]>;
 }
 

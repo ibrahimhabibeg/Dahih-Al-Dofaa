@@ -10,7 +10,7 @@ export type chat = {
 };
 
 class ChatDB {
-  static instance: ChatDB;
+  static instance: ChatDB = null;
 
   chats: chat[] = [];
   filePath: string;

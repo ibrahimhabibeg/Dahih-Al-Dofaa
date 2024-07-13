@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   List,
-  ListItem,
   Typography,
   ListItemText,
   Divider,
@@ -12,7 +11,11 @@ import {
 import { Add } from "@mui/icons-material";
 import AddCourseModal from "./AddCourseModal";
 
-const Courses = () => {
+type CoursesProps = {
+  handleCourseClick: (course: { title: string; id: string }) => void;
+};
+
+const Courses = ({ handleCourseClick }: CoursesProps) => {
   const [courses, setCourses] = useState<{ id: string; title: string }[]>([]);
   const [isAddingCourse, setIsAddingCourse] = useState(false);
 
@@ -50,12 +53,15 @@ const Courses = () => {
           <ListItemText primary={"New Course"} />
         </ListItemButton>
         {courses.map((course) => (
-          <>
+          <Box key={course.id}>
             <Divider />
-            <ListItem key={course.id}>
+            <ListItemButton
+              key={course.id}
+              onClick={() => handleCourseClick(course)}
+            >
               <ListItemText primary={course.title} />
-            </ListItem>
-          </>
+            </ListItemButton>
+          </Box>
         ))}
       </List>
     </Box>
