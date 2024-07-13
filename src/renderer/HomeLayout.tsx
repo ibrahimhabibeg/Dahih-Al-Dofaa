@@ -16,7 +16,7 @@ const HomeLayout = () => {
       >
         <Sidebar />
       </Box>
-      <Box width={"80%"}>
+      <Box width={"80%"} display={'flex'} flexDirection={'column'} alignItems={'center'}>
         <Outlet />
       </Box>
     </Box>
