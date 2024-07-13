@@ -119,3 +119,13 @@ export const renameDocument = async (documentId: string, newTitle: string) => {
   const db = DocDB.getInstance();
   return db.renameDocument(documentId, newTitle);
 };
+
+export const getDocuments = async (courseId: string) => {
+  const db = DocDB.getInstance();
+  return db.getDocuments(courseId);
+};
+
+export const getDocument = async (documentId: string) => {
+  const db = DocDB.getInstance();
+  return db.getDocument(documentId);
+};
