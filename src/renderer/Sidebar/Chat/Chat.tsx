@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ArrowBack, Add, Article } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 type ChatProps = {
   course: {
@@ -20,6 +21,7 @@ type ChatProps = {
 
 const Chat = ({ course, handleBackClick }: ChatProps) => {
   const [chats, setChats] = React.useState<{ id: string; name: string }[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.api.getChats(course.id).then((chats) => {
@@ -33,7 +35,7 @@ const Chat = ({ course, handleBackClick }: ChatProps) => {
   };
 
   return (
-    <Box display={"flex"} flexDirection={"column"} height={'100vh'}>
+    <Box display={"flex"} flexDirection={"column"} height={"100vh"}>
       <Box height={"90%"}>
         <List>
           <ListItemButton onClick={handleBackClick}>
@@ -66,7 +68,7 @@ const Chat = ({ course, handleBackClick }: ChatProps) => {
       <Box height={"10%"}>
         <Divider />
         <List>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate(`/documents/${course.id}`)}>
             <ListItemIcon>
               <Article />
             </ListItemIcon>
