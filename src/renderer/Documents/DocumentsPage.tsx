@@ -14,10 +14,15 @@ const DocumentsPage = () => {
     window.api.getCourse(courseId).then((course) => {
       setCourse(course);
     });
-  });
+  }, [courseId]);
 
-  const [documents, setDocuments] =
-    useState<{ id: string; title: string; docType: string }[]>([]);
+  const [documents, setDocuments] = useState<Doc[]>([]);
+
+  useEffect(() => {
+    window.api.getDocuments(courseId).then((documents) => {
+      setDocuments(documents);
+    });
+  }, [courseId]);
 
   const handleImport = () => {
     window.api.addDocument(courseId).then((documents) => {

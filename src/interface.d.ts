@@ -1,5 +1,4 @@
 import { course } from "./main/courses/courses";
-import { Document } from "./main/documents/docDB";
 
 export interface IAPI {
   startOllama: () => Promise<void>;
@@ -13,15 +12,25 @@ export interface IAPI {
   getChats: (courseId: string) => Promise<chat[]>;
   addChat: (courseId: string, chatName?: string) => Promise<chat[]>;
   removeChat: (chatId: string) => Promise<chat[]>;
-  addDocument: (courseId: string) => Promise<Document[]>;
-  deleteDocument: (documentId: string) => Promise<Document[]>;
-  renameDocument: (documentId: string, newTitle: string) => Promise<Document[]>;
-  getDocuments: (courseId: string) => Promise<Document[]>;
-  getDocument: (documentId: string) => Promise<Document>;
+  addDocument: (courseId: string) => Promise<Doc[]>;
+  deleteDocument: (documentId: string) => Promise<Doc[]>;
+  renameDocument: (documentId: string, newTitle: string) => Promise<Doc[]>;
+  getDocuments: (courseId: string) => Promise<Doc[]>;
+  getDocument: (documentId: string) => Promise<Doc>;
 }
 
 declare global {
   interface Window {
     api: IAPI;
+  }
+
+  type DocType = "pdf" | "docx" | "ppt" | "txt" | "md";
+
+  interface Doc {
+    id: string;
+    title: string;
+    path: string;
+    courseId: string;
+    docType: DocType;
   }
 }

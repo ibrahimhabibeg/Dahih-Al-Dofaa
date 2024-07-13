@@ -2,27 +2,17 @@ import path from "path";
 import fs from "fs";
 import { app } from "electron";
 import { v4 as uuidv4 } from "uuid";
-
-export type DocType = "pdf" | "ppt" | "txt" | "md" | "docx";
-const validExtensions = ["pdf", "ppt", "txt", "md", "docx"];
-
-export type Document = {
-  id: string;
-  title: string;
-  path: string;
-  courseId: string;
-  docType: DocType;
-};
+import { validExtensions } from ".";
 
 /**
  * This class manages the documents in the application.
  */
 class DocDB {
   static instance: DocDB = null;
-  documents: Document[];
+  documents: Doc[];
   filePath: string;
 
-  constructor(documents: Document[], filePath: string) {
+  constructor(documents: Doc[], filePath: string) {
     this.documents = documents;
     this.filePath = filePath;
   }
