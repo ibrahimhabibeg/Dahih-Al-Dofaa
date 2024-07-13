@@ -15,4 +15,14 @@ contextBridge.exposeInMainWorld("api", {
   addChat: (courseId: string, chatName?: string) =>
     ipcRenderer.invoke("chat:add", courseId, chatName),
   removeChat: (chatId: string) => ipcRenderer.invoke("chat:remove", chatId),
+  addDocument: (path: string, courseId: string) =>
+    ipcRenderer.invoke("document:add", path, courseId),
+  deleteDocument: (documentId: string) =>
+    ipcRenderer.invoke("document:delete", documentId),
+  renameDocument: (documentId: string, newTitle: string) =>
+    ipcRenderer.invoke("document:rename", documentId, newTitle),
+  getDocuments: (courseId: string) =>
+    ipcRenderer.invoke("document:getAll", courseId),
+  getDocument: (documentId: string) =>
+    ipcRenderer.invoke("document:get", documentId),
 });
