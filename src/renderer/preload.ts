@@ -15,8 +15,8 @@ contextBridge.exposeInMainWorld("api", {
   addChat: (courseId: string, chatName?: string) =>
     ipcRenderer.invoke("chat:add", courseId, chatName),
   removeChat: (chatId: string) => ipcRenderer.invoke("chat:remove", chatId),
-  addDocument: (path: string, courseId: string) =>
-    ipcRenderer.invoke("document:add", path, courseId),
+  addDocument: (courseId: string) =>
+    ipcRenderer.invoke("document:add", courseId),
   deleteDocument: (documentId: string) =>
     ipcRenderer.invoke("document:delete", documentId),
   renameDocument: (documentId: string, newTitle: string) =>

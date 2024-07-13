@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Typography, Box, Button } from "@mui/material";
 import { Upload } from "@mui/icons-material";
 import { useParams } from "react-router-dom";
 
 const DocumentsPage = () => {
   const { courseId } = useParams();
-  const [course, setCourse] = React.useState<{ id: string; title: string }>({
+  const [course, setCourse] = useState<{ id: string; title: string }>({
     id: courseId,
     title: "",
   });
@@ -16,6 +16,15 @@ const DocumentsPage = () => {
     });
   });
 
+  const [documents, setDocuments] =
+    useState<{ id: string; title: string; docType: string }[]>([]);
+
+  const handleImport = () => {
+    window.api.addDocument(courseId).then((documents) => {
+      setDocuments(documents);
+    });
+  };
+
   return (
     <Box display={"flex"} flexDirection={"column"} width={"90%"}>
       <Box
@@ -25,9 +34,21 @@ const DocumentsPage = () => {
         marginTop={4}
       >
         <Typography variant={"h5"}>{course.title} Documents</Typography>
-        <Button startIcon={<Upload />} variant={"outlined"}>
+        <Button
+          startIcon={<Upload />}
+          variant={"outlined"}
+          onClick={handleImport}
+        >
           Import
         </Button>
+      </Box>
+      <Box>
+        {documents.map((document) => (
+          <Box key={document.id} marginTop={2}>
+            <Typography>{document.title}</Typography>
+            <Typography>{document.docType}</Typography>
+          </Box>
+        ))}
       </Box>
     </Box>
   );

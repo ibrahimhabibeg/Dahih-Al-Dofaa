@@ -1,4 +1,4 @@
-import { ipcMain } from "electron";
+import { ipcMain, dialog } from "electron";
 import {
   addDocument,
   deleteDocument,
@@ -6,10 +6,12 @@ import {
   getDocument,
   getDocuments,
 } from "./docDB";
+import { type Document } from "./docDB";
 
 ipcMain.handle(
   "document:add",
-  async (event, path: string, courseId: string) => {
+  async (event, courseId: string): Promise<Document[]> => {
+    const path = await getDocumentPathFromUser();
     const documents = await addDocument(path, courseId);
     return documents;
   }
@@ -37,3 +39,24 @@ ipcMain.handle("document:get", async (event, documentId: string) => {
   const document = await getDocument(documentId);
   return document;
 });
+
+/**
+ * This function opens a dialog to get the path of the document from the user.
+ * @returns {Promise<string>} The path of the document selected by the user.
+ */
+const getDocumentPathFromUser = async (): Promise<string> => {
+  const { canceled, filePaths } = await dialog.showOpenDialog({
+    properties: ["openFile"],
+    filters: [
+      {
+        name: "Supported Documents",
+        extensions: ["pdf", "docx", "ppt", "txt", "md"],
+      },
+    ],
+  });
+  if (!canceled) {
+    const [path] = filePaths;
+    return path;
+  }
+  throw new Error("No document selected");
+};
