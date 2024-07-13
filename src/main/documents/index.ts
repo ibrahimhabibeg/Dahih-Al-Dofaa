@@ -13,6 +13,7 @@ ipcMain.handle(
   "document:add",
   async (event, courseId: string): Promise<Doc[]> => {
     const path = await getDocumentPathFromUser();
+    if (!path) return getDocuments(courseId);
     const documents = await addDocument(path, courseId);
     return documents;
   }
@@ -59,5 +60,5 @@ const getDocumentPathFromUser = async (): Promise<string> => {
     const [path] = filePaths;
     return path;
   }
-  throw new Error("No document selected");
+  return undefined;
 };
