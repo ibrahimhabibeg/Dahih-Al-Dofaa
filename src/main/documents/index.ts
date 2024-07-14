@@ -6,6 +6,7 @@ import {
   getDocument,
   getDocuments,
 } from "./docDB";
+import parseDocument from "./parsers";
 
 export const validExtensions = ["pdf", "ppt", "txt", "md", "docx"];
 
@@ -14,7 +15,9 @@ ipcMain.handle(
   async (event, courseId: string): Promise<Doc[]> => {
     const path = await getDocumentPathFromUser();
     if (!path) return getDocuments(courseId);
-    const { documents } = await addDocument(path, courseId);
+    const { documents, document } = await addDocument(path, courseId);
+    const text = await parseDocument(document);
+    console.log(text);
     return documents;
   }
 );
