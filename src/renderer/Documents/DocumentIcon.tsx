@@ -3,7 +3,6 @@ import {
   PictureAsPdf,
   Slideshow,
   Description,
-  ShortText,
   Article,
 } from "@mui/icons-material";
 
@@ -13,12 +12,8 @@ const DocumentIcon = ({ docType }: { docType: DocType }) => {
       return <PictureAsPdf />;
     case "docx":
       return <Description />;
-    case "ppt":
-      return <Slideshow />;
     case "pptx":
       return <Slideshow />;
-    case "txt":
-      return <ShortText />;
     default:
       return <Article />;
   }

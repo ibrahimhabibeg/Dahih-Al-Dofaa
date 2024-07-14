@@ -24,7 +24,7 @@ declare global {
     api: IAPI;
   }
 
-  type DocType = "pdf" | "docx" | "ppt" | "txt" | "md" | "pptx";
+  type DocType = "pdf" | "docx" | "pptx";
 
   interface Doc {
     id: string;

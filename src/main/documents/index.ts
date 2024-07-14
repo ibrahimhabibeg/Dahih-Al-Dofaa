@@ -8,7 +8,7 @@ import {
 } from "./docDB";
 import parseDocument from "./parsers";
 
-export const validExtensions = ["pdf", "pptx", "ppt", "txt", "md", "docx"];
+export const validExtensions = ["pdf", "pptx", "docx"];
 
 ipcMain.handle(
   "document:add",
