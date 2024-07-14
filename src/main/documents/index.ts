@@ -7,6 +7,7 @@ import {
   getDocuments,
 } from "./docDB";
 import parseDocument from "./parsers";
+import split from "./split";
 
 export const validExtensions = ["pdf", "pptx", "docx"];
 
@@ -17,7 +18,7 @@ ipcMain.handle(
     if (!path) return getDocuments(courseId);
     const { documents, document } = await addDocument(path, courseId);
     const text = await parseDocument(document);
-    console.log(text);
+    const splits = await split(text);
     return documents;
   }
 );
