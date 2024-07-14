@@ -15,6 +15,8 @@ const DocumentIcon = ({ docType }: { docType: DocType }) => {
       return <Description />;
     case "ppt":
       return <Slideshow />;
+    case "pptx":
+      return <Slideshow />;
     case "txt":
       return <ShortText />;
     default:

@@ -8,7 +8,7 @@ import {
 } from "./docDB";
 import parseDocument from "./parsers";
 
-export const validExtensions = ["pdf", "ppt", "txt", "md", "docx"];
+export const validExtensions = ["pdf", "pptx", "ppt", "txt", "md", "docx"];
 
 ipcMain.handle(
   "document:add",
@@ -55,7 +55,7 @@ const getDocumentPathFromUser = async (): Promise<string> => {
     filters: [
       {
         name: "Supported Documents",
-        extensions: ["pdf", "docx", "ppt", "txt", "md"],
+        extensions: validExtensions,
       },
     ],
   });
