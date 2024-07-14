@@ -33,16 +33,31 @@ class DocDB {
   }
 
   addDocument(path: string, courseId: string) {
+    const id = uuidv4();
+    const newPath = this.copyDocument(id, path);
     const document = {
-      id: uuidv4(),
+      id,
       title: this.extractTitle(path),
-      path,
+      path: newPath,
       courseId,
       docType: this.extractExtension(path),
     };
     this.documents.push(document);
     this.save();
-    return this.documents;
+    return { documents: this.documents, document };
+  }
+
+  private copyDocument(id: string, originalPath: string) {
+    fs.mkdirSync(path.join(app.getPath("userData"), "documents"), {
+      recursive: true,
+    });
+    const newPath = path.join(
+      app.getPath("userData"),
+      "documents",
+      id + "." + this.extractExtension(originalPath)
+    );
+    fs.copyFileSync(originalPath, newPath);
+    return newPath;
   }
 
   private extractExtension(path: string): DocType {
@@ -63,9 +78,17 @@ class DocDB {
   }
 
   deleteDocument(documentId: string) {
+    const document = this.documents.find((doc) => doc.id === documentId);
+    if (document) {
+      this.deleteFile(document.path);
+    }
     this.documents = this.documents.filter((doc) => doc.id !== documentId);
     this.save();
     return this.documents;
+  }
+
+  private deleteFile(path: string) {
+    fs.unlinkSync(path);
   }
 
   renameDocument(documentId: string, newTitle: string) {
