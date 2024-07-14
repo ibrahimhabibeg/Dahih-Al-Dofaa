@@ -1,4 +1,4 @@
-import { ipcMain, dialog } from "electron";
+import { ipcMain, dialog, app } from "electron";
 import {
   addDocument,
   deleteDocument,
@@ -6,15 +6,18 @@ import {
   getDocument,
   getDocuments,
 } from "./docDB";
+import path from "path";
+import fs from "fs";
 
 export const validExtensions = ["pdf", "ppt", "txt", "md", "docx"];
 
 ipcMain.handle(
   "document:add",
   async (event, courseId: string): Promise<Doc[]> => {
-    const path = await getDocumentPathFromUser();
-    if (!path) return getDocuments(courseId);
-    const documents = await addDocument(path, courseId);
+    const originalPath = await getDocumentPathFromUser();
+    if (!originalPath) return getDocuments(courseId);
+    const newPath = copyDocument(originalPath);
+    const documents = await addDocument(newPath, courseId);
     return documents;
   }
 );
@@ -61,4 +64,12 @@ const getDocumentPathFromUser = async (): Promise<string> => {
     return path;
   }
   return undefined;
+};
+
+const copyDocument = (originalPath: string) => {
+  const name = path.basename(originalPath);
+  const newPath = path.join(app.getPath("userData"), "documents", name);
+  fs.mkdirSync(path.dirname(newPath), { recursive: true });
+  fs.copyFileSync(originalPath, newPath);
+  return newPath;
 };
