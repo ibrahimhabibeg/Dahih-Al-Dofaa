@@ -9,4 +9,5 @@ ipcMain.handle("ollama:setup", () => {
   ollamaManager.setup();
 });
 
-export const stopOllama = (): void => ollamaManager.stop();
+export const embed = (text: string) => ollamaManager.embed(text);
+export const stopOllama = () => ollamaManager.stop();

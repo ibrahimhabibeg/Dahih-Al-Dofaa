@@ -199,6 +199,19 @@ class OllamaManager {
     await this.pull(this.llmModel);
     await this.pull(this.embeddedModel);
   }
+
+  /**
+   * Embeds the given text.
+   * @param text The text to embed.
+   * @returns {Promise<number[]>} The embedding of the text.
+   */
+  async embed(text: string): Promise<number[]> {
+    const { embedding } = await this.ollama.embeddings({
+      model: this.embeddedModel,
+      prompt: text,
+    });
+    return embedding;
+  }
 }
 
 const ollamaManager = OllamaManager.getInstance();
