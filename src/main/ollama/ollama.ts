@@ -180,7 +180,19 @@ class OllamaManager {
    * @returns {Promise<void>} Promise that resolves when the model is pulled.
    */
   async pull(model: string) {
-    await this.ollama.pull({model: model});
+    const modelExists = await this.doesModelExist(model);
+    if (modelExists) return;
+    await this.ollama.pull({ model: model });
+  }
+
+  private async doesModelExist(model: string) {
+    const { models } = await this.ollama.list();
+    for (const m of models) {
+      if (m.name.startsWith(model)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
@@ -210,4 +222,4 @@ export const stop = () => {
 export const pull = async (model: string) => {
   const manager = OllamaManager.getInstance();
   return manager.pull(model);
-}
+};
