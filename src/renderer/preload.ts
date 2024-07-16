@@ -17,12 +17,12 @@ contextBridge.exposeInMainWorld("api", {
   removeChat: (chatId: string) => ipcRenderer.invoke("chat:remove", chatId),
   addDocument: (courseId: string) =>
     ipcRenderer.invoke("document:add", courseId),
-  deleteDocument: (documentId: string) =>
-    ipcRenderer.invoke("document:delete", documentId),
-  renameDocument: (documentId: string, newTitle: string) =>
-    ipcRenderer.invoke("document:rename", documentId, newTitle),
+  deleteDocument: (courseId: string, documentId: string) =>
+    ipcRenderer.invoke("document:delete", courseId, documentId),
+  renameDocument: (courseId: string, documentId: string, newTitle: string) =>
+    ipcRenderer.invoke("document:rename", courseId, documentId, newTitle),
   getDocuments: (courseId: string) =>
     ipcRenderer.invoke("document:getAll", courseId),
-  getDocument: (documentId: string) =>
-    ipcRenderer.invoke("document:get", documentId),
+  getDocument: (courseId: string, documentId: string) =>
+    ipcRenderer.invoke("document:get", courseId, documentId),
 });

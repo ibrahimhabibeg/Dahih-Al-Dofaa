@@ -12,10 +12,14 @@ export interface IAPI {
   addChat: (courseId: string, chatName?: string) => Promise<chat[]>;
   removeChat: (chatId: string) => Promise<chat[]>;
   addDocument: (courseId: string) => Promise<Doc[]>;
-  deleteDocument: (documentId: string) => Promise<Doc[]>;
-  renameDocument: (documentId: string, newTitle: string) => Promise<Doc[]>;
+  deleteDocument: (courseId: string, documentId: string) => Promise<Doc[]>;
+  renameDocument: (
+    courseId: string,
+    documentId: string,
+    newTitle: string
+  ) => Promise<Doc[]>;
   getDocuments: (courseId: string) => Promise<Doc[]>;
-  getDocument: (documentId: string) => Promise<Doc>;
+  getDocument: (courseId: string, documentId: string) => Promise<Doc>;
 }
 
 declare global {
@@ -29,7 +33,6 @@ declare global {
     id: string;
     title: string;
     path: string;
-    courseId: string;
     docType: DocType;
   }
 }

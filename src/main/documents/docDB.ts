@@ -8,38 +8,46 @@ import { validExtensions } from ".";
  * This class manages the documents in the application.
  */
 class DocDB {
-  static instance: DocDB = null;
-  documents: Doc[];
-  filePath: string;
+  private static instancesMap: Map<string, DocDB> = new Map();
+  private documents: Doc[];
+  private filePath: string;
+  private documentsFolderPath: string;
 
-  constructor(documents: Doc[], filePath: string) {
-    this.documents = documents;
-    this.filePath = filePath;
-  }
-
-  static getInstance() {
-    if (!this.instance) {
-      const filePath = path.join(app.getPath("userData"), "documents.json");
-      if (fs.existsSync(filePath)) {
-        const file = fs.readFileSync(filePath, "utf-8");
-        const { documents } = JSON.parse(file);
-        this.instance = new this(documents, filePath);
-      } else {
-        fs.writeFileSync(filePath, JSON.stringify({ documents: [] }));
-        this.instance = new this([], filePath);
-      }
+  private constructor(courseId: string) {
+    const folderPath = path.join(app.getPath("userData"), "courses", courseId);
+    const documentsFolderPath = path.join(folderPath, "documents");
+    if (!fs.existsSync(documentsFolderPath)) {
+      fs.mkdirSync(documentsFolderPath, { recursive: true });
     }
-    return this.instance;
+    const filePath = path.join(folderPath, "documents.json");
+    if (fs.existsSync(filePath)) {
+      const file = fs.readFileSync(filePath, "utf-8");
+      const { documents } = JSON.parse(file);
+      this.documents = documents;
+    } else {
+      fs.writeFileSync(filePath, JSON.stringify({ documents: [] }));
+      this.documents = [];
+    }
+    this.filePath = filePath;
+    this.documentsFolderPath = documentsFolderPath;
   }
 
-  addDocument(path: string, courseId: string) {
+  static getInstance(courseId: string) {
+    let instance = this.instancesMap.get(courseId);
+    if (!instance) {
+      instance = new DocDB(courseId);
+      this.instancesMap.set(courseId, instance);
+    }
+    return instance;
+  }
+
+  addDocument(path: string) {
     const id = uuidv4();
     const newPath = this.copyDocument(id, path);
     const document = {
       id,
       title: this.extractTitle(path),
       path: newPath,
-      courseId,
       docType: this.extractExtension(path),
     };
     this.documents.push(document);
@@ -48,12 +56,8 @@ class DocDB {
   }
 
   private copyDocument(id: string, originalPath: string) {
-    fs.mkdirSync(path.join(app.getPath("userData"), "documents"), {
-      recursive: true,
-    });
     const newPath = path.join(
-      app.getPath("userData"),
-      "documents",
+      this.documentsFolderPath,
       id + "." + this.extractExtension(originalPath)
     );
     fs.copyFileSync(originalPath, newPath);
@@ -102,8 +106,8 @@ class DocDB {
     return this.documents;
   }
 
-  getDocuments(courseId: string) {
-    return this.documents.filter((doc) => doc.courseId === courseId);
+  getDocuments() {
+    return this.documents;
   }
 
   getDocument(documentId: string) {
@@ -118,27 +122,4 @@ class DocDB {
   }
 }
 
-export const addDocument = async (path: string, courseId: string) => {
-  const db = DocDB.getInstance();
-  return db.addDocument(path, courseId);
-};
-
-export const deleteDocument = async (documentId: string) => {
-  const db = DocDB.getInstance();
-  return db.deleteDocument(documentId);
-};
-
-export const renameDocument = async (documentId: string, newTitle: string) => {
-  const db = DocDB.getInstance();
-  return db.renameDocument(documentId, newTitle);
-};
-
-export const getDocuments = async (courseId: string) => {
-  const db = DocDB.getInstance();
-  return db.getDocuments(courseId);
-};
-
-export const getDocument = async (documentId: string) => {
-  const db = DocDB.getInstance();
-  return db.getDocument(documentId);
-};
+export default DocDB;

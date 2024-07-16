@@ -32,15 +32,17 @@ const DocumentsPage = () => {
   };
 
   const handleDelete = (documentId: string) => {
-    window.api.deleteDocument(documentId).then((documents) => {
+    window.api.deleteDocument(courseId, documentId).then((documents) => {
       setDocuments(documents);
     });
   };
 
   const handleRename = (documentId: string, newTitle: string) => {
-    window.api.renameDocument(documentId, newTitle).then((documents) => {
-      setDocuments(documents);
-    });
+    window.api
+      .renameDocument(courseId, documentId, newTitle)
+      .then((documents) => {
+        setDocuments(documents);
+      });
   };
 
   return (
