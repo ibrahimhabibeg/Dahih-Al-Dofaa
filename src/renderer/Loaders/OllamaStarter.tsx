@@ -1,26 +1,26 @@
- import { Typography, Box, LinearProgress } from "@mui/material";
+import { Typography, Box, LinearProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import Logo from "../assets/logo.svg";
+import Logo from "../../assets/logo.svg";
 
 const textDescriptions = [
-  "Downloading your study partner: Llama 3!",
-  "Hold on tight! We're downloading a whole herd of knowledge",
-  "Shhh! Llama 3 is on the phone... downloading all the answers to your exam woes.",
-  "Downloading the A in your next exam (along with the LLM, of course).",
-  "We're not just downloading, we're llamazing your phone with intelligence!",
-  "Llama 3: The secret weapon of top students (except it's not really a secret anymore).",
-  "Under the hood of Dahih El-Dofaa: Downloading the powerful Llama 3 LLM.",
+  "Waking up the Dahih... almost there!",
+  "Shhh! Ollama's busy learning all the smart stuff.",
+  "Don't worry! We're getting your study buddy ready.",
+  "Hold on to your neurons, knowledge incoming!",
+  "We're downloading the entire library of Alexandria... well, maybe not all of it.",
+  "We may be AI, but loading can still be a pain. Thanks for your patience!",
 ];
 
-const LlamaPuller = ({ children }: { children: React.JSX.Element }) => {
-  const [pullingLlama, setPullingLlama] = useState(true);
+const OllamaStarter = ({ children }: { children: React.JSX.Element }) => {
+  const [startingOllama, setStartingOllama] = useState(true);
   const [textDescription, setTextDescription] = useState(textDescriptions[0]);
 
   useEffect(() => {
-    window.api.pullOllama('llama3').then(() => {
-      setPullingLlama(false);
+    
+    window.api.startOllama().then(() => {
+      setStartingOllama(false);
     });
 
     const timer = setInterval(() => {
@@ -34,11 +34,11 @@ const LlamaPuller = ({ children }: { children: React.JSX.Element }) => {
     };
   }, []);
 
-  if (pullingLlama) {
+  if (startingOllama) {
     return (
       <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
         <Box marginTop={10} textAlign={"center"}>
-          <img src={Logo} width={150} />
+          <img src={Logo} alt="Ollama Logo" width={150} />
           <Typography variant="h4" marginTop={3}>
             Dahih Al-Dofaa
           </Typography>
@@ -46,7 +46,7 @@ const LlamaPuller = ({ children }: { children: React.JSX.Element }) => {
         </Box>
         <Box marginTop={12} width={"50%"} textAlign={"center"}>
           <Typography marginBottom={1} variant="body1">
-            Downloading Llama 3 (4.7GB)
+            Starting Ollama
           </Typography>
           <LinearProgress />
           <Typography variant="caption" marginTop={1}>
@@ -60,4 +60,4 @@ const LlamaPuller = ({ children }: { children: React.JSX.Element }) => {
   }
 };
 
-export default LlamaPuller;
+export default OllamaStarter;

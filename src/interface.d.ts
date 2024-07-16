@@ -2,8 +2,7 @@ import { course } from "./main/courses/courses";
 
 export interface IAPI {
   startOllama: () => Promise<void>;
-  pullOllama: (model: string) => Promise<void>;
-  stopOllama: () => Promise<void>;
+  setupOllama: () => Promise<void>;
   addCourse: (courseTitle: string) => Promise<course[]>;
   removeCourse: (courseId: string) => Promise<course[]>;
   getCourse: (courseId: string) => Promise<course>;

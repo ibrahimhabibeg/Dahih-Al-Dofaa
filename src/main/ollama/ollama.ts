@@ -23,6 +23,8 @@ class OllamaManager {
   private ollama: Ollama;
   private host: string;
   private childProcess: ChildProcess;
+  private llmModel = "llama3";
+  private embeddedModel = "nomic-embed-text";
 
   constructor() {
     this.host = process.env.OLLAMA_HOST || "http://127.0.0.1:11434";
@@ -174,12 +176,7 @@ class OllamaManager {
     this.childProcess = null;
   }
 
-  /**
-   * Pull the model from the Ollama server.
-   * @param model Model name to pull.
-   * @returns {Promise<void>} Promise that resolves when the model is pulled.
-   */
-  async pull(model: string): Promise<void> {
+  private async pull(model: string): Promise<void> {
     const modelExists = await this.doesModelExist(model);
     if (modelExists) return;
     await this.ollama.pull({ model: model });
@@ -193,6 +190,14 @@ class OllamaManager {
       }
     }
     return false;
+  }
+
+  /**
+   * Sets up everything needed for Ollama.
+   */
+  async setup(): Promise<void> {
+    await this.pull(this.llmModel);
+    await this.pull(this.embeddedModel);
   }
 }
 

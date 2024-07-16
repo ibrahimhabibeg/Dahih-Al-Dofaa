@@ -5,8 +5,8 @@ ipcMain.handle("ollama:start", () => {
   ollamaManager.start();
 });
 
-ipcMain.handle("ollama:pull", async (event, model: string) => {
-  ollamaManager.pull(model);
+ipcMain.handle("ollama:setup", () => {
+  ollamaManager.setup();
 });
 
 export const stopOllama = (): void => ollamaManager.stop();

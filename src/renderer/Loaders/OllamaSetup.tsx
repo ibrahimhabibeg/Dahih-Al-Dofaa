@@ -2,24 +2,23 @@ import { Typography, Box, LinearProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import Logo from "../assets/logo.svg";
+import Logo from "../../assets/logo.svg";
 
 const textDescriptions = [
-  "Waking up the Dahih... almost there!",
-  "Shhh! Ollama's busy learning all the smart stuff.",
-  "Don't worry! We're getting your study buddy ready.",
-  "Hold on to your neurons, knowledge incoming!",
-  "We're downloading the entire library of Alexandria... well, maybe not all of it.",
-  "We may be AI, but loading can still be a pain. Thanks for your patience!",
+  "First-time setup! This might take a moment as we prepare your personalized study companion.",
+  "Building your study arsenal: Downloading essential models (it takes a while, but worth it!)",
+  "Hold tight! We're brewing a potent knowledge potion (downloading models takes time).",
+  "Shhh! Supercharging Dahih El-Dofaa... patience is key (and rewarded with awesome study tools!).",
+  "Unleashing the power of AI for your studies... download in progress!",
+  "Get ready for an intelligence boost! Downloading essential models for Dahih El-Dofaa...",
 ];
 
-const OllamaStarter = ({ children }: { children: React.JSX.Element }) => {
+const OllamaSetup = ({ children }: { children: React.JSX.Element }) => {
   const [startingOllama, setStartingOllama] = useState(true);
   const [textDescription, setTextDescription] = useState(textDescriptions[0]);
 
   useEffect(() => {
-    
-    window.api.startOllama().then(() => {
+    window.api.setupOllama().then(() => {
       setStartingOllama(false);
     });
 
@@ -46,7 +45,10 @@ const OllamaStarter = ({ children }: { children: React.JSX.Element }) => {
         </Box>
         <Box marginTop={12} width={"50%"} textAlign={"center"}>
           <Typography marginBottom={1} variant="body1">
-            Starting Ollama
+            Setting up Ollama
+          </Typography>
+          <Typography marginBottom={1} variant="body1">
+            Downloading required files (5 GB)
           </Typography>
           <LinearProgress />
           <Typography variant="caption" marginTop={1}>
@@ -60,4 +62,4 @@ const OllamaStarter = ({ children }: { children: React.JSX.Element }) => {
   }
 };
 
-export default OllamaStarter;
+export default OllamaSetup;

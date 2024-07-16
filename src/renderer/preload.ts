@@ -3,7 +3,7 @@ import { type course } from "../main/courses/courses";
 
 contextBridge.exposeInMainWorld("api", {
   startOllama: () => ipcRenderer.invoke("ollama:start"),
-  pullOllama: (model: string) => ipcRenderer.invoke("ollama:pull", model),
+  setupOllama: () => ipcRenderer.invoke("ollama:setup"),
   addCourse: (courseTitle: string) =>
     ipcRenderer.invoke("course:add", courseTitle),
   removeCourse: (courseId: string) =>
