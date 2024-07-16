@@ -1,9 +1,5 @@
 import { app, BrowserWindow, ipcMain } from "electron";
-import {
-  start as startOllama,
-  stop as stopOllama,
-  pull as pullOllama,
-} from "./ollama/ollama";
+import { stopOllama } from "./ollama";
 import {
   addCourse,
   removeCourse,
@@ -49,10 +45,6 @@ const createWindow = (): void => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", () => {
-  ipcMain.handle("ollama:start", startOllama);
-  ipcMain.handle("ollama:pull", async (event, model: string) => {
-    await pullOllama(model);
-  });
   ipcMain.handle("course:add", async (event, courseTitle: string) => {
     const courses = await addCourse(courseTitle);
     return courses;

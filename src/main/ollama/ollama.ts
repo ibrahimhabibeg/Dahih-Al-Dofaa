@@ -19,10 +19,10 @@ const OllamaServeType = Object.freeze({
  * OllamaManager is a singleton class that manages the Ollama server.
  */
 class OllamaManager {
-  static inistance: OllamaManager = null;
-  ollama: Ollama;
-  host: string;
-  childProcess: ChildProcess;
+  private static inistance: OllamaManager = null;
+  private ollama: Ollama;
+  private host: string;
+  private childProcess: ChildProcess;
 
   constructor() {
     this.host = process.env.OLLAMA_HOST || "http://127.0.0.1:11434";
@@ -33,7 +33,7 @@ class OllamaManager {
    * Get the instance of OllamaManager.
    * @returns {OllamaManager} The instance of OllamaManager.
    */
-  static getInstance() {
+  static getInstance(): OllamaManager {
     if (this.inistance === null) {
       this.inistance = new this();
     }
@@ -44,7 +44,7 @@ class OllamaManager {
    * Start the Ollama server.
    * @returns {Promise<string>} The type of Ollama server that is running.
    */
-  async start() {
+  async start(): Promise<string> {
     try {
       await this.ping();
       return OllamaServeType.SYSTEM;
@@ -91,7 +91,7 @@ class OllamaManager {
    * @param appDataDirectory Path to the directory where Ollama will store its data.
    * @returns {Promise<void>} Promise that resolves when the Ollama server is running.
    */
-  async execServe(
+  private async execServe(
     path: string,
     appDataDirectory: string = null
   ): Promise<void> {
@@ -125,7 +125,7 @@ class OllamaManager {
    * Try to ping the Ollama server.
    * @returns {Promise<boolean>} True if the Ollama server is running.
    */
-  async ping() {
+  private async ping(): Promise<boolean> {
     const response = await fetch(this.host, {
       method: "GET",
       cache: "no-store",
@@ -142,7 +142,7 @@ class OllamaManager {
    * @param retries Number of retries
    * @returns {Promise<void>} Promise that resolves when the Ollama server is running.
    */
-  async waitForPing(delay = 1000, retries = 5) {
+  private async waitForPing(delay = 1000, retries = 5): Promise<void> {
     for (let i = 0; i < retries; i++) {
       try {
         await this.ping();
@@ -158,7 +158,7 @@ class OllamaManager {
    * Stop the Ollama server.
    * @returns {void}
    */
-  stop() {
+  stop(): void {
     if (!this.childProcess) {
       return;
     }
@@ -179,7 +179,7 @@ class OllamaManager {
    * @param model Model name to pull.
    * @returns {Promise<void>} Promise that resolves when the model is pulled.
    */
-  async pull(model: string) {
+  async pull(model: string): Promise<void> {
     const modelExists = await this.doesModelExist(model);
     if (modelExists) return;
     await this.ollama.pull({ model: model });
@@ -196,30 +196,6 @@ class OllamaManager {
   }
 }
 
-/**
- * Start the Ollama server.
- * @returns {Promise<string>} The type of Ollama server that is running.
- */
-export const start = async () => {
-  const manager = OllamaManager.getInstance();
-  return manager.start();
-};
+const ollamaManager = OllamaManager.getInstance();
 
-/**
- * Stop the Ollama server.
- * @returns {void}
- */
-export const stop = () => {
-  const manager = OllamaManager.getInstance();
-  manager.stop();
-};
-
-/**
- * Pull the model from the Ollama server.
- * @param model Model name to pull.
- * @returns {Promise<void>} Promise that resolves when the model is pulled.
- */
-export const pull = async (model: string) => {
-  const manager = OllamaManager.getInstance();
-  return manager.pull(model);
-};
+export default ollamaManager;
