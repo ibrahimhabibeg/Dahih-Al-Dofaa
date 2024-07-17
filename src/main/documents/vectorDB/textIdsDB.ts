@@ -12,7 +12,7 @@ class TextIdsDB {
     if (!fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath, { recursive: true });
     }
-    const filePath = path.join(folderPath, "documents.json");
+    const filePath = path.join(folderPath, "docToTextIds.json");
     if (fs.existsSync(filePath)) {
       const file = fs.readFileSync(filePath, "utf-8");
       const docToText = JSON.parse(file);

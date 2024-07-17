@@ -814,6 +814,11 @@
   dependencies:
     cross-spawn "^7.0.1"
 
+"@msgpack/msgpack@^2.7.2":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@msgpack/msgpack/-/msgpack-2.8.0.tgz#4210deb771ee3912964f14a15ddfb5ff877e70b9"
+  integrity sha512-h9u4u/jiIRKbq25PM+zymTyW6bhTzELvOoUd+AvYriWOAKpLGnIamaET3pnHYoI5iYphAHBI4ayx0MehR+VVPQ==
+
 "@mui/base@5.0.0-beta.40":
   version "5.0.0-beta.40"
   resolved "https://registry.yarnpkg.com/@mui/base/-/base-5.0.0-beta.40.tgz#1f8a782f1fbf3f84a961e954c8176b187de3dae2"
@@ -942,10 +947,19 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@orama/orama@^2.0.21":
+"@orama/orama@2.0.21", "@orama/orama@^2.0.21":
   version "2.0.21"
   resolved "https://registry.yarnpkg.com/@orama/orama/-/orama-2.0.21.tgz#78b660301d2a0c1d5653702a8906b6e64a0cc763"
   integrity sha512-XZpyjyNw4Mcpg94+gUvxmyyiFTZAdXvJ1aFPqHABarofu86oNwZL5tQUIj84xa1lrQiaeSxNKNBw0w4y5We5Yg==
+
+"@orama/plugin-data-persistence@^2.0.21":
+  version "2.0.21"
+  resolved "https://registry.yarnpkg.com/@orama/plugin-data-persistence/-/plugin-data-persistence-2.0.21.tgz#72154e821a52651dcb9fe3ad8deb023b7cdf9c7a"
+  integrity sha512-OrjUjtYcF5f1t5EUDj6EDg52rgP1D+y3yC4p4Yyzs8gl5xBfbVZFue2SqJNtXO5sj6bMZy5TrdUl7pZh0kUxcQ==
+  dependencies:
+    "@msgpack/msgpack" "^2.7.2"
+    "@orama/orama" "2.0.21"
+    dpack "^0.6.22"
 
 "@popperjs/core@^2.11.8":
   version "2.11.8"
@@ -2680,6 +2694,11 @@ dot-case@^3.0.4:
   dependencies:
     no-case "^3.0.4"
     tslib "^2.0.3"
+
+dpack@^0.6.22:
+  version "0.6.22"
+  resolved "https://registry.yarnpkg.com/dpack/-/dpack-0.6.22.tgz#e1c863e0145d6670d92380db1dfa93a4cf97d252"
+  integrity sha512-WGPNlW2OAE7Bj0eODMpAHUcEqxrlg01e9OFZDxQodminIgC194/cRHT7K04Z1j7AUEWTeeplYGrIv/xRdwU9Hg==
 
 duck@^0.1.12:
   version "0.1.12"
