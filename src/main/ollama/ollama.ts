@@ -201,16 +201,20 @@ class OllamaManager {
   }
 
   /**
-   * Embeds the given text.
-   * @param text The text to embed.
-   * @returns {Promise<number[]>} The embedding of the text.
+   * Embeds the given text array.
+   * @param textArray The array of text to embed
+   * @returns {Promise<number[][]>} The embeddings of the text array.
    */
-  async embed(text: string): Promise<number[]> {
-    const { embedding } = await this.ollama.embeddings({
-      model: this.embeddedModel,
-      prompt: text,
-    });
-    return embedding;
+  async embed(textArray: string[]): Promise<number[][]> {
+    const embeddings = [];
+    for (const text of textArray) {
+      const response = await this.ollama.embeddings({
+        model: this.embeddedModel,
+        prompt: text,
+      });
+      embeddings.push(response.embedding);
+    }
+    return embeddings;
   }
 }
 

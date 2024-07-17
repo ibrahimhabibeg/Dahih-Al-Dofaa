@@ -942,6 +942,11 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
+"@orama/orama@^2.0.21":
+  version "2.0.21"
+  resolved "https://registry.yarnpkg.com/@orama/orama/-/orama-2.0.21.tgz#78b660301d2a0c1d5653702a8906b6e64a0cc763"
+  integrity sha512-XZpyjyNw4Mcpg94+gUvxmyyiFTZAdXvJ1aFPqHABarofu86oNwZL5tQUIj84xa1lrQiaeSxNKNBw0w4y5We5Yg==
+
 "@popperjs/core@^2.11.8":
   version "2.11.8"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
