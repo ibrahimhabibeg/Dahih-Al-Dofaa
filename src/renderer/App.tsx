@@ -1,16 +1,16 @@
 import React from "react";
 import ThemeProvider from "./ThemeProvider";
-import OllamaStarter from "./OllamaStarter";
-import LlamaPuller from "./LlamaPuller";
+import OllamaStarter from "./Loaders/OllamaStarter";
 import Router from "./Router";
+import OllamaSetup from "./Loaders/OllamaSetup";
 
 const App = () => {
   return (
     <ThemeProvider>
       <OllamaStarter>
-        <LlamaPuller>
+        <OllamaSetup>
           <Router />
-        </LlamaPuller>
+        </OllamaSetup>
       </OllamaStarter>
     </ThemeProvider>
   );

@@ -49,8 +49,13 @@
     "@fontsource/roboto": "^5.0.13",
     "@mui/icons-material": "^5.16.1",
     "@mui/material": "^5.16.1",
+    "@orama/orama": "^2.0.21",
+    "@orama/plugin-data-persistence": "^2.0.21",
     "electron-squirrel-startup": "^1.0.1",
+    "langchain": "^0.2.9",
+    "office-text-extractor": "^3.0.3",
     "ollama": "^0.5.2",
+    "pdf-parse-debugging-disabled": "^1.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.24.1"

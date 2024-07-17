@@ -3,7 +3,7 @@ import { type course } from "../main/courses/courses";
 
 contextBridge.exposeInMainWorld("api", {
   startOllama: () => ipcRenderer.invoke("ollama:start"),
-  pullOllama: (model: string) => ipcRenderer.invoke("ollama:pull", model),
+  setupOllama: () => ipcRenderer.invoke("ollama:setup"),
   addCourse: (courseTitle: string) =>
     ipcRenderer.invoke("course:add", courseTitle),
   removeCourse: (courseId: string) =>
@@ -15,4 +15,26 @@ contextBridge.exposeInMainWorld("api", {
   addChat: (courseId: string, chatName?: string) =>
     ipcRenderer.invoke("chat:add", courseId, chatName),
   removeChat: (chatId: string) => ipcRenderer.invoke("chat:remove", chatId),
+  addDocument: (courseId: string) =>
+    ipcRenderer.invoke("document:add", courseId),
+  deleteDocument: (courseId: string, documentId: string) =>
+    ipcRenderer.invoke("document:delete", courseId, documentId),
+  renameDocument: (courseId: string, documentId: string, newTitle: string) =>
+    ipcRenderer.invoke("document:rename", courseId, documentId, newTitle),
+  getDocuments: (courseId: string) =>
+    ipcRenderer.invoke("document:getAll", courseId),
+  getDocument: (courseId: string, documentId: string) =>
+    ipcRenderer.invoke("document:get", courseId, documentId),
+  listenToDocument: (courseId: string, documentId: string) =>
+    ipcRenderer.invoke("document:listen", courseId, documentId),
+  stopListeningToDocument: (courseId: string, documentId: string) =>
+    ipcRenderer.invoke("document:stopListening", courseId, documentId),
+  onDocumentLoading: (listener: (documentId: string) => void) =>
+    ipcRenderer.on("document:loading", (_event, documentId) =>
+      listener(documentId)
+    ),
+  onDocumentLoaded: (listener: (documentId: string) => void) =>
+    ipcRenderer.on("document:loaded", (_event, documentId) =>
+      listener(documentId)
+    ),
 });
