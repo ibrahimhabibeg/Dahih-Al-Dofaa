@@ -21,8 +21,13 @@ ipcMain.handle(
 
 ipcMain.handle(
   "document:delete",
-  async (event, courseId: string, documentId: string) =>
-    DocDB.getInstance(courseId).deleteDocument(documentId)
+  async (event, courseId: string, documentId: string) => {
+    const docDb = DocDB.getInstance(courseId);
+    const documents = await docDb.deleteDocument(documentId);
+    const vectorDb = await VectorDB.getInstance(courseId);
+    await vectorDb.deleteDocument(documentId);
+    return documents;
+  }
 );
 
 ipcMain.handle(

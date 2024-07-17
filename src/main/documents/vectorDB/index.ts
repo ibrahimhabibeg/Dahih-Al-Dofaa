@@ -1,5 +1,12 @@
-import { create, insertMultiple, Orama, search } from "@orama/orama";
-import { embed } from "../ollama";
+import {
+  create,
+  insertMultiple,
+  Orama,
+  search,
+  removeMultiple,
+} from "@orama/orama";
+import { embed } from "../../ollama";
+import TextIdsDB from "./textIdsDB";
 
 const schema = {
   text: "string",
@@ -13,9 +20,11 @@ class VectorDB {
     VectorDB
   >();
   private db: Orama<typeof schema>;
+  private textIdsDB: TextIdsDB;
 
   private constructor(courseId: string, db: Orama<typeof schema>) {
     this.db = db;
+    this.textIdsDB = TextIdsDB.getInstance(courseId);
   }
 
   public static async getInstance(courseId: string): Promise<VectorDB> {
@@ -33,7 +42,8 @@ class VectorDB {
       embedding,
       documentId,
     }));
-    return insertMultiple<typeof this.db>(this.db, data);
+    const ids = await insertMultiple<typeof this.db>(this.db, data);
+    this.textIdsDB.saveText(ids, documentId);
   }
 
   public async search(query: string) {
@@ -48,6 +58,12 @@ class VectorDB {
     });
     const documents = result.hits.map((hit) => hit.document);
     return documents;
+  }
+
+  public async deleteDocument(documentId: string) {
+    const textIds = this.textIdsDB.getTextIds(documentId);
+    await removeMultiple(this.db, textIds);
+    this.textIdsDB.deleteDocument(documentId);
   }
 }
 
