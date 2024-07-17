@@ -20,6 +20,10 @@ export interface IAPI {
   ) => Promise<Doc[]>;
   getDocuments: (courseId: string) => Promise<Doc[]>;
   getDocument: (courseId: string, documentId: string) => Promise<Doc>;
+  listenToDocument: (documentId: string) => Promise<boolean>;
+  stopListeningToDocument: (documentId: string) => Promise<boolean>;
+  onDocumentLoading: (listener: (documentId: string) => void) => void;
+  onDocumentLoaded: (listener: (documentId: string) => void) => void;
 }
 
 declare global {

@@ -25,4 +25,16 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.invoke("document:getAll", courseId),
   getDocument: (courseId: string, documentId: string) =>
     ipcRenderer.invoke("document:get", courseId, documentId),
+  listenToDocument: (courseId: string, documentId: string) =>
+    ipcRenderer.invoke("document:listen", courseId, documentId),
+  stopListeningToDocument: (courseId: string, documentId: string) =>
+    ipcRenderer.invoke("document:stopListening", courseId, documentId),
+  onDocumentLoading: (listener: (documentId: string) => void) =>
+    ipcRenderer.on("document:loading", (_event, documentId) =>
+      listener(documentId)
+    ),
+  onDocumentLoaded: (listener: (documentId: string) => void) =>
+    ipcRenderer.on("document:loaded", (_event, documentId) =>
+      listener(documentId)
+    ),
 });

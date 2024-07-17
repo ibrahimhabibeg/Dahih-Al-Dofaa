@@ -1,5 +1,9 @@
 import { ipcMain, dialog } from "electron";
 import DocDB from "./docDB";
+import VectorDB from "./vectorDB";
+import parseDocument from "./parsers";
+import split from "./split";
+import documentLoading from "./documentLoading";
 
 export const validExtensions = ["pdf", "pptx", "docx"];
 
@@ -9,7 +13,8 @@ ipcMain.handle(
     const path = await getDocumentPathFromUser();
     const docDb = DocDB.getInstance(courseId);
     if (!path) return docDb.getDocuments();
-    const { documents } = await docDb.addDocument(path);
+    const { documents, document } = await docDb.addDocument(path);
+    addDocumentToVectorDB(courseId, document);
     return documents;
   }
 );
@@ -36,6 +41,14 @@ ipcMain.handle(
     DocDB.getInstance(courseId).getDocument(documentId)
 );
 
+ipcMain.handle("document:listen", async (event, documentId: string) =>
+  documentLoading.listenToDocument(documentId, event.sender)
+);
+
+ipcMain.handle("document:stopListening", async (event, documentId: string) =>
+  documentLoading.stopListeningToDocument(documentId, event.sender)
+);
+
 /**
  * This function opens a dialog to get the path of the document from the user.
  * @returns {Promise<string>} The path of the document selected by the user.
@@ -55,4 +68,14 @@ const getDocumentPathFromUser = async (): Promise<string> => {
     return path;
   }
   return undefined;
+};
+
+const addDocumentToVectorDB = async (courseId: string, document: Doc) => {
+  documentLoading.addDocument(document.id);
+  const text = await parseDocument(document);
+  const splits = await split(text);
+  const vectorDb = await VectorDB.getInstance(courseId);
+  const ids = await vectorDb.insert(splits, document.id);
+  documentLoading.deleteDocument(document.id);
+  return ids;
 };
