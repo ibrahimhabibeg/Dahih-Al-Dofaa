@@ -59,7 +59,10 @@ const Chat = ({ course, handleBackClick }: ChatProps) => {
           {chats.map((chat) => (
             <>
               <Divider />
-              <ListItemButton key={chat.id}>
+              <ListItemButton
+                key={chat.id}
+                onClick={() => navigate(`/chat/${course.id}/${chat.id}`)}
+              >
                 <ListItemText>{chat.title}</ListItemText>
               </ListItemButton>
             </>

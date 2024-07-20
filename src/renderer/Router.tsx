@@ -8,12 +8,14 @@ import {
 import HomeLayout from "./HomeLayout";
 import GetStartedPage from "./GetStartedPage";
 import DocumentsPage from "./Documents/DocumentsPage";
+import Chat from "./Chat/Chat";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<HomeLayout />}>
       <Route path="/main_window" element={<GetStartedPage />} />
       <Route path="/documents/:courseId" element={<DocumentsPage />} />
+      <Route path="/chat/:courseId/:courseId" element={<Chat />} />
     </Route>
   )
 );

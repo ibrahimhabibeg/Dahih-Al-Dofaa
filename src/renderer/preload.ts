@@ -38,6 +38,10 @@ const api: Window["api"] = {
     ipcRenderer.on("document:loaded", (_event, documentId) =>
       listener(documentId)
     ),
+  chat: (courseId: string, chatId: string, message: string) =>
+    ipcRenderer.invoke("chat:message", courseId, chatId, message),
+  getMessages: (courseId: string, chatId: string) =>
+    ipcRenderer.invoke("chat:getMessages", courseId, chatId),
 };
 
 contextBridge.exposeInMainWorld("api", api);
