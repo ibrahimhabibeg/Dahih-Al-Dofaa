@@ -2,11 +2,6 @@ import path from "path";
 import { app } from "electron";
 import fs from "fs";
 
-type Message = {
-  content: string;
-  sender: "human" | "bot";
-};
-
 class ChatDB {
   private static inistances: Map<string, ChatDB> = new Map();
   private messages: Message[];

@@ -24,6 +24,8 @@ export interface IAPI {
   stopListeningToDocument: (documentId: string) => Promise<boolean>;
   onDocumentLoading: (listener: (documentId: string) => void) => void;
   onDocumentLoaded: (listener: (documentId: string) => void) => void;
+  chat: (courseId: string, chatId: string, message: string) => Promise<string>;
+  getMessages: (courseId: string, chatId: string) => Promise<Message[]>;
 }
 
 declare global {
@@ -43,5 +45,10 @@ declare global {
   interface ChatType {
     id: string;
     title: string;
+  }
+
+  interface Message {
+    content: string;
+    sender: "human" | "bot";
   }
 }

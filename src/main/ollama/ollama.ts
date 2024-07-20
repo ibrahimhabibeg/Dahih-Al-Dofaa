@@ -216,6 +216,10 @@ class OllamaManager {
     }
     return embeddings;
   }
+
+  public getHost(): string {
+    return this.host;
+  }
 }
 
 const ollamaManager = OllamaManager.getInstance();
