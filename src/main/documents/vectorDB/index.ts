@@ -1,30 +1,43 @@
+import {
+  create,
+  insertMultiple,
+  Orama,
+  search,
+  removeMultiple,
+} from "@orama/orama";
+import { embed } from "../../ollama";
 import TextIdsDB from "./textIdsDB";
 import path from "path";
 import { app } from "electron";
 import fs from "fs";
-import { getEmbeddingsModel } from "../../embeddings";
-import { FaissStore } from "@langchain/community/vectorstores/faiss";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import getLoader from "../loader";
+import {
+  restoreFromFile,
+  persistToFile,
+} from "@orama/plugin-data-persistence/server";
+
+const schema = {
+  text: "string",
+  embedding: "vector[768]",
+  documentId: "string",
+} as const;
 
 class VectorDB {
   private static instanceMap: Map<string, VectorDB> = new Map<
     string,
     VectorDB
   >();
-
-  private vectorStore: FaissStore;
-  private directory: string;
+  private db: Orama<typeof schema>;
   private textIdsDB: TextIdsDB;
+  private filePath: string;
 
   private constructor(
     courseId: string,
-    vectorStore: FaissStore,
-    directory: string
+    db: Orama<typeof schema>,
+    filePath: string
   ) {
-    this.directory = directory;
-    this.vectorStore = vectorStore;
+    this.db = db;
     this.textIdsDB = TextIdsDB.getInstance(courseId);
+    this.filePath = filePath;
   }
 
   public static async getInstance(courseId: string): Promise<VectorDB> {
@@ -37,56 +50,61 @@ class VectorDB {
       if (!fs.existsSync(folderPath)) {
         fs.mkdirSync(folderPath, { recursive: true });
       }
-      const directory = path.join(folderPath, "vectorDB");
-      if (fs.existsSync(directory)) {
-        const vectorStore = await FaissStore.load(
-          directory,
-          getEmbeddingsModel()
-        );
+      const filePath = path.join(folderPath, "vectorDB.json");
+      if (fs.existsSync(filePath)) {
+        const db = await restoreFromFile("json", filePath);
         VectorDB.instanceMap.set(
           courseId,
-          new VectorDB(courseId, vectorStore, directory)
+          new VectorDB(courseId, db, filePath)
         );
       } else {
-        const vectorStore = await FaissStore.fromDocuments(
-          [],
-          getEmbeddingsModel()
-        );
+        const db = await create({ schema });
+        await persistToFile(db, "json", filePath);
         VectorDB.instanceMap.set(
           courseId,
-          new VectorDB(courseId, vectorStore, directory)
+          new VectorDB(courseId, db, filePath)
         );
       }
     }
     return VectorDB.instanceMap.get(courseId);
   }
 
-  public async insert(document: Doc) {
-    const loader = getLoader(document);
-    const docs = await loader.load();
-    const textSplitter = new RecursiveCharacterTextSplitter({
-      chunkSize: 1000,
-      chunkOverlap: 200,
+  public async insert(textArray: string[], documentId: string) {
+    const embeddings = await embed(textArray);
+    const data = embeddings.map((embedding, index) => ({
+      text: textArray[index],
+      embedding,
+      documentId,
+    }));
+    const ids = await insertMultiple<typeof this.db>(this.db, data);
+    this.textIdsDB.saveText(ids, documentId);
+    await this.persist();
+  }
+
+  public async search(query: string) {
+    const [queryEmbedding] = await embed([query]);
+    const result = await search<typeof this.db>(this.db, {
+      mode: "vector",
+      vector: {
+        value: queryEmbedding,
+        property: "embedding",
+      },
+      similarity: 0.7,
+      limit: 5,
     });
-    const splittedDocuments = await textSplitter.splitDocuments(docs);
-    const ids = await this.vectorStore.addDocuments(splittedDocuments);
-    this.textIdsDB.saveText(ids, document.id);
-    await this.save();
+    const documents = result.hits.map((hit) => hit.document);
+    return documents;
   }
 
   public async deleteDocument(documentId: string) {
     const textIds = this.textIdsDB.getTextIds(documentId);
-    await this.vectorStore.delete({ ids: textIds });
+    await removeMultiple(this.db, textIds);
     this.textIdsDB.deleteDocument(documentId);
-    await this.save();
+    await this.persist();
   }
 
-  private async save() {
-    await this.vectorStore.save(this.directory);
-  }
-
-  public getRetriver() {
-    return this.vectorStore.asRetriever();
+  private async persist() {
+    await persistToFile(this.db, "json", this.filePath);
   }
 }
 

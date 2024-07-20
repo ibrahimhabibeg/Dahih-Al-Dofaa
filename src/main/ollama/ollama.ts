@@ -200,8 +200,21 @@ class OllamaManager {
     await this.pull(this.embeddedModel);
   }
 
-  public getHost(): string {
-    return this.host;
+  /**
+   * Embeds the given text array.
+   * @param textArray The array of text to embed
+   * @returns {Promise<number[][]>} The embeddings of the text array.
+   */
+  async embed(textArray: string[]): Promise<number[][]> {
+    const embeddings = [];
+    for (const text of textArray) {
+      const response = await this.ollama.embeddings({
+        model: this.embeddedModel,
+        prompt: text,
+      });
+      embeddings.push(response.embedding);
+    }
+    return embeddings;
   }
 }
 

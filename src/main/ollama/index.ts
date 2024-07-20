@@ -9,5 +9,5 @@ ipcMain.handle("ollama:setup", () => {
   ollamaManager.setup();
 });
 
+export const embed = (textArray: string[]) => ollamaManager.embed(textArray);
 export const stopOllama = () => ollamaManager.stop();
-export const getHost = () => ollamaManager.getHost();
