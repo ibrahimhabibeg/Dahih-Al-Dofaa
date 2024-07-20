@@ -1,8 +1,6 @@
 import { ipcMain, dialog } from "electron";
 import DocDB from "./docDB";
 import VectorDB from "./vectorDB";
-import parseDocument from "./parsers";
-import split from "./split";
 import documentLoading from "./documentLoading";
 
 export const validExtensions = ["pdf", "pptx", "docx"];
@@ -77,10 +75,7 @@ const getDocumentPathFromUser = async (): Promise<string> => {
 
 const addDocumentToVectorDB = async (courseId: string, document: Doc) => {
   documentLoading.addDocument(document.id);
-  const text = await parseDocument(document);
-  const splits = await split(text);
   const vectorDb = await VectorDB.getInstance(courseId);
-  const ids = await vectorDb.insert(splits, document.id);
+  await vectorDb.insert(document);
   documentLoading.deleteDocument(document.id);
-  return ids;
 };
