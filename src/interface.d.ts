@@ -8,9 +8,9 @@ export interface IAPI {
   getCourse: (courseId: string) => Promise<course>;
   getCourses: () => Promise<course[]>;
   updateCourse: (course: course) => Promise<course[]>;
-  getChats: (courseId: string) => Promise<chat[]>;
-  addChat: (courseId: string, chatName?: string) => Promise<chat[]>;
-  removeChat: (chatId: string) => Promise<chat[]>;
+  getChats: (courseId: string) => Promise<ChatType[]>;
+  addChat: (courseId: string, chatName?: string) => Promise<ChatType>;
+  removeChat: (courseId:string, chatId: string) => Promise<ChatType[]>;
   addDocument: (courseId: string) => Promise<Doc[]>;
   deleteDocument: (courseId: string, documentId: string) => Promise<Doc[]>;
   renameDocument: (
@@ -38,5 +38,10 @@ declare global {
     title: string;
     path: string;
     docType: DocType;
+  }
+
+  interface ChatType {
+    id: string;
+    title: string;
   }
 }

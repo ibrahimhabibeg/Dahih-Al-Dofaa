@@ -1,88 +1,66 @@
-import { app } from "electron";
 import path from "path";
+import { app } from "electron";
 import fs from "fs";
-import { v4 as uuidv4 } from "uuid";
 
-export type chat = {
-  id: string;
-  name: string;
-  courseId: string;
+type Message = {
+  content: string;
+  sender: "human" | "bot";
 };
 
 class ChatDB {
-  static instance: ChatDB = null;
+  private static inistances: Map<string, ChatDB> = new Map();
+  private messages: Message[];
+  private filePath: string;
 
-  chats: chat[] = [];
-  filePath: string;
+  public static getInstance(courseId: string, chatId: string): ChatDB {
+    if (this.inistances.has(courseId)) return this.inistances.get(courseId);
+    const folderPath = path.join(
+      app.getPath("userData"),
+      "courses",
+      courseId,
+      "chats"
+    );
+    fs.mkdirSync(folderPath, { recursive: true });
+    const filePath = path.join(folderPath, chatId + ".json");
+    if (fs.existsSync(filePath)) {
+      const { messages }: { messages: Message[] } = JSON.parse(
+        fs.readFileSync(filePath, "utf-8")
+      );
+      this.inistances.set(courseId, new ChatDB(messages, filePath));
+    } else {
+      const messages: Message[] = [];
+      fs.writeFileSync(filePath, JSON.stringify({ messages }));
+      this.inistances.set(courseId, new ChatDB(messages, filePath));
+    }
+    return this.inistances.get(courseId);
+  }
 
-  constructor(chats: chat[], filePath: string) {
-    this.chats = chats;
+  private constructor(messages: Message[], filePath: string) {
+    this.messages = messages;
     this.filePath = filePath;
   }
 
-  static async getInstance() {
-    if (this.instance === null) {
-      const filePath = path.join(app.getPath("userData"), "chat.json");
-      if (fs.existsSync(filePath)) {
-        const file = fs.readFileSync(filePath, "utf-8");
-        const { chats } = JSON.parse(file);
-        this.instance = new this(chats, filePath);
-      } else {
-        fs.writeFileSync(filePath, JSON.stringify({ chats: [] }));
-        this.instance = new this([], filePath);
-      }
-    }
-    return this.instance;
-  }
-
-  addChat(courseId:string, chatName = "Unnamed Chat") {
-    const chat: chat = {
-      id: uuidv4(),
-      name: chatName,
-      courseId: courseId
-    };
-    this.chats.push(chat);
+  public addMessage(content: string, sender: "human" | "bot"): Message {
+    const message: Message = { content, sender };
+    this.messages.push(message);
     this.save();
-    return this.chats;
+    return message;
   }
 
-  removeChat(chatId: string) {
-    this.chats = this.chats.filter((chat) => chat.id !== chatId);
-    this.save();
-    return this.chats;
+  public getMessages(): Message[] {
+    return this.messages;
   }
 
-  changeChatName(chatId: string, chatName: string) {
-    this.chats.map((chat) => {
-      if (chat.id === chatId) {
-        chat.name = chatName;
-      }
-      return chat;
-    });
-    this.save();
-    return this.chats;
+  public deleteDB() {
+    fs.unlinkSync(this.filePath);
   }
 
-  getChats(courseId:string) {
-    return this.chats.filter((chat) => chat.courseId === courseId);
-  }
-
-  save() {
-    fs.writeFileSync(this.filePath, JSON.stringify({ chats: this.chats }));
+  private save() {
+    fs.writeFileSync(
+      this.filePath,
+      JSON.stringify({ messages: this.messages })
+    );
   }
 }
 
-export const addChaDb = async (courseId: string, chatName: string = undefined) => {
-  const chatDB = await ChatDB.getInstance();
-  return chatDB.addChat(courseId, chatName);
-};
-
-export const removeChatDb = async (chatId: string) => {
-  const chatDB = await ChatDB.getInstance();
-  return chatDB.removeChat(chatId);
-};
-
-export const getChatsDb = async (courseId: string) => {
-  const chatDB = await ChatDB.getInstance();
-  return chatDB.getChats(courseId);
-}
+export default ChatDB;

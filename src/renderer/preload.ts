@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { type course } from "../main/courses/courses";
 
-contextBridge.exposeInMainWorld("api", {
+const api: Window["api"] = {
   startOllama: () => ipcRenderer.invoke("ollama:start"),
   setupOllama: () => ipcRenderer.invoke("ollama:setup"),
   addCourse: (courseTitle: string) =>
@@ -14,7 +14,8 @@ contextBridge.exposeInMainWorld("api", {
   getChats: (courseId: string) => ipcRenderer.invoke("chat:get", courseId),
   addChat: (courseId: string, chatName?: string) =>
     ipcRenderer.invoke("chat:add", courseId, chatName),
-  removeChat: (chatId: string) => ipcRenderer.invoke("chat:remove", chatId),
+  removeChat: (courseId: string, chatId: string) =>
+    ipcRenderer.invoke("chat:remove", courseId, chatId),
   addDocument: (courseId: string) =>
     ipcRenderer.invoke("document:add", courseId),
   deleteDocument: (courseId: string, documentId: string) =>
@@ -25,10 +26,10 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.invoke("document:getAll", courseId),
   getDocument: (courseId: string, documentId: string) =>
     ipcRenderer.invoke("document:get", courseId, documentId),
-  listenToDocument: (courseId: string, documentId: string) =>
-    ipcRenderer.invoke("document:listen", courseId, documentId),
-  stopListeningToDocument: (courseId: string, documentId: string) =>
-    ipcRenderer.invoke("document:stopListening", courseId, documentId),
+  listenToDocument: (documentId: string) =>
+    ipcRenderer.invoke("document:listen", documentId),
+  stopListeningToDocument: (documentId: string) =>
+    ipcRenderer.invoke("document:stopListening", documentId),
   onDocumentLoading: (listener: (documentId: string) => void) =>
     ipcRenderer.on("document:loading", (_event, documentId) =>
       listener(documentId)
@@ -37,4 +38,6 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.on("document:loaded", (_event, documentId) =>
       listener(documentId)
     ),
-});
+};
+
+contextBridge.exposeInMainWorld("api", api);

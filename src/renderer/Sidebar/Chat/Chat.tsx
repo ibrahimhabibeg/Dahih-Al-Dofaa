@@ -20,7 +20,7 @@ type ChatProps = {
 };
 
 const Chat = ({ course, handleBackClick }: ChatProps) => {
-  const [chats, setChats] = React.useState<{ id: string; name: string }[]>([]);
+  const [chats, setChats] = React.useState<ChatType[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,8 +30,9 @@ const Chat = ({ course, handleBackClick }: ChatProps) => {
   }, [course]);
 
   const addChat = async () => {
-    const chats = await window.api.addChat(course.id);
-    setChats(chats);
+    await window.api.addChat(course.id);
+    const newChats = await window.api.getChats(course.id);
+    setChats(newChats);
   };
 
   return (
@@ -59,7 +60,7 @@ const Chat = ({ course, handleBackClick }: ChatProps) => {
             <>
               <Divider />
               <ListItemButton key={chat.id}>
-                <ListItemText>{chat.name}</ListItemText>
+                <ListItemText>{chat.title}</ListItemText>
               </ListItemButton>
             </>
           ))}
