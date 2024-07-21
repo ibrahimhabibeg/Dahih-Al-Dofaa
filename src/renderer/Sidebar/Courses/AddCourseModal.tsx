@@ -38,15 +38,28 @@ const AddCourseModal = ({
           alignItems: "center",
         }}
       >
-        <Typography variant="h6">Course Title</Typography>
-        <TextField
-          value={courseTitle}
-          onChange={(e) => setCourseTitle(e.target.value)}
-          sx={{ marginBottom: 3, marginTop: 5 }}
-        />
-        <Button onClick={handleAddCourse} variant="outlined">
-          Add Course
-        </Button>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleAddCourse();
+          }}
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h6">Course Title</Typography>
+          <TextField
+            value={courseTitle}
+            onChange={(e) => setCourseTitle(e.target.value)}
+            sx={{ marginBottom: 3, marginTop: 5 }}
+          />
+          <Button variant="outlined" type="submit">
+            Add Course
+          </Button>
+        </form>
       </Box>
     </Modal>
   );
