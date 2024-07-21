@@ -87,7 +87,10 @@ const Chat = () => {
           onChange={(e) => setQuestion(e.target.value)}
           endAdornment={
             <InputAdornment position="end">
-              <IconButton onClick={handleSubmit} disabled={loading}>
+              <IconButton
+                onClick={handleSubmit}
+                disabled={loading || question === ""}
+              >
                 <Send />
               </IconButton>
             </InputAdornment>
