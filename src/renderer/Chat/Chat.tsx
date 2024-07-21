@@ -39,7 +39,8 @@ const Chat = () => {
     listRef.current?.lastElementChild?.scrollIntoView();
   }, [messages]);
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     window.api.chat(courseId, chatId, question);
     setLoading(true);
     setQuestion("");
@@ -85,22 +86,21 @@ const Chat = () => {
           width: "80%",
         }}
       >
-        <OutlinedInput
-          disabled={loading}
-          fullWidth={true}
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                onClick={handleSubmit}
-                disabled={loading || question === ""}
-              >
-                <Send />
-              </IconButton>
-            </InputAdornment>
-          }
-        />
+        <form onSubmit={handleSubmit}>
+          <OutlinedInput
+            disabled={loading}
+            fullWidth={true}
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton disabled={loading || question === ""} type="submit">
+                  <Send />
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </form>
       </Box>
     </Box>
   );
