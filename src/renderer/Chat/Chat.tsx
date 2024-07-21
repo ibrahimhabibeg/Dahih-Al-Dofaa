@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { Send } from "@mui/icons-material";
 import Message from "./Message";
 import LoadingBotMessage from "./LoadingBotMessage";
+import ChatTopBar from "./ChatTopBar";
 
 const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -62,7 +63,18 @@ const Chat = () => {
     >
       <Box
         sx={{
-          height: "80vh",
+          height: "10vh",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <ChatTopBar chatId={chatId} courseId={courseId} />
+      </Box>
+      <Box
+        sx={{
+          height: "75vh",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -79,7 +91,7 @@ const Chat = () => {
       </Box>
       <Box
         sx={{
-          height: "20vh",
+          height: "15vh",
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",

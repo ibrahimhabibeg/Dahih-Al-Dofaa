@@ -57,6 +57,10 @@ class ChatsManager {
     return this.chats;
   }
 
+  public getChat(chatId: string): ChatType {
+    return this.chats.find((chat) => chat.id === chatId);
+  }
+
   private save() {
     fs.writeFileSync(this.filepath, JSON.stringify({ chats: this.chats }));
   }

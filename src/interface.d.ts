@@ -31,6 +31,7 @@ export interface IAPI {
   chatIsLoadingMessage: (courseId: string, chatId: string) => Promise<boolean>;
   onChatMessage: (listener: (chatId: string, message: Message) => void) => void;
   unsubscribeChatMessage: () => void;
+  getChat: (courseId: string, chatId: string) => Promise<ChatType>;
 }
 
 declare global {

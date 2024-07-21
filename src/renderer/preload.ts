@@ -11,7 +11,9 @@ const api: Window["api"] = {
   getCourse: (courseId: string) => ipcRenderer.invoke("course:get", courseId),
   getCourses: () => ipcRenderer.invoke("course:getAll"),
   updateCourse: (course: course) => ipcRenderer.invoke("course:update", course),
-  getChats: (courseId: string) => ipcRenderer.invoke("chat:get", courseId),
+  getChats: (courseId: string) => ipcRenderer.invoke("chat:getAll", courseId),
+  getChat: (courseId: string, chatId: string) =>
+    ipcRenderer.invoke("chat:get", courseId, chatId),
   addChat: (courseId: string, chatName?: string) =>
     ipcRenderer.invoke("chat:add", courseId, chatName),
   removeChat: (courseId: string, chatId: string) =>
@@ -48,13 +50,14 @@ const api: Window["api"] = {
     ipcRenderer.invoke("chat:unsubscribe", courseId, chatId),
   chatIsLoadingMessage: (courseId: string, chatId: string) =>
     ipcRenderer.invoke("chat:loadingMessage", courseId, chatId),
-  onChatMessage: (listener: (chatId: string, message: Message) => void) =>{
-    const res = ipcRenderer.on("chat:message:complete", (_event, chatId, message) =>
-      listener(chatId, message)
-    )
+  onChatMessage: (listener: (chatId: string, message: Message) => void) => {
+    ipcRenderer.on(
+      "chat:message:complete",
+      (_event, chatId, message) => listener(chatId, message)
+    );
   },
-  unsubscribeChatMessage: () => ipcRenderer.removeAllListeners("chat:message:complete")
-    
+  unsubscribeChatMessage: () =>
+    ipcRenderer.removeAllListeners("chat:message:complete"),
 };
 
 contextBridge.exposeInMainWorld("api", api);

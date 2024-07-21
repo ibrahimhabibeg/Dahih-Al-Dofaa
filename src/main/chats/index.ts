@@ -4,7 +4,7 @@ import ChatDB from "./chatDB";
 import message from "./message";
 import chatSubscription from "./chatSubscription";
 
-ipcMain.handle("chat:get", async (event, courseId: string) => {
+ipcMain.handle("chat:getAll", async (event, courseId: string) => {
   const chatManager = ChatsManager.getInistance(courseId);
   return chatManager.getChats();
 });
@@ -55,3 +55,8 @@ ipcMain.handle(
     return chatSubscription.isChatWithLoadingMessage(chatId);
   }
 );
+
+ipcMain.handle("chat:get", async (event, courseId: string, chatId: string) => {
+  const chatManager = ChatsManager.getInistance(courseId);
+  return chatManager.getChat(chatId);
+});
