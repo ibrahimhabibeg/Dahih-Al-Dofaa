@@ -61,6 +61,16 @@ class ChatsManager {
     return this.chats.find((chat) => chat.id === chatId);
   }
 
+  public renameChat(chatId: string, newTitle: string) {
+    this.chats = this.chats.map((chat) => {
+      if (chat.id === chatId) {
+        chat.title = newTitle;
+      }
+      return chat;
+    });
+    this.save();
+  }
+
   private save() {
     fs.writeFileSync(this.filepath, JSON.stringify({ chats: this.chats }));
   }

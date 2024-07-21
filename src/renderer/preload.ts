@@ -51,13 +51,14 @@ const api: Window["api"] = {
   chatIsLoadingMessage: (courseId: string, chatId: string) =>
     ipcRenderer.invoke("chat:loadingMessage", courseId, chatId),
   onChatMessage: (listener: (chatId: string, message: Message) => void) => {
-    ipcRenderer.on(
-      "chat:message:complete",
-      (_event, chatId, message) => listener(chatId, message)
+    ipcRenderer.on("chat:message:complete", (_event, chatId, message) =>
+      listener(chatId, message)
     );
   },
   unsubscribeChatMessage: () =>
     ipcRenderer.removeAllListeners("chat:message:complete"),
+  renameChat: (courseId: string, chatId: string, newTitle: string) =>
+    ipcRenderer.invoke("chat:rename", courseId, chatId, newTitle),
 };
 
 contextBridge.exposeInMainWorld("api", api);

@@ -60,3 +60,11 @@ ipcMain.handle("chat:get", async (event, courseId: string, chatId: string) => {
   const chatManager = ChatsManager.getInistance(courseId);
   return chatManager.getChat(chatId);
 });
+
+ipcMain.handle(
+  "chat:rename",
+  async (event, courseId: string, chatId: string, newTitle: string) => {
+    const chatManager = ChatsManager.getInistance(courseId);
+    return chatManager.renameChat(chatId, newTitle);
+  }
+);
