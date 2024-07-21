@@ -37,7 +37,6 @@ class ChatSubscription {
   }
 
   public isChatWithLoadingMessage(chatId: string): boolean {
-    console.log(`Checking if chat ${chatId} is loading`);
     return this.chatsWithLoadingMessage.has(chatId);
   }
 

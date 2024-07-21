@@ -44,7 +44,6 @@ class ChatsManager {
 
   public addChat(title = "Unnamed Chat"): ChatType {
     const id = uuid4();
-    console.log("Adding chat", id, title);
     const chat: ChatType = { id, title };
     this.chats.push(chat);
     this.save();

@@ -19,13 +19,9 @@ const Chat = () => {
     });
     window.api.chatSubscribe(courseId, chatId);
     window.api.chatIsLoadingMessage(courseId, chatId).then((isLoading) => {
-      console.log(`Is loading: ${isLoading}`);
-      console.log(`Chat ID: ${chatId}`);
-      console.log(`Course ID: ${courseId}`);
       setLoading(isLoading);
     });
     window.api.onChatMessage((receviedMessageChatID, message) => {
-      console.log(`Received message: ${message.content}`);
       if (receviedMessageChatID === chatId) {
         setMessages((prevMessages) => [...prevMessages, message]);
         setLoading(false);
