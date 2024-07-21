@@ -5,7 +5,6 @@ import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import {
   ChatPromptTemplate,
   MessagesPlaceholder,
-  PromptTemplate,
 } from "@langchain/core/prompts";
 import { ChatOllama } from "@langchain/ollama";
 import { getHost } from "../ollama";
@@ -33,14 +32,17 @@ ipcMain.handle(
   }
 );
 
-ipcMain.handle("chat:getMessages", async (event, courseId: string, chatId: string) => {
-  const chatDB = ChatDB.getInstance(courseId, chatId);
-  return chatDB.getMessages();
-});
+ipcMain.handle(
+  "chat:getMessages",
+  async (event, courseId: string, chatId: string) => {
+    const chatDB = ChatDB.getInstance(courseId, chatId);
+    return chatDB.getMessages();
+  }
+);
 
 ipcMain.handle(
   "chat:message",
-  async (event, courseId: string, chatId: string, message: string) => {
+  async (event, courseId: string, chatId: string, question: string) => {
     const chatDB = ChatDB.getInstance(courseId, chatId);
     const chatHistory = chatDB
       .getMessages()
@@ -49,24 +51,30 @@ ipcMain.handle(
           ? new HumanMessage(message.content)
           : new AIMessage(message.content)
       );
-    chatDB.addMessage(message, "human");
     const llm = new ChatOllama({
       model: "llama3",
       baseUrl: getHost(),
     });
-    let question = message;
+    
+    let contextualizedQuestion = question;
     if (chatHistory.length > 0)
-      question = await contextualizeQuestion(question, chatHistory, llm);
+      contextualizedQuestion = await contextualizeQuestion(
+        contextualizedQuestion,
+        chatHistory,
+        llm
+      );
 
     const vectorDB = await VectorDB.getInstance(courseId);
-    const documents = await vectorDB.search(question);
+    const documents = await vectorDB.search(contextualizedQuestion);
 
     const answer = await respondToQuestion(
       question,
       documents.map((doc) => doc.text),
+      chatHistory,
       llm
     );
 
+    chatDB.addMessage(question, "human");
     chatDB.addMessage(answer, "bot");
     return answer;
   }
@@ -99,22 +107,27 @@ just reformulate it if needed and otherwise return it as is.`;
 const respondToQuestion = async (
   question: string,
   documents: string[],
+  chatHistory: (HumanMessage | AIMessage)[],
   llm: ChatOllama
 ) => {
-  const prompt = PromptTemplate.fromTemplate(`
-  You are an assistant for question-answering tasks. 
-  Use the following pieces of retrieved context to answer the question. 
-  If you don't know the answer, just say that you don't know. 
+  const systemPrompt = `You are an assistant for question-answering tasks.
+  Use the following pieces of retrieved context to answer the question.
+  If you don't know the answer, just say that you don't know.
   Use three sentences maximum and keep the answer concise.
-  Question: {question} 
-  Context: {context} 
-  Answer:  
-  `);
+
+  {context}`;
+
+  const prompt = ChatPromptTemplate.fromMessages([
+    ["system", systemPrompt],
+    new MessagesPlaceholder("chatHistory"),
+    ["human", question],
+  ]);
 
   const chain = prompt.pipe(llm).pipe(new StringOutputParser());
 
   return chain.invoke({
     question,
     context: documents.join("\n\n"),
+    chatHistory,
   });
 };
