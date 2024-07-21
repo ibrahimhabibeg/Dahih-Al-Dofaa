@@ -5,6 +5,7 @@ import { Send } from "@mui/icons-material";
 import Message from "./Message";
 import LoadingBotMessage from "./LoadingBotMessage";
 import ChatTopBar from "./ChatTopBar";
+import useScrollbarStyle from "../UI/useScrollbarStyle";
 
 const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -13,6 +14,8 @@ const Chat = () => {
 
   const { courseId, chatId } = useParams();
   const listRef = useRef(null);
+
+  const scrollbarStyle = useScrollbarStyle();
 
   useEffect(() => {
     window.api.getMessages(courseId, chatId).then((messages) => {
@@ -80,6 +83,7 @@ const Chat = () => {
           alignItems: "center",
           overflow: "auto",
           width: "100%",
+          ...scrollbarStyle,
         }}
       >
         <Box width={"80%"} ref={listRef}>
