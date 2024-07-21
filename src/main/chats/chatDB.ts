@@ -8,7 +8,7 @@ class ChatDB {
   private filePath: string;
 
   public static getInstance(courseId: string, chatId: string): ChatDB {
-    if (this.inistances.has(courseId)) return this.inistances.get(courseId);
+    if (this.inistances.has(chatId)) return this.inistances.get(chatId);
     const folderPath = path.join(
       app.getPath("userData"),
       "courses",
@@ -21,13 +21,13 @@ class ChatDB {
       const { messages }: { messages: Message[] } = JSON.parse(
         fs.readFileSync(filePath, "utf-8")
       );
-      this.inistances.set(courseId, new ChatDB(messages, filePath));
+      this.inistances.set(chatId, new ChatDB(messages, filePath));
     } else {
       const messages: Message[] = [];
       fs.writeFileSync(filePath, JSON.stringify({ messages }));
-      this.inistances.set(courseId, new ChatDB(messages, filePath));
+      this.inistances.set(chatId, new ChatDB(messages, filePath));
     }
-    return this.inistances.get(courseId);
+    return this.inistances.get(chatId);
   }
 
   private constructor(messages: Message[], filePath: string) {

@@ -17,8 +17,26 @@ const Chat = () => {
     window.api.getMessages(courseId, chatId).then((messages) => {
       setMessages(messages);
     });
+    window.api.chatSubscribe(courseId, chatId);
+    window.api.chatIsLoadingMessage(courseId, chatId).then((isLoading) => {
+      console.log(`Is loading: ${isLoading}`);
+      console.log(`Chat ID: ${chatId}`);
+      console.log(`Course ID: ${courseId}`);
+      setLoading(isLoading);
+    });
+    window.api.onChatMessage((receviedMessageChatID, message) => {
+      console.log(`Received message: ${message.content}`);
+      if (receviedMessageChatID === chatId) {
+        setMessages((prevMessages) => [...prevMessages, message]);
+        setLoading(false);
+      }
+    });
     setQuestion("");
-    setLoading(false);
+
+    return () => {
+      window.api.chatUnsubscribe(courseId, chatId);
+      window.api.unsubscribeChatMessage();
+    };
   }, [courseId, chatId]);
 
   useEffect(() => {
@@ -26,17 +44,13 @@ const Chat = () => {
   }, [messages]);
 
   const handleSubmit = () => {
+    window.api.chat(courseId, chatId, question);
     setLoading(true);
-
-    window.api.chat(courseId, chatId, question).then((response) => {
-      setMessages([
-        ...messages,
-        { content: question, sender: "human" },
-        { content: response, sender: "bot" },
-      ]);
-      setQuestion("");
-      setLoading(false);
-    });
+    setQuestion("");
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { content: question, sender: "human" },
+    ]);
   };
 
   return (
@@ -63,12 +77,7 @@ const Chat = () => {
           {messages.map((message, index) => (
             <Message key={index} message={message} />
           ))}
-          {loading && (
-            <>
-              <Message message={{ content: question, sender: "human" }} />
-              <LoadingBotMessage />
-            </>
-          )}
+          {loading && <LoadingBotMessage />}
         </Box>
       </Box>
       <Box

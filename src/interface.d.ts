@@ -24,8 +24,13 @@ export interface IAPI {
   stopListeningToDocument: (documentId: string) => Promise<boolean>;
   onDocumentLoading: (listener: (documentId: string) => void) => void;
   onDocumentLoaded: (listener: (documentId: string) => void) => void;
-  chat: (courseId: string, chatId: string, message: string) => Promise<string>;
+  chat: (courseId: string, chatId: string, message: string) => Promise<void>;
   getMessages: (courseId: string, chatId: string) => Promise<Message[]>;
+  chatSubscribe: (courseId: string, chatId: string) => Promise<void>;
+  chatUnsubscribe: (courseId: string, chatId: string) => Promise<void>;
+  chatIsLoadingMessage: (courseId: string, chatId: string) => Promise<boolean>;
+  onChatMessage: (listener: (chatId: string, message: Message) => void) => void;
+  unsubscribeChatMessage: () => void;
 }
 
 declare global {

@@ -42,6 +42,19 @@ const api: Window["api"] = {
     ipcRenderer.invoke("chat:message", courseId, chatId, message),
   getMessages: (courseId: string, chatId: string) =>
     ipcRenderer.invoke("chat:getMessages", courseId, chatId),
+  chatSubscribe: (courseId: string, chatId: string) =>
+    ipcRenderer.invoke("chat:subscribe", courseId, chatId),
+  chatUnsubscribe: (courseId: string, chatId: string) =>
+    ipcRenderer.invoke("chat:unsubscribe", courseId, chatId),
+  chatIsLoadingMessage: (courseId: string, chatId: string) =>
+    ipcRenderer.invoke("chat:loadingMessage", courseId, chatId),
+  onChatMessage: (listener: (chatId: string, message: Message) => void) =>{
+    const res = ipcRenderer.on("chat:message:complete", (_event, chatId, message) =>
+      listener(chatId, message)
+    )
+  },
+  unsubscribeChatMessage: () => ipcRenderer.removeAllListeners("chat:message:complete")
+    
 };
 
 contextBridge.exposeInMainWorld("api", api);
