@@ -68,7 +68,6 @@ ipcMain.handle(
     );
 
     chatDB.addMessage(answer, "bot");
-    console.log(answer);
     return answer;
   }
 );
