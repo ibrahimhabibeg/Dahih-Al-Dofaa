@@ -1,18 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
-import {
-  Avatar,
-  Box,
-  IconButton,
-  InputAdornment,
-  OutlinedInput,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, IconButton, InputAdornment, OutlinedInput } from "@mui/material";
 import { useParams } from "react-router-dom";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import Logo from "../../assets/logo.svg";
-import { Person, Send } from "@mui/icons-material";
+import { Send } from "@mui/icons-material";
+import Message from "./Message";
+import LoadingBotMessage from "./LoadingBotMessage";
 
 const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -20,7 +11,6 @@ const Chat = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const { courseId, chatId } = useParams();
-  const theme = useTheme();
   const listRef = useRef(null);
 
   useEffect(() => {
@@ -35,19 +25,18 @@ const Chat = () => {
     listRef.current?.lastElementChild?.scrollIntoView();
   }, [messages]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     setLoading(true);
-    setMessages((currentMessage) => [
-      ...currentMessage,
-      { content: question, sender: "human" },
-    ]);
-    const message = await window.api.chat(courseId, chatId, question);
-    setMessages((currentMessage) => [
-      ...currentMessage,
-      { content: message, sender: "bot" },
-    ]);
-    setQuestion("");
-    setLoading(false);
+
+    window.api.chat(courseId, chatId, question).then((response) => {
+      setMessages([
+        ...messages,
+        { content: question, sender: "human" },
+        { content: response, sender: "bot" },
+      ]);
+      setQuestion("");
+      setLoading(false);
+    });
   };
 
   return (
@@ -71,36 +60,15 @@ const Chat = () => {
         }}
       >
         <Box width={"80%"} ref={listRef}>
-          {messages.map((message) => (
-            <Box
-              sx={{
-                marginTop: 3,
-                marginBottom: 3,
-                display: "flex",
-                flexDirection: "row",
-                width: "100%",
-              }}
-            >
-              <Box width={"10%"}>
-                {message.sender === "human" ? (
-                  <Avatar
-                    sx={{
-                      width: 24,
-                      height: 24,
-                      backgroundColor: theme.palette.primary.light,
-                    }}
-                  >
-                    <Person sx={{ fontSize: 20 }} />
-                  </Avatar>
-                ) : (
-                  <img src={Logo} alt="Ollama Logo" width={24} />
-                )}
-              </Box>
-              <Box width={"90%"}>
-                <Typography>{message.content}</Typography>
-              </Box>
-            </Box>
+          {messages.map((message, index) => (
+            <Message key={index} message={message} />
           ))}
+          {loading && (
+            <>
+              <Message message={{ content: question, sender: "human" }} />
+              <LoadingBotMessage />
+            </>
+          )}
         </Box>
       </Box>
       <Box
