@@ -56,7 +56,11 @@ const AddCourseModal = ({
             onChange={(e) => setCourseTitle(e.target.value)}
             sx={{ marginBottom: 3, marginTop: 5 }}
           />
-          <Button variant="outlined" type="submit">
+          <Button
+            variant="outlined"
+            type="submit"
+            disabled={courseTitle === ""}
+          >
             Add Course
           </Button>
         </form>
