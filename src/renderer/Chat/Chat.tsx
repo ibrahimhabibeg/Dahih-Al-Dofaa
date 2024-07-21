@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Avatar,
   Box,
@@ -21,6 +21,7 @@ const Chat = () => {
 
   const { courseId, chatId } = useParams();
   const theme = useTheme();
+  const listRef = useRef(null);
 
   useEffect(() => {
     window.api.getMessages(courseId, chatId).then((messages) => {
@@ -29,6 +30,10 @@ const Chat = () => {
     setQuestion("");
     setLoading(false);
   }, [courseId, chatId]);
+
+  useEffect(() => {
+    listRef.current?.lastElementChild?.scrollIntoView();
+  }, [messages]);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -62,9 +67,10 @@ const Chat = () => {
           flexDirection: "column",
           alignItems: "center",
           overflow: "auto",
+          width: "100%",
         }}
       >
-        <Box width={"80%"}>
+        <Box width={"80%"} ref={listRef}>
           {messages.map((message) => (
             <Box
               sx={{
