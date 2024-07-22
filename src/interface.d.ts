@@ -9,21 +9,13 @@ interface IMessageAPI {
     chatId: string,
     listener: (_event: IpcRendererEvent, isLoading: boolean) => void
   ) => void;
-  unsubscribeFromIsLoadingMessage: (
-    courseId: string,
-    chatId: string,
-    listener: (_event: IpcRendererEvent, isLoading: boolean) => void
-  ) => void;
+  unsubscribeFromIsLoadingMessage: (courseId: string, chatId: string) => void;
   subscribeToCompleteMessage: (
     courseId: string,
     chatId: string,
     listener: (_event: IpcRendererEvent, message: Message) => void
   ) => void;
-  unsubscribeFromCompleteMessage: (
-    courseId: string,
-    chatId: string,
-    listener: (_event: IpcRendererEvent, message: Message) => void
-  ) => void;
+  unsubscribeFromCompleteMessage: (courseId: string, chatId: string) => void;
 }
 
 export interface IAPI {

@@ -18,12 +18,11 @@ const message = {
   ) => {
     ipcRenderer.on(`message:update:loading:${courseId}:${chatId}`, listener);
   },
-  unsubscribeFromIsLoadingMessage: (
-    courseId: string,
-    chatId: string,
-    listener: (_event: IpcRendererEvent, isLoading: boolean) => void
-  ) => {
-    ipcRenderer.off(`message:update:loading:${courseId}:${chatId}`, listener);
+  unsubscribeFromIsLoadingMessage: (courseId: string, chatId: string) => {
+    // Warning: Removing ALL listeners may cause unintended side effects
+    ipcRenderer.removeAllListeners(
+      `message:update:loading:${courseId}:${chatId}`
+    );
   },
   subscribeToCompleteMessage: (
     courseId: string,
@@ -32,12 +31,11 @@ const message = {
   ) => {
     ipcRenderer.on(`message:update:complete:${courseId}:${chatId}`, listener);
   },
-  unsubscribeFromCompleteMessage: (
-    courseId: string,
-    chatId: string,
-    listener: (_event: IpcRendererEvent, message: Message) => void
-  ) => {
-    ipcRenderer.off(`message:update:complete:${courseId}:${chatId}`, listener);
+  unsubscribeFromCompleteMessage: (courseId: string, chatId: string) => {
+    // Warning: Removing ALL listeners may cause unintended side effects
+    ipcRenderer.removeAllListeners(
+      `message:update:complete:${courseId}:${chatId}`
+    );
   },
 };
 

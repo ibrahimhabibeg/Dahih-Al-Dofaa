@@ -6,37 +6,21 @@ import Message from "./Message";
 import LoadingBotMessage from "./LoadingBotMessage";
 import ChatTopBar from "./ChatTopBar";
 import useScrollbarStyle from "../UI/useScrollbarStyle";
+import useMessages from "./useMessages";
+import useIsLoadingMessage from "./useIsLoadingMessage";
 
 const Chat = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [question, setQuestion] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-
   const { courseId, chatId } = useParams();
+  const [question, setQuestion] = useState<string>("");
+  const messages = useMessages({ courseId, chatId });
+  const loading = useIsLoadingMessage({ courseId, chatId });
+
   const listRef = useRef(null);
 
   const scrollbarStyle = useScrollbarStyle();
 
   useEffect(() => {
-    window.api.getMessages(courseId, chatId).then((messages) => {
-      setMessages(messages);
-    });
-    window.api.chatSubscribe(courseId, chatId);
-    window.api.chatIsLoadingMessage(courseId, chatId).then((isLoading) => {
-      setLoading(isLoading);
-    });
-    window.api.onChatMessage((receviedMessageChatID, message) => {
-      if (receviedMessageChatID === chatId) {
-        setMessages((prevMessages) => [...prevMessages, message]);
-        setLoading(false);
-      }
-    });
     setQuestion("");
-
-    return () => {
-      window.api.chatUnsubscribe(courseId, chatId);
-      window.api.unsubscribeChatMessage();
-    };
   }, [courseId, chatId]);
 
   useEffect(() => {
@@ -45,13 +29,7 @@ const Chat = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    window.api.chat(courseId, chatId, question);
-    setLoading(true);
-    setQuestion("");
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { content: question, sender: "human" },
-    ]);
+    window.api.message.sendMessage(courseId, chatId, question);
   };
 
   return (
