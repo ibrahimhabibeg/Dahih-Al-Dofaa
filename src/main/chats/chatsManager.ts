@@ -2,7 +2,7 @@ import path from "path";
 import { app } from "electron";
 import fs from "fs";
 import { v4 as uuid4 } from "uuid";
-import ChatDB from "./chatDB";
+import MessageDB from "../messages/messageDB";
 
 class ChatsManager {
   private static instances: Map<string, ChatsManager> = new Map();
@@ -53,7 +53,7 @@ class ChatsManager {
   public removeChat(chatId: string): ChatType[] {
     this.chats = this.chats.filter((chat) => chat.id !== chatId);
     this.save();
-    ChatDB.getInstance(this.courseId, chatId).deleteDB();
+    MessageDB.getInstance(this.courseId, chatId).deleteDB();
     return this.chats;
   }
 

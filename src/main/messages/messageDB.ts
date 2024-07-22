@@ -1,13 +1,16 @@
 import path from "path";
 import { app } from "electron";
 import fs from "fs";
+import { notifyCompleteMessage } from "./messageNotifier";
 
-class ChatDB {
-  private static inistances: Map<string, ChatDB> = new Map();
+class MessageDB {
+  private static inistances: Map<string, MessageDB> = new Map();
   private messages: Message[];
   private filePath: string;
+  private courseId: string;
+  private chatId: string;
 
-  public static getInstance(courseId: string, chatId: string): ChatDB {
+  public static getInstance(courseId: string, chatId: string): MessageDB {
     if (this.inistances.has(chatId)) return this.inistances.get(chatId);
     const folderPath = path.join(
       app.getPath("userData"),
@@ -21,16 +24,29 @@ class ChatDB {
       const { messages }: { messages: Message[] } = JSON.parse(
         fs.readFileSync(filePath, "utf-8")
       );
-      this.inistances.set(chatId, new ChatDB(messages, filePath));
+      this.inistances.set(
+        chatId,
+        new MessageDB(courseId, chatId, messages, filePath)
+      );
     } else {
       const messages: Message[] = [];
       fs.writeFileSync(filePath, JSON.stringify({ messages }));
-      this.inistances.set(chatId, new ChatDB(messages, filePath));
+      this.inistances.set(
+        chatId,
+        new MessageDB(courseId, chatId, messages, filePath)
+      );
     }
     return this.inistances.get(chatId);
   }
 
-  private constructor(messages: Message[], filePath: string) {
+  private constructor(
+    courseId: string,
+    chatId: string,
+    messages: Message[],
+    filePath: string
+  ) {
+    this.courseId = courseId;
+    this.chatId = chatId;
     this.messages = messages;
     this.filePath = filePath;
   }
@@ -39,6 +55,7 @@ class ChatDB {
     const message: Message = { content, sender };
     this.messages.push(message);
     this.save();
+    notifyCompleteMessage(this.courseId, this.chatId, message);
     return message;
   }
 
@@ -58,4 +75,4 @@ class ChatDB {
   }
 }
 
-export default ChatDB;
+export default MessageDB;
