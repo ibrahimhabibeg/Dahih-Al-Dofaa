@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Avatar, Typography, useTheme } from "@mui/material";
+import { Box, Avatar, useTheme } from "@mui/material";
 import { Person } from "@mui/icons-material";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
