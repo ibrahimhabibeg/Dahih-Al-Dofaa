@@ -18,7 +18,7 @@ const Message = ({ message }: { message: Message }) => {
         width: "100%",
       }}
     >
-      <Box width={"10%"}>
+      <Box width={"10%"} marginTop={2}>
         {message.sender === "human" ? (
           <Avatar
             sx={{

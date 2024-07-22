@@ -18,6 +18,8 @@ const SubmitButton = () => {
   return (
     <form onSubmit={handleSubmit}>
       <OutlinedInput
+        autoFocus
+        placeholder="Ask the Dahih anything"
         disabled={loading}
         fullWidth={true}
         value={question}
