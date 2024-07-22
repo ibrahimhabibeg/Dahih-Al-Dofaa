@@ -39,6 +39,19 @@ const message = {
   },
 };
 
+const chat = {
+  subscribeToChats: (
+    courseId: string,
+    listener: (_event: IpcRendererEvent, chats: ChatType[]) => void
+  ) => {
+    ipcRenderer.on(`chat:update:${courseId}`, listener);
+  },
+  unsubscribeFromChats: (courseId: string) => {
+    // Warning: Removing ALL listeners may cause unintended side effects
+    ipcRenderer.removeAllListeners(`chat:update:${courseId}`);
+  },
+};
+
 const api: Window["api"] = {
   startOllama: () => ipcRenderer.invoke("ollama:start"),
   setupOllama: () => ipcRenderer.invoke("ollama:setup"),
@@ -81,6 +94,7 @@ const api: Window["api"] = {
   renameChat: (courseId: string, chatId: string, newTitle: string) =>
     ipcRenderer.invoke("chat:rename", courseId, chatId, newTitle),
   message,
+  chat,
 };
 
 contextBridge.exposeInMainWorld("api", api);

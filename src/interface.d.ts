@@ -18,6 +18,14 @@ interface IMessageAPI {
   unsubscribeFromCompleteMessage: (courseId: string, chatId: string) => void;
 }
 
+interface IChatAPI {
+  subscribeToChats: (
+    courseId: string,
+    listener: (_event: IpcRendererEvent, chats: ChatType[]) => void
+  ) => void;
+  unsubscribeFromChats: (courseId: string) => void;
+}
+
 export interface IAPI {
   startOllama: () => Promise<void>;
   setupOllama: () => Promise<void>;
@@ -49,6 +57,7 @@ export interface IAPI {
     newTitle: string
   ) => Promise<void>;
   message: IMessageAPI;
+  chat: IChatAPI;
 }
 
 declare global {

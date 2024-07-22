@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Box,
   Divider,
@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { ArrowBack, Add, Article } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import useChats from "./useChats";
 
 type ChatProps = {
   course: {
@@ -20,19 +21,11 @@ type ChatProps = {
 };
 
 const Chat = ({ course, handleBackClick }: ChatProps) => {
-  const [chats, setChats] = React.useState<ChatType[]>([]);
+  const chats = useChats(course.id);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    window.api.getChats(course.id).then((chats) => {
-      setChats(chats);
-    });
-  }, [course]);
-
-  const addChat = async () => {
-    await window.api.addChat(course.id);
-    const newChats = await window.api.getChats(course.id);
-    setChats(newChats);
+  const addChat = () => {
+    window.api.addChat(course.id);
   };
 
   return (

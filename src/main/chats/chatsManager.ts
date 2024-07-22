@@ -3,6 +3,7 @@ import { app } from "electron";
 import fs from "fs";
 import { v4 as uuid4 } from "uuid";
 import MessageDB from "../messages/messageDB";
+import { notifyChat } from "./chatNotifier";
 
 class ChatsManager {
   private static instances: Map<string, ChatsManager> = new Map();
@@ -47,6 +48,7 @@ class ChatsManager {
     const chat: ChatType = { id, title };
     this.chats.push(chat);
     this.save();
+    notifyChat(this.courseId, this.chats);
     return chat;
   }
 
@@ -54,6 +56,7 @@ class ChatsManager {
     this.chats = this.chats.filter((chat) => chat.id !== chatId);
     this.save();
     MessageDB.getInstance(this.courseId, chatId).deleteDB();
+    notifyChat(this.courseId, this.chats);
     return this.chats;
   }
 
@@ -69,6 +72,7 @@ class ChatsManager {
       return chat;
     });
     this.save();
+    notifyChat(this.courseId, this.chats);
   }
 
   private save() {
