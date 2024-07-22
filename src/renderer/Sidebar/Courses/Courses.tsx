@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import AddCourseModal from "./AddCourseModal";
+import useScrollbarStyle from "../../UI/useScrollbarStyle";
 
 type CoursesProps = {
   handleCourseClick: (course: { title: string; id: string }) => void;
@@ -18,6 +19,7 @@ type CoursesProps = {
 const Courses = ({ handleCourseClick }: CoursesProps) => {
   const [courses, setCourses] = useState<{ id: string; title: string }[]>([]);
   const [isAddingCourse, setIsAddingCourse] = useState(false);
+  const scrollbarStyle = useScrollbarStyle();
 
   useEffect(() => {
     window.api.getCourses().then((courses) => {
@@ -36,7 +38,13 @@ const Courses = ({ handleCourseClick }: CoursesProps) => {
   };
 
   return (
-    <Box marginTop={3}>
+    <Box
+      sx={{
+        height: "100vh",
+        overflowY: "auto",
+        ...scrollbarStyle,
+      }}
+    >
       <AddCourseModal
         isOpen={isAddingCourse}
         onClose={closeAddCourseModal}
