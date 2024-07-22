@@ -25,6 +25,17 @@ const ChatTopBar = () => {
     setIsEditing(true);
   };
 
+  const handleKeydown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      submitRename();
+    }
+  };
+
+  const submitRename = () => {
+    setIsEditing(false);
+    window.api.renameChat(courseId, chatId, chatName);
+  };
+
   return (
     <Box
       sx={{
@@ -38,12 +49,11 @@ const ChatTopBar = () => {
     >
       {isEditing ? (
         <TextField
+          autoFocus
           value={chatName}
           onChange={(e) => setChatName(e.target.value)}
-          onBlur={() => {
-            setIsEditing(false);
-            window.api.renameChat(courseId, chatId, chatName);
-          }}
+          onBlur={submitRename}
+          onKeyDown={handleKeydown}
         />
       ) : (
         <Typography variant="h5">{chatName}</Typography>
