@@ -34,3 +34,8 @@ ipcMain.handle(
     return chatManager.renameChat(chatId, newTitle);
   }
 );
+
+export const recordNewChatActivity = (courseId: string, chatId: string) => {
+  const chatManager = ChatsManager.getInistance(courseId);
+  chatManager.recordNewActivity(chatId);
+};

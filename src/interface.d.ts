@@ -77,6 +77,7 @@ declare global {
   interface ChatType {
     id: string;
     title: string;
+    latestActivity: Date;
   }
 
   interface Message {

@@ -23,7 +23,14 @@ class ChatsManager {
       const { chats }: { chats: ChatType[] } = JSON.parse(
         fs.readFileSync(filePath, "utf-8")
       );
-      this.instances.set(courseId, new ChatsManager(chats, filePath, courseId));
+      const chatsWithParsedDate = chats.map((chat) => ({
+        ...chat,
+        latestActivity: new Date(chat.latestActivity),
+      }));
+      this.instances.set(
+        courseId,
+        new ChatsManager(chatsWithParsedDate, filePath, courseId)
+      );
     } else {
       const chats: ChatType[] = [];
       fs.writeFileSync(filePath, JSON.stringify({ chats }));
@@ -45,8 +52,9 @@ class ChatsManager {
 
   public addChat(title = "Unnamed Chat"): ChatType {
     const id = uuid4();
-    const chat: ChatType = { id, title };
+    const chat: ChatType = { id, title, latestActivity: new Date() };
     this.chats.push(chat);
+    this.sortChats();
     this.save();
     notifyChat(this.courseId, this.chats);
     return chat;
@@ -73,6 +81,24 @@ class ChatsManager {
     });
     this.save();
     notifyChat(this.courseId, this.chats);
+  }
+
+  public recordNewActivity(chatId: string) {
+    this.chats = this.chats.map((chat) => {
+      if (chat.id === chatId) {
+        chat.latestActivity = new Date();
+      }
+      return chat;
+    });
+    this.sortChats();
+    this.save();
+    notifyChat(this.courseId, this.chats);
+  }
+
+  private sortChats() {
+    this.chats = this.chats.sort(
+      (a, b) => b.latestActivity.getTime() - a.latestActivity.getTime()
+    );
   }
 
   private save() {

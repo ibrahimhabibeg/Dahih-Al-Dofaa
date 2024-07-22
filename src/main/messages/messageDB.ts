@@ -2,6 +2,7 @@ import path from "path";
 import { app } from "electron";
 import fs from "fs";
 import { notifyCompleteMessage } from "./messageNotifier";
+import { recordNewChatActivity } from "../chats";
 
 class MessageDB {
   private static inistances: Map<string, MessageDB> = new Map();
@@ -56,6 +57,7 @@ class MessageDB {
     this.messages.push(message);
     this.save();
     notifyCompleteMessage(this.courseId, this.chatId, message);
+    recordNewChatActivity(this.courseId, this.chatId);
     return message;
   }
 
