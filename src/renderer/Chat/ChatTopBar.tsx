@@ -56,7 +56,9 @@ const ChatTopBar = () => {
           onKeyDown={handleKeydown}
         />
       ) : (
-        <Typography variant="h5">{chatName}</Typography>
+        <span onDoubleClick={handleEdit}>
+          <Typography variant="h5">{chatName}</Typography>
+        </span>
       )}
       <Box sx={{ display: "flex", flexDirection: "row" }}>
         <IconButton sx={{ marginRight: 3 }} onClick={handleEdit}>
