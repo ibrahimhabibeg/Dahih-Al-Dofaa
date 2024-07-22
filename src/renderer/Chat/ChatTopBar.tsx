@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Box, IconButton, Typography, TextField } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const ChatTopBar = ({
-  chatId,
-  courseId,
-}: {
-  chatId: string;
-  courseId: string;
-}) => {
+const ChatTopBar = () => {
+  const { courseId, chatId } = useParams();
   const [chatName, setChatName] = useState<string>("");
   const [isEditing, setIsEditing] = useState<boolean>(false);
 

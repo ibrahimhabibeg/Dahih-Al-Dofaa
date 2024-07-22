@@ -1,36 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Box, IconButton, InputAdornment, OutlinedInput } from "@mui/material";
-import { useParams } from "react-router-dom";
-import { Send } from "@mui/icons-material";
-import Message from "./Message";
-import LoadingBotMessage from "./LoadingBotMessage";
+import React from "react";
+import { Box } from "@mui/material";
 import ChatTopBar from "./ChatTopBar";
 import useScrollbarStyle from "../UI/useScrollbarStyle";
-import useMessages from "./useMessages";
-import useIsLoadingMessage from "./useIsLoadingMessage";
+import SubmitButton from "./SubmitButton";
+import ChatList from "./ChatList";
 
 const Chat = () => {
-  const { courseId, chatId } = useParams();
-  const [question, setQuestion] = useState<string>("");
-  const messages = useMessages({ courseId, chatId });
-  const loading = useIsLoadingMessage({ courseId, chatId });
-
-  const listRef = useRef(null);
-
   const scrollbarStyle = useScrollbarStyle();
-
-  useEffect(() => {
-    setQuestion("");
-  }, [courseId, chatId]);
-
-  useEffect(() => {
-    listRef.current?.lastElementChild?.scrollIntoView();
-  }, [messages]);
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    window.api.message.sendMessage(courseId, chatId, question);
-  };
 
   return (
     <Box
@@ -51,7 +27,7 @@ const Chat = () => {
           alignItems: "center",
         }}
       >
-        <ChatTopBar chatId={chatId} courseId={courseId} />
+        <ChatTopBar />
       </Box>
       <Box
         sx={{
@@ -64,12 +40,7 @@ const Chat = () => {
           ...scrollbarStyle,
         }}
       >
-        <Box width={"80%"} ref={listRef}>
-          {messages.map((message, index) => (
-            <Message key={index} message={message} />
-          ))}
-          {loading && <LoadingBotMessage />}
-        </Box>
+        <ChatList />
       </Box>
       <Box
         sx={{
@@ -80,21 +51,7 @@ const Chat = () => {
           width: "80%",
         }}
       >
-        <form onSubmit={handleSubmit}>
-          <OutlinedInput
-            disabled={loading}
-            fullWidth={true}
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton disabled={loading || question === ""} type="submit">
-                  <Send />
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </form>
+        <SubmitButton />
       </Box>
     </Box>
   );
