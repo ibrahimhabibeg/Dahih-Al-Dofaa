@@ -24,3 +24,10 @@ export const notifyLoadingMessage = (
     );
   });
 }
+
+export const notifyPartialMessage = (courseId: string, chatId: string, message: string) => {
+  const windows = webContents.getAllWebContents();
+  windows.forEach((webContents) => {
+    webContents.send(`message:update:partial:${courseId}:${chatId}`, message);
+  });
+}

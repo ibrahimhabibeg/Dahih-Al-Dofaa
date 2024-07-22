@@ -9,6 +9,7 @@ import { getHost } from "../ollama";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import VectorDB from "../documents/vectorDB";
 import loadingMessage from "./loadingMessages";
+import { notifyPartialMessage } from "./messageNotifier";
 
 const sendMessage = async (
   courseId: string,
@@ -43,13 +44,19 @@ const sendMessage = async (
   const vectorDB = await VectorDB.getInstance(courseId);
   const documents = await vectorDB.search(contextualizedQuestion);
 
-  const answer = await respondToQuestion(
+  const stream = await respondToQuestion(
     message,
     documents.map((doc) => doc.text),
     chatHistory,
     llm
   );
 
+  let answer = "";
+  for await (const chunk of stream) {
+    answer += chunk;
+    notifyPartialMessage(courseId, chatId, answer);
+  }
+  notifyPartialMessage(courseId, chatId, "");
   messageDB.addMessage(answer, "bot");
   loadingMessage.removeLoadingMessageChat(courseId, chatId);
 };
@@ -99,7 +106,7 @@ const respondToQuestion = async (
 
   const chain = prompt.pipe(llm).pipe(new StringOutputParser());
 
-  return chain.invoke({
+  return chain.stream({
     question,
     context: documents.join("\n\n"),
     chatHistory,

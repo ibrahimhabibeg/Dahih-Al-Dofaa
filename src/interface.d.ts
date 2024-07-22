@@ -16,6 +16,12 @@ interface IMessageAPI {
     listener: (_event: IpcRendererEvent, message: Message) => void
   ) => void;
   unsubscribeFromCompleteMessage: (courseId: string, chatId: string) => void;
+  subscribeToPartialMessage: (
+    courseId: string,
+    chatId: string,
+    listener: (_event: IpcRendererEvent, message: string) => void
+  ) => void;
+  unsubscribeFromPartialMessage: (courseId: string, chatId: string) => void;
 }
 
 interface IChatAPI {

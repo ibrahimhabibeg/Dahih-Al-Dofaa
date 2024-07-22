@@ -5,11 +5,14 @@ import Message from "./Message";
 import LoadingBotMessage from "./LoadingBotMessage";
 import useMessages from "./useMessages";
 import useIsLoadingMessage from "./useIsLoadingMessage";
+import usePartialMessage from "./usePartialMessage";
+import PartialMessage from "./PartialMessage";
 
 const ChatList = () => {
   const { courseId, chatId } = useParams();
   const messages = useMessages({ courseId, chatId });
   const loading = useIsLoadingMessage({ courseId, chatId });
+  const partialMessage = usePartialMessage({ courseId, chatId });
 
   const listRef = useRef(null);
 
@@ -22,7 +25,11 @@ const ChatList = () => {
       {messages.map((message, index) => (
         <Message key={index} message={message} />
       ))}
-      {loading && <LoadingBotMessage />}
+      {partialMessage ? (
+        <PartialMessage message={partialMessage} />
+      ) : (
+        loading && <LoadingBotMessage />
+      )}
     </Box>
   );
 };

@@ -37,6 +37,19 @@ const message = {
       `message:update:complete:${courseId}:${chatId}`
     );
   },
+  subscribeToPartialMessage: (
+    courseId: string,
+    chatId: string,
+    listener: (_event: IpcRendererEvent, message: string) => void
+  ) => {
+    ipcRenderer.on(`message:update:partial:${courseId}:${chatId}`, listener);
+  },
+  unsubscribeFromPartialMessage: (courseId: string, chatId: string) => {
+    // Warning: Removing ALL listeners may cause unintended side effects
+    ipcRenderer.removeAllListeners(
+      `message:update:partial:${courseId}:${chatId}`
+    );
+  },
 };
 
 const chat = {
