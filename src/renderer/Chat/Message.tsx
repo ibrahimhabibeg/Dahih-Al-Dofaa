@@ -4,6 +4,7 @@ import { Person } from "@mui/icons-material";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Logo from "../../assets/logo.svg";
+import Markdown from "react-markdown";
 
 const Message = ({ message }: { message: Message }) => {
   const theme = useTheme();
@@ -33,7 +34,7 @@ const Message = ({ message }: { message: Message }) => {
         )}
       </Box>
       <Box width={"90%"}>
-        <Typography>{message.content}</Typography>
+        <Markdown>{message.content}</Markdown>
       </Box>
     </Box>
   );
