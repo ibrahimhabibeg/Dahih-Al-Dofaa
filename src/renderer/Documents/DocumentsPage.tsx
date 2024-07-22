@@ -65,7 +65,7 @@ const DocumentsPage = () => {
       <Box marginTop={3}>
         <List>
           {documents.map((document, index) => (
-            <>
+            <Box key={index}>
               <DocumentView
                 document={document}
                 handleDelete={() => handleDelete(document.id)}
@@ -75,7 +75,7 @@ const DocumentsPage = () => {
                 key={document.id}
               />
               {index !== documents.length - 1 && <Divider />}
-            </>
+            </Box>
           ))}
         </List>
       </Box>

@@ -57,7 +57,7 @@ const Chat = ({ course, handleBackClick }: ChatProps) => {
             <ListItemText primary={"New Chat"} />
           </ListItemButton>
           {chats.map((chat) => (
-            <>
+            <Box key={chat.id}>
               <Divider />
               <ListItemButton
                 key={chat.id}
@@ -65,7 +65,7 @@ const Chat = ({ course, handleBackClick }: ChatProps) => {
               >
                 <ListItemText>{chat.title}</ListItemText>
               </ListItemButton>
-            </>
+            </Box>
           ))}
         </List>
       </Box>
