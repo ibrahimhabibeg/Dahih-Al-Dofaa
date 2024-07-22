@@ -44,7 +44,7 @@ const TopBar = ({ handleBackClick, course }: PropsType) => {
           <ListItemText>Back to all courses</ListItemText>
         </ListItemButton>
       </List>
-      <Typography variant="h6" marginLeft={2} marginTop={2}>
+      <Typography variant="body1" marginLeft={2} marginTop={2}>
         {course.title} Chats
       </Typography>
       <List>

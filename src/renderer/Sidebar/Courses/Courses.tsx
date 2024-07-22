@@ -50,7 +50,7 @@ const Courses = ({ handleCourseClick }: CoursesProps) => {
         onClose={closeAddCourseModal}
         addCourse={addCourse}
       />
-      <Typography variant="h6" marginLeft={2}>
+      <Typography variant="h6" marginLeft={2} marginTop={2}>
         Courses
       </Typography>
       <List>
