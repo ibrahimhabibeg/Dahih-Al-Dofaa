@@ -1,5 +1,23 @@
 import { course } from "./main/courses/courses";
 
+interface IMessageAPI {
+  getMessages: (courseId: string, chatId: string) => Promise<Message[]>;
+  isLoadingMessage: (courseId: string, chatId: string) => Promise<boolean>;
+  sendMessage: (courseId: string, chatId: string, message: string) => void;
+  subscribeToIsLoadingMessage: (
+    courseId: string,
+    chatId: string,
+    listener: (_event: IpcRendererEvent, isLoading: boolean) => void
+  ) => void;
+  unsubscribeFromIsLoadingMessage: (courseId: string, chatId: string) => void;
+  subscribeToCompleteMessage: (
+    courseId: string,
+    chatId: string,
+    listener: (_event: IpcRendererEvent, message: Message) => void
+  ) => void;
+  unsubscribeFromCompleteMessage: (courseId: string, chatId: string) => void;
+}
+
 export interface IAPI {
   startOllama: () => Promise<void>;
   setupOllama: () => Promise<void>;
@@ -10,7 +28,7 @@ export interface IAPI {
   updateCourse: (course: course) => Promise<course[]>;
   getChats: (courseId: string) => Promise<ChatType[]>;
   addChat: (courseId: string, chatName?: string) => Promise<ChatType>;
-  removeChat: (courseId:string, chatId: string) => Promise<ChatType[]>;
+  removeChat: (courseId: string, chatId: string) => Promise<ChatType[]>;
   addDocument: (courseId: string) => Promise<Doc[]>;
   deleteDocument: (courseId: string, documentId: string) => Promise<Doc[]>;
   renameDocument: (
@@ -24,15 +42,13 @@ export interface IAPI {
   stopListeningToDocument: (documentId: string) => Promise<boolean>;
   onDocumentLoading: (listener: (documentId: string) => void) => void;
   onDocumentLoaded: (listener: (documentId: string) => void) => void;
-  chat: (courseId: string, chatId: string, message: string) => Promise<void>;
-  getMessages: (courseId: string, chatId: string) => Promise<Message[]>;
-  chatSubscribe: (courseId: string, chatId: string) => Promise<void>;
-  chatUnsubscribe: (courseId: string, chatId: string) => Promise<void>;
-  chatIsLoadingMessage: (courseId: string, chatId: string) => Promise<boolean>;
-  onChatMessage: (listener: (chatId: string, message: Message) => void) => void;
-  unsubscribeChatMessage: () => void;
   getChat: (courseId: string, chatId: string) => Promise<ChatType>;
-  renameChat: (courseId: string, chatId: string, newTitle: string) => Promise<void>;
+  renameChat: (
+    courseId: string,
+    chatId: string,
+    newTitle: string
+  ) => Promise<void>;
+  message: IMessageAPI;
 }
 
 declare global {

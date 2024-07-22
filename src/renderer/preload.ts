@@ -1,5 +1,43 @@
-import { contextBridge, ipcRenderer } from "electron";
+import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 import { type course } from "../main/courses/courses";
+
+const message = {
+  getMessages: (courseId: string, chatId: string) => {
+    return ipcRenderer.invoke("message:get", courseId, chatId);
+  },
+  isLoadingMessage: (courseId: string, chatId: string) => {
+    return ipcRenderer.invoke("message:isLoading", courseId, chatId);
+  },
+  sendMessage: (courseId: string, chatId: string, message: string) => {
+    ipcRenderer.invoke("message:send", courseId, chatId, message);
+  },
+  subscribeToIsLoadingMessage: (
+    courseId: string,
+    chatId: string,
+    listener: (_event: IpcRendererEvent, isLoading: boolean) => void
+  ) => {
+    ipcRenderer.on(`message:update:loading:${courseId}:${chatId}`, listener);
+  },
+  unsubscribeFromIsLoadingMessage: (courseId: string, chatId: string) => {
+    // Warning: Removing ALL listeners may cause unintended side effects
+    ipcRenderer.removeAllListeners(
+      `message:update:loading:${courseId}:${chatId}`
+    );
+  },
+  subscribeToCompleteMessage: (
+    courseId: string,
+    chatId: string,
+    listener: (_event: IpcRendererEvent, message: Message) => void
+  ) => {
+    ipcRenderer.on(`message:update:complete:${courseId}:${chatId}`, listener);
+  },
+  unsubscribeFromCompleteMessage: (courseId: string, chatId: string) => {
+    // Warning: Removing ALL listeners may cause unintended side effects
+    ipcRenderer.removeAllListeners(
+      `message:update:complete:${courseId}:${chatId}`
+    );
+  },
+};
 
 const api: Window["api"] = {
   startOllama: () => ipcRenderer.invoke("ollama:start"),
@@ -40,25 +78,9 @@ const api: Window["api"] = {
     ipcRenderer.on("document:loaded", (_event, documentId) =>
       listener(documentId)
     ),
-  chat: (courseId: string, chatId: string, message: string) =>
-    ipcRenderer.invoke("chat:message", courseId, chatId, message),
-  getMessages: (courseId: string, chatId: string) =>
-    ipcRenderer.invoke("chat:getMessages", courseId, chatId),
-  chatSubscribe: (courseId: string, chatId: string) =>
-    ipcRenderer.invoke("chat:subscribe", courseId, chatId),
-  chatUnsubscribe: (courseId: string, chatId: string) =>
-    ipcRenderer.invoke("chat:unsubscribe", courseId, chatId),
-  chatIsLoadingMessage: (courseId: string, chatId: string) =>
-    ipcRenderer.invoke("chat:loadingMessage", courseId, chatId),
-  onChatMessage: (listener: (chatId: string, message: Message) => void) => {
-    ipcRenderer.on("chat:message:complete", (_event, chatId, message) =>
-      listener(chatId, message)
-    );
-  },
-  unsubscribeChatMessage: () =>
-    ipcRenderer.removeAllListeners("chat:message:complete"),
   renameChat: (courseId: string, chatId: string, newTitle: string) =>
     ipcRenderer.invoke("chat:rename", courseId, chatId, newTitle),
+  message,
 };
 
 contextBridge.exposeInMainWorld("api", api);

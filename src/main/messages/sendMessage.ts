@@ -1,4 +1,4 @@
-import ChatDB from "./chatDB";
+import MessageDB from "./messageDB";
 import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import {
   ChatPromptTemplate,
@@ -8,19 +8,18 @@ import { ChatOllama } from "@langchain/ollama";
 import { getHost } from "../ollama";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import VectorDB from "../documents/vectorDB";
-import chatSubscription from "./chatSubscription";
+import loadingMessage from "./loadingMessages";
 
-const message = async (
-  event: Electron.IpcMainInvokeEvent,
+const sendMessage = async (
   courseId: string,
   chatId: string,
-  question: string
+  message: string
 ) => {
-  chatSubscription.addLoadingMessageChat(chatId);
-  const chatDB = ChatDB.getInstance(courseId, chatId);
-  chatDB.addMessage(question, "human");
+  const messageDB = MessageDB.getInstance(courseId, chatId);
+  messageDB.addMessage(message, "human");
+  loadingMessage.addLoadingMessageChat(courseId, chatId);
 
-  const chatHistory = chatDB
+  const chatHistory = messageDB
     .getMessages()
     .map((message) =>
       message.sender === "human"
@@ -33,7 +32,7 @@ const message = async (
     baseUrl: getHost(),
   });
 
-  let contextualizedQuestion = question;
+  let contextualizedQuestion = message;
   if (chatHistory.length > 0)
     contextualizedQuestion = await contextualizeQuestion(
       contextualizedQuestion,
@@ -45,18 +44,14 @@ const message = async (
   const documents = await vectorDB.search(contextualizedQuestion);
 
   const answer = await respondToQuestion(
-    question,
+    message,
     documents.map((doc) => doc.text),
     chatHistory,
     llm
   );
 
-  chatDB.addMessage(answer, "bot");
-  chatSubscription.removeLoadingMessageChat(chatId);
-  chatSubscription.notifyChatMessage(chatId, {
-    content: answer,
-    sender: "bot",
-  });
+  messageDB.addMessage(answer, "bot");
+  loadingMessage.removeLoadingMessageChat(courseId, chatId);
 };
 
 const contextualizeQuestion = async (
@@ -111,4 +106,4 @@ const respondToQuestion = async (
   });
 };
 
-export default message;
+export default sendMessage;
