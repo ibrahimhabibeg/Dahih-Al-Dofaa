@@ -52,6 +52,7 @@ const AddCourseModal = ({
         >
           <Typography variant="h6">Course Title</Typography>
           <TextField
+            autoFocus
             value={courseTitle}
             onChange={(e) => setCourseTitle(e.target.value)}
             sx={{ marginBottom: 3, marginTop: 5 }}
