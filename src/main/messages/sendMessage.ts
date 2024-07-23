@@ -91,12 +91,8 @@ const respondToQuestion = async (
   chatHistory: (HumanMessage | AIMessage)[],
   llm: ChatOllama
 ) => {
-  const systemPrompt = `You are an assistant for question-answering tasks.
-  Use the following pieces of retrieved context to answer the question.
-  If you don't know the answer, just say that you don't know.
-  Use three sentences maximum and keep the answer concise.
-
-  {context}`;
+  const systemPrompt =
+    documents.length > 0 ? promptWithContext : promptWithoutContext;
 
   const prompt = ChatPromptTemplate.fromMessages([
     ["system", systemPrompt],
@@ -106,11 +102,28 @@ const respondToQuestion = async (
 
   const chain = prompt.pipe(llm).pipe(new StringOutputParser());
 
-  return chain.stream({
-    question,
-    context: documents.join("\n\n"),
-    chatHistory,
-  });
+  const data =
+    documents.length > 0
+      ? { question, chatHistory, context: documents.join("\n") }
+      : { question, chatHistory };
+
+  return chain.stream(data);
 };
 
 export default sendMessage;
+
+const promptWithContext = `You're name is 'Dahih Al-Dofaa' which is arabic for
+the smartest student in class. You are an A+ student at the university and you are so smart
+you can answer any university related. question. You are given a conversation between you and
+one of your classmates related to university topics. You extracted the following context from
+your professor's lecture notes. You should answer your classmate's question from this context.
+Keep your answer clear, concise, and to the point.
+
+Context:
+{context}`;
+
+const promptWithoutContext = `You're name is 'Dahih Al-Dofaa' which is arabic for
+the smartest student in class. You are an A+ student at the university and you are so smart
+you can answer any university related. question. You are given a conversation between you and
+one of your classmates related to university topics. You should answer your classmate's question
+as best as you can. Keep your answer clear, concise, and to the point.`;
