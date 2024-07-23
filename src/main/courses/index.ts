@@ -24,7 +24,7 @@ ipcMain.handle("course:delete", async (_, courseId: string) => {
 });
 
 ipcMain.handle(
-  "cours:rename",
+  "course:rename",
   async (_, courseId: string, courseTitle: string) => {
     await updateCourse({ id: courseId, title: courseTitle });
   }
