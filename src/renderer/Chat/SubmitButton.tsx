@@ -26,7 +26,11 @@ const SubmitButton = () => {
         onChange={(e) => setQuestion(e.target.value)}
         endAdornment={
           <InputAdornment position="end">
-            <IconButton disabled={loading || question === ""} type="submit">
+            <IconButton
+              disabled={loading || question === ""}
+              type="submit"
+              color="primary"
+            >
               <Send />
             </IconButton>
           </InputAdornment>
