@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Box, Button, List, Divider } from "@mui/material";
-import { Upload } from "@mui/icons-material";
+import { Typography, Box, List, Divider } from "@mui/material";
 import { useParams } from "react-router-dom";
 import DocumentView from "./DocumentView";
+import useDocuments from "./useDocuments";
+import ImportDocumentButton from "./ImportDocumentButton";
 
 const DocumentsPage = () => {
   const { courseId } = useParams();
@@ -17,33 +18,7 @@ const DocumentsPage = () => {
     });
   }, [courseId]);
 
-  const [documents, setDocuments] = useState<Doc[]>([]);
-
-  useEffect(() => {
-    window.api.getDocuments(courseId).then((documents) => {
-      setDocuments(documents);
-    });
-  }, [courseId]);
-
-  const handleImport = () => {
-    window.api.addDocument(courseId).then((documents) => {
-      setDocuments(documents);
-    });
-  };
-
-  const handleDelete = (documentId: string) => {
-    window.api.deleteDocument(courseId, documentId).then((documents) => {
-      setDocuments(documents);
-    });
-  };
-
-  const handleRename = (documentId: string, newTitle: string) => {
-    window.api
-      .renameDocument(courseId, documentId, newTitle)
-      .then((documents) => {
-        setDocuments(documents);
-      });
-  };
+  const documents = useDocuments(courseId);
 
   return (
     <Box display={"flex"} flexDirection={"column"} width={"90%"}>
@@ -54,26 +29,13 @@ const DocumentsPage = () => {
         marginTop={4}
       >
         <Typography variant={"h5"}>{course.title} Documents</Typography>
-        <Button
-          startIcon={<Upload />}
-          variant={"outlined"}
-          onClick={handleImport}
-        >
-          Import
-        </Button>
+        <ImportDocumentButton courseId={courseId} />
       </Box>
       <Box marginTop={3}>
         <List>
           {documents.map((document, index) => (
             <Box key={index}>
-              <DocumentView
-                document={document}
-                handleDelete={() => handleDelete(document.id)}
-                handleRename={(newTitle: string) =>
-                  handleRename(document.id, newTitle)
-                }
-                key={document.id}
-              />
+              <DocumentView document={document} courseId={courseId} />
               {index !== documents.length - 1 && <Divider />}
             </Box>
           ))}

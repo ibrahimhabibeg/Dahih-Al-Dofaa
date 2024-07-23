@@ -13,9 +13,8 @@ ipcMain.handle(
     const path = await getDocumentPathFromUser();
     const docDb = DocDB.getInstance(courseId);
     if (!path) return docDb.getDocuments();
-    const { documents, document } = await docDb.addDocument(path);
+    const { document } = await docDb.addDocument(path);
     addDocumentToVectorDB(courseId, document);
-    return documents;
   }
 );
 
@@ -23,17 +22,17 @@ ipcMain.handle(
   "document:delete",
   async (event, courseId: string, documentId: string) => {
     const docDb = DocDB.getInstance(courseId);
-    const documents = await docDb.deleteDocument(documentId);
+    await docDb.deleteDocument(documentId);
     const vectorDb = await VectorDB.getInstance(courseId);
     await vectorDb.deleteDocument(documentId);
-    return documents;
   }
 );
 
 ipcMain.handle(
   "document:rename",
-  async (event, courseId: string, documentId: string, newTitle: string) =>
-    DocDB.getInstance(courseId).renameDocument(documentId, newTitle)
+  async (event, courseId: string, documentId: string, newTitle: string) => {
+    DocDB.getInstance(courseId).renameDocument(documentId, newTitle);
+  }
 );
 
 ipcMain.handle("document:getAll", async (event, courseId: string) =>
@@ -41,17 +40,9 @@ ipcMain.handle("document:getAll", async (event, courseId: string) =>
 );
 
 ipcMain.handle(
-  "document:get",
+  "document:isLoading",
   async (event, courseId: string, documentId: string) =>
-    DocDB.getInstance(courseId).getDocument(documentId)
-);
-
-ipcMain.handle("document:listen", async (event, documentId: string) =>
-  documentLoading.listenToDocument(documentId, event.sender)
-);
-
-ipcMain.handle("document:stopListening", async (event, documentId: string) =>
-  documentLoading.stopListeningToDocument(documentId, event.sender)
+    documentLoading.isLoading(courseId, documentId)
 );
 
 /**
@@ -76,11 +67,11 @@ const getDocumentPathFromUser = async (): Promise<string> => {
 };
 
 const addDocumentToVectorDB = async (courseId: string, document: Doc) => {
-  documentLoading.addDocument(document.id);
+  documentLoading.addDocument(courseId, document.id);
   const text = await parseDocument(document);
   const splits = await split(text);
   const vectorDb = await VectorDB.getInstance(courseId);
   const ids = await vectorDb.insert(splits, document.id);
-  documentLoading.deleteDocument(document.id);
+  documentLoading.removeDocument(courseId, document.id);
   return ids;
 };

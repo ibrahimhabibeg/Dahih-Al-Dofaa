@@ -32,6 +32,25 @@ interface IChatAPI {
   unsubscribeFromChats: (courseId: string) => void;
 }
 
+interface IDocumentAPI {
+  getAll: (courseId: string) => Promise<Doc[]>;
+  add: (courseId: string) => Promise<void>;
+  rename: (courseId: string, docId: string, newTitle: string) => Promise<void>;
+  delete: (courseId: string, docId: string) => Promise<void>;
+  isLoading: (courseId: string, documentId: string) => Promise<boolean>;
+  subscribeToIsLoading: (
+    courseId: string,
+    docId: string,
+    listener: (_event: IpcRendererEvent, isLoading: boolean) => void
+  ) => void;
+  unsubscribeFromIsLoading: (courseId: string, docId: string) => void;
+  subscribeToAllDocuments: (
+    courseId: string,
+    listener: (_event: IpcRendererEvent, documents: Doc[]) => void
+  ) => void;
+  unsubscribeFromAllDocuments: (courseId: string) => void;
+}
+
 export interface IAPI {
   startOllama: () => Promise<void>;
   setupOllama: () => Promise<void>;
@@ -43,19 +62,6 @@ export interface IAPI {
   getChats: (courseId: string) => Promise<ChatType[]>;
   addChat: (courseId: string, chatName?: string) => Promise<ChatType>;
   removeChat: (courseId: string, chatId: string) => Promise<ChatType[]>;
-  addDocument: (courseId: string) => Promise<Doc[]>;
-  deleteDocument: (courseId: string, documentId: string) => Promise<Doc[]>;
-  renameDocument: (
-    courseId: string,
-    documentId: string,
-    newTitle: string
-  ) => Promise<Doc[]>;
-  getDocuments: (courseId: string) => Promise<Doc[]>;
-  getDocument: (courseId: string, documentId: string) => Promise<Doc>;
-  listenToDocument: (documentId: string) => Promise<boolean>;
-  stopListeningToDocument: (documentId: string) => Promise<boolean>;
-  onDocumentLoading: (listener: (documentId: string) => void) => void;
-  onDocumentLoaded: (listener: (documentId: string) => void) => void;
   getChat: (courseId: string, chatId: string) => Promise<ChatType>;
   renameChat: (
     courseId: string,
@@ -64,6 +70,7 @@ export interface IAPI {
   ) => Promise<void>;
   message: IMessageAPI;
   chat: IChatAPI;
+  document: IDocumentAPI;
 }
 
 declare global {

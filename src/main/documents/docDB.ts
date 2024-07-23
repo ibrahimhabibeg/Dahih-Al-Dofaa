@@ -3,6 +3,7 @@ import fs from "fs";
 import { app } from "electron";
 import { v4 as uuidv4 } from "uuid";
 import { validExtensions } from ".";
+import { notifyDocumentsUpdate } from "./documentNotifier";
 
 /**
  * This class manages the documents in the application.
@@ -12,8 +13,10 @@ class DocDB {
   private documents: Doc[];
   private filePath: string;
   private documentsFolderPath: string;
+  private courseID: string;
 
   private constructor(courseId: string) {
+    this.courseID = courseId;
     const folderPath = path.join(app.getPath("userData"), "courses", courseId);
     const documentsFolderPath = path.join(folderPath, "documents");
     if (!fs.existsSync(documentsFolderPath)) {
@@ -52,6 +55,7 @@ class DocDB {
     };
     this.documents.push(document);
     this.save();
+    notifyDocumentsUpdate(this.courseID, this.documents);
     return { documents: this.documents, document };
   }
 
@@ -88,6 +92,7 @@ class DocDB {
     }
     this.documents = this.documents.filter((doc) => doc.id !== documentId);
     this.save();
+    notifyDocumentsUpdate(this.courseID, this.documents);
     return this.documents;
   }
 
@@ -103,6 +108,7 @@ class DocDB {
       return doc;
     });
     this.save();
+    notifyDocumentsUpdate(this.courseID, this.documents);
     return this.documents;
   }
 
