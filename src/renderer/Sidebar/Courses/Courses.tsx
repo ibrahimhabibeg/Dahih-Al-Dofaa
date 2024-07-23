@@ -4,13 +4,13 @@ import {
   List,
   Typography,
   ListItemText,
-  Divider,
   ListItemButton,
   ListItemIcon,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import AddCourseModal from "./AddCourseModal";
 import useScrollbarStyle from "../../UI/useScrollbarStyle";
+import CourseItem from "./CourseItem";
 
 type CoursesProps = {
   handleCourseClick: (course: { title: string; id: string }) => void;
@@ -61,15 +61,11 @@ const Courses = ({ handleCourseClick }: CoursesProps) => {
           <ListItemText primary={"New Course"} />
         </ListItemButton>
         {courses.map((course) => (
-          <Box key={course.id}>
-            <Divider />
-            <ListItemButton
-              key={course.id}
-              onClick={() => handleCourseClick(course)}
-            >
-              <ListItemText primary={course.title} />
-            </ListItemButton>
-          </Box>
+          <CourseItem
+            key={course.id}
+            course={course}
+            handleCourseClick={handleCourseClick}
+          />
         ))}
       </List>
     </Box>
