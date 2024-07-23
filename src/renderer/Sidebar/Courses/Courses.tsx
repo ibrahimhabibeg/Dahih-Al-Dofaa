@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   List,
@@ -11,25 +11,19 @@ import { Add } from "@mui/icons-material";
 import AddCourseModal from "./AddCourseModal";
 import useScrollbarStyle from "../../UI/useScrollbarStyle";
 import CourseItem from "./CourseItem";
+import useCourses from "./useCourses";
 
 type CoursesProps = {
   handleCourseClick: (course: { title: string; id: string }) => void;
 };
 
 const Courses = ({ handleCourseClick }: CoursesProps) => {
-  const [courses, setCourses] = useState<{ id: string; title: string }[]>([]);
+  const courses = useCourses();
   const [isAddingCourse, setIsAddingCourse] = useState(false);
   const scrollbarStyle = useScrollbarStyle();
 
-  useEffect(() => {
-    window.api.getCourses().then((courses) => {
-      setCourses(courses);
-    });
-  }, []);
-
   const addCourse = async (courseTitle: string) => {
-    const courses = await window.api.addCourse(courseTitle);
-    setCourses(courses);
+    window.api.course.add(courseTitle);
     setIsAddingCourse(false);
   };
 

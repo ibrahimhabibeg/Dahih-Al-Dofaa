@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
-import { type course } from "../main/courses/courses";
+import { type Course } from "../main/courses/courses";
 
 const message = {
   getMessages: (courseId: string, chatId: string) => {
@@ -102,16 +102,37 @@ const document = {
   },
 };
 
+const course = {
+  get: (courseId: string) => ipcRenderer.invoke("course:get", courseId),
+  getAll: () => ipcRenderer.invoke("course:getAll"),
+  add: (courseTitle: string) => ipcRenderer.invoke("course:add", courseTitle),
+  delete: (courseId: string) => ipcRenderer.invoke("course:delete", courseId),
+  rename: (courseId: string, courseTitle: string) =>
+    ipcRenderer.invoke("course:rename", courseId, courseTitle),
+  subscribeToCourse: (
+    courseId: string,
+    listener: (_event: IpcRendererEvent, course: Course) => void
+  ) => {
+    ipcRenderer.on(`course:update:${courseId}`, listener);
+  },
+  unsubscribeFromCourse: (courseId: string) => {
+    // Warning: Removing ALL listeners may cause unintended side effects
+    ipcRenderer.removeAllListeners(`course:update:${courseId}`);
+  },
+  subscribeToAllCourses: (
+    listener: (_event: IpcRendererEvent, courses: Course[]) => void
+  ) => {
+    ipcRenderer.on(`course:update:all`, listener);
+  },
+  unsubscribeFromAllCourses: () => {
+    // Warning: Removing ALL listeners may cause unintended side effects
+    ipcRenderer.removeAllListeners(`course:update:all`);
+  },
+};
+
 const api: Window["api"] = {
   startOllama: () => ipcRenderer.invoke("ollama:start"),
   setupOllama: () => ipcRenderer.invoke("ollama:setup"),
-  addCourse: (courseTitle: string) =>
-    ipcRenderer.invoke("course:add", courseTitle),
-  removeCourse: (courseId: string) =>
-    ipcRenderer.invoke("course:remove", courseId),
-  getCourse: (courseId: string) => ipcRenderer.invoke("course:get", courseId),
-  getCourses: () => ipcRenderer.invoke("course:getAll"),
-  updateCourse: (course: course) => ipcRenderer.invoke("course:update", course),
   getChats: (courseId: string) => ipcRenderer.invoke("chat:getAll", courseId),
   getChat: (courseId: string, chatId: string) =>
     ipcRenderer.invoke("chat:get", courseId, chatId),
@@ -124,6 +145,7 @@ const api: Window["api"] = {
   message,
   chat,
   document,
+  course,
 };
 
 contextBridge.exposeInMainWorld("api", api);

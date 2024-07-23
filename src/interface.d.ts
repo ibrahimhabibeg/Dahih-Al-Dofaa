@@ -1,4 +1,4 @@
-import { course } from "./main/courses/courses";
+import { Course } from "./main/courses/courses";
 
 interface IMessageAPI {
   getMessages: (courseId: string, chatId: string) => Promise<Message[]>;
@@ -51,14 +51,26 @@ interface IDocumentAPI {
   unsubscribeFromAllDocuments: (courseId: string) => void;
 }
 
+interface ICourseAPI {
+  get: (courseId: string) => Promise<Course>;
+  getAll: () => Promise<Course[]>;
+  add: (courseTitle: string) => Promise<void>;
+  delete: (courseId: string) => Promise<void>;
+  rename: (courseId: string, courseTitle: string) => Promise<void>;
+  subscribeToCourse: (
+    courseId: string,
+    listener: (_event: IpcRendererEvent, course: Course) => void
+  ) => void;
+  unsubscribeFromCourse: (courseId: string) => void;
+  subscribeToAllCourses: (
+    listener: (_event: IpcRendererEvent, courses: Course[]) => void
+  ) => void;
+  unsubscribeFromAllCourses: () => void;
+}
+
 export interface IAPI {
   startOllama: () => Promise<void>;
   setupOllama: () => Promise<void>;
-  addCourse: (courseTitle: string) => Promise<course[]>;
-  removeCourse: (courseId: string) => Promise<course[]>;
-  getCourse: (courseId: string) => Promise<course>;
-  getCourses: () => Promise<course[]>;
-  updateCourse: (course: course) => Promise<course[]>;
   getChats: (courseId: string) => Promise<ChatType[]>;
   addChat: (courseId: string, chatName?: string) => Promise<ChatType>;
   removeChat: (courseId: string, chatId: string) => Promise<ChatType[]>;
@@ -71,6 +83,7 @@ export interface IAPI {
   message: IMessageAPI;
   chat: IChatAPI;
   document: IDocumentAPI;
+  course: ICourseAPI;
 }
 
 declare global {
@@ -97,4 +110,6 @@ declare global {
     content: string;
     sender: "human" | "bot";
   }
+
+  type Course = Course;
 }

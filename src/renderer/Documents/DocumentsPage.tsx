@@ -1,22 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Typography, Box, List, Divider } from "@mui/material";
 import { useParams } from "react-router-dom";
 import DocumentView from "./DocumentView";
 import useDocuments from "./useDocuments";
 import ImportDocumentButton from "./ImportDocumentButton";
+import useCourse from "../Sidebar/Courses/useCourse";
 
 const DocumentsPage = () => {
   const { courseId } = useParams();
-  const [course, setCourse] = useState<{ id: string; title: string }>({
-    id: courseId,
-    title: "",
-  });
-
-  useEffect(() => {
-    window.api.getCourse(courseId).then((course) => {
-      setCourse(course);
-    });
-  }, [courseId]);
+  const course = useCourse(courseId);
 
   const documents = useDocuments(courseId);
 

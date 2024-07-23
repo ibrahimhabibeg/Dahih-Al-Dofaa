@@ -2,8 +2,9 @@ import { app } from "electron";
 import path from "path";
 import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
+import { notifyCoursesUpdate, notifyCourseUpdate } from "./coursesNotifier";
 
-export type course = {
+export type Course = {
   id: string;
   title: string;
 };
@@ -12,11 +13,11 @@ export type course = {
  * This class manages the courses in the application.
  */
 class CoursesManager {
-  courses: course[];
+  courses: Course[];
   filePath: string;
   static instance: CoursesManager = null;
 
-  constructor(courses: course[], filePath: string) {
+  constructor(courses: Course[], filePath: string) {
     this.courses = courses;
     this.filePath = filePath;
   }
@@ -52,6 +53,8 @@ class CoursesManager {
     };
     this.courses.push(course);
     this.save();
+    notifyCourseUpdate(course);
+    notifyCoursesUpdate(this.courses);
     return this.courses;
   }
 
@@ -63,6 +66,7 @@ class CoursesManager {
   removeCourse(courseId: string) {
     this.courses = this.courses.filter((course) => course.id !== courseId);
     this.save();
+    notifyCoursesUpdate(this.courses);
     return this.courses;
   }
 
@@ -71,7 +75,7 @@ class CoursesManager {
    * @param course The course to update.
    * @returns The list of courses.
    */
-  updateCourse(course: course) {
+  updateCourse(course: Course) {
     this.courses = this.courses.map((c) => {
       if (c.id === course.id) {
         return course;
@@ -79,6 +83,8 @@ class CoursesManager {
       return c;
     });
     this.save();
+    notifyCourseUpdate(course);
+    notifyCoursesUpdate(this.courses);
     return this.courses;
   }
 
@@ -117,7 +123,7 @@ export const removeCourse = async (courseId: string) => {
   return coursesManager.removeCourse(courseId);
 };
 
-export const updateCourse = async (course: course) => {
+export const updateCourse = async (course: Course) => {
   const coursesManager = await CoursesManager.getInstance();
   return coursesManager.updateCourse(course);
 };
