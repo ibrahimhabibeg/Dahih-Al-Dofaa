@@ -1,6 +1,6 @@
-import React from "react";
-import { Box, Avatar, useTheme } from "@mui/material";
-import { Person } from "@mui/icons-material";
+import React, { useState } from "react";
+import { Box, Avatar, useTheme, IconButton } from "@mui/material";
+import { ContentCopy, Done, Person } from "@mui/icons-material";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Logo from "../../assets/logo.svg";
@@ -8,6 +8,12 @@ import Markdown from "react-markdown";
 
 const Message = ({ message }: { message: Message }) => {
   const theme = useTheme();
+  const [copied, setCopied] = useState(false);
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(message.content).then(() => setCopied(true));
+  };
+
   return (
     <Box
       sx={{
@@ -33,8 +39,13 @@ const Message = ({ message }: { message: Message }) => {
           <img src={Logo} alt="Ollama Logo" width={24} />
         )}
       </Box>
-      <Box width={"90%"}>
+      <Box width={"80%"}>
         <Markdown>{message.content}</Markdown>
+      </Box>
+      <Box width={"10%"}>
+        <IconButton onClick={copyToClipboard}>
+          {copied ? <Done /> : <ContentCopy />}
+        </IconButton>
       </Box>
     </Box>
   );
