@@ -9,6 +9,7 @@ import HomeLayout from "./HomeLayout";
 import GetStartedPage from "./GetStartedPage";
 import DocumentsPage from "./Documents/DocumentsPage";
 import Chat from "./Chat/Chat";
+import Settings from "./Settings/Settings";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -16,6 +17,7 @@ const router = createBrowserRouter(
       <Route path="/main_window" element={<GetStartedPage />} />
       <Route path="/documents/:courseId" element={<DocumentsPage />} />
       <Route path="/chat/:courseId/:chatId" element={<Chat />} />
+      <Route path="/settings" element={<Settings />} />
     </Route>
   )
 );

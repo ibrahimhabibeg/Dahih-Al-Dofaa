@@ -12,6 +12,7 @@ import AddCourseModal from "./AddCourseModal";
 import useScrollbarStyle from "../../UI/useScrollbarStyle";
 import CourseItem from "./CourseItem";
 import useCourses from "./useCourses";
+import SettingsButton from "./SettingsButton";
 
 type CoursesProps = {
   handleCourseClick: (course: { title: string; id: string }) => void;
@@ -32,37 +33,45 @@ const Courses = ({ handleCourseClick }: CoursesProps) => {
   };
 
   return (
-    <Box
-      sx={{
-        height: "100vh",
-        overflowY: "auto",
-        ...scrollbarStyle,
-      }}
-    >
+    <>
       <AddCourseModal
         isOpen={isAddingCourse}
         onClose={closeAddCourseModal}
         addCourse={addCourse}
       />
-      <Typography variant="h6" marginLeft={2} marginTop={2}>
-        Courses
-      </Typography>
-      <List>
-        <ListItemButton onClick={() => setIsAddingCourse(true)}>
-          <ListItemIcon>
-            <Add />
-          </ListItemIcon>
-          <ListItemText primary={"New Course"} />
-        </ListItemButton>
-        {courses.map((course) => (
-          <CourseItem
-            key={course.id}
-            course={course}
-            handleCourseClick={handleCourseClick}
-          />
-        ))}
-      </List>
-    </Box>
+      <Box
+        sx={{
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          overflowY: "auto",
+          ...scrollbarStyle,
+        }}
+      >
+        <Box>
+          <Typography variant="h6" marginLeft={2} marginTop={2}>
+            Courses
+          </Typography>
+          <List>
+            <ListItemButton onClick={() => setIsAddingCourse(true)}>
+              <ListItemIcon>
+                <Add />
+              </ListItemIcon>
+              <ListItemText primary={"New Course"} />
+            </ListItemButton>
+            {courses.map((course) => (
+              <CourseItem
+                key={course.id}
+                course={course}
+                handleCourseClick={handleCourseClick}
+              />
+            ))}
+          </List>
+        </Box>
+        <SettingsButton />
+      </Box>
+    </>
   );
 };
 
