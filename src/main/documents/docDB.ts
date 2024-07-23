@@ -97,7 +97,7 @@ class DocDB {
   }
 
   private deleteFile(path: string) {
-    fs.unlinkSync(path);
+    if (fs.existsSync(path)) fs.unlinkSync(path);
   }
 
   renameDocument(documentId: string, newTitle: string) {

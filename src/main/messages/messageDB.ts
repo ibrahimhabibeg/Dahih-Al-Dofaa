@@ -66,7 +66,7 @@ class MessageDB {
   }
 
   public deleteDB() {
-    fs.unlinkSync(this.filePath);
+    if (fs.existsSync(this.filePath)) fs.unlinkSync(this.filePath);
   }
 
   private save() {

@@ -66,6 +66,13 @@ class CoursesManager {
   removeCourse(courseId: string) {
     this.courses = this.courses.filter((course) => course.id !== courseId);
     this.save();
+    const courseFolderPath = path.join(
+      app.getPath("userData"),
+      "courses",
+      courseId
+    );
+    if (fs.existsSync(courseFolderPath))
+      fs.rmSync(courseFolderPath, { recursive: true });
     notifyCoursesUpdate(this.courses);
     return this.courses;
   }
