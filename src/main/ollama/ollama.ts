@@ -23,7 +23,7 @@ class OllamaManager {
   private ollama: Ollama;
   private host: string;
   private childProcess: ChildProcess;
-  private llmModel = "llama3";
+  private llmModel = "llama3.1";
   private embeddedModel = "nomic-embed-text";
 
   constructor() {

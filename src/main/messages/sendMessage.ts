@@ -29,7 +29,7 @@ const sendMessage = async (
     );
 
   const llm = new ChatOllama({
-    model: "llama3",
+    model: "llama3.1",
     baseUrl: getHost(),
   });
 
