@@ -7,8 +7,7 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { ArrowBack, Add } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { ArrowBack } from "@mui/icons-material";
 
 type PropsType = {
   handleBackClick: () => void;
@@ -19,20 +18,11 @@ type PropsType = {
 };
 
 const TopBar = ({ handleBackClick, course }: PropsType) => {
-  const navigate = useNavigate();
-
-  const addChat = () => {
-    window.api.addChat(course.id).then((chat) => {
-      navigate(`/chat/${course.id}/${chat.id}`);
-    });
-  };
-
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "100%",
         justifyContent: "space-around",
       }}
     >
@@ -47,14 +37,6 @@ const TopBar = ({ handleBackClick, course }: PropsType) => {
       <Typography variant="body1" marginLeft={2} marginTop={2}>
         {course.title} Chats
       </Typography>
-      <List>
-        <ListItemButton onClick={addChat}>
-          <ListItemIcon>
-            <Add />
-          </ListItemIcon>
-          <ListItemText primary={"New Chat"} />
-        </ListItemButton>
-      </List>
     </Box>
   );
 };

@@ -17,28 +17,21 @@ const Chat = ({ course, handleBackClick }: ChatProps) => {
   const scrollbarStyle = useScrollbarStyle();
 
   return (
-    <Box display={"flex"} flexDirection={"column"} height={"100vh"}>
-      <Box
-        height={"25vh"}
-        sx={{
-          overflowY: "auto",
-          ...scrollbarStyle,
-        }}
-      >
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        height: "100vh",
+        overflowY: "auto",
+        ...scrollbarStyle,
+      }}
+    >
+      <Box>
         <TopBar handleBackClick={handleBackClick} course={course} />
-      </Box>
-      <Box
-        height={"65vh"}
-        sx={{
-          overflowY: "auto",
-          ...scrollbarStyle,
-        }}
-      >
         <ChatList course={course} />
       </Box>
-      <Box height={"10vh"}>
-        <DocumnetsButton courseId={course.id} />
-      </Box>
+      <DocumnetsButton courseId={course.id} />
     </Box>
   );
 };
