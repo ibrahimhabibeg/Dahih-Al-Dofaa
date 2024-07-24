@@ -52,8 +52,12 @@ class MessageDB {
     this.filePath = filePath;
   }
 
-  public addMessage(content: string, sender: "human" | "bot"): Message {
-    const message: Message = { content, sender };
+  public addMessage(
+    content: string,
+    sender: "human" | "bot",
+    refrencedTexts: RefrencedText[] = []
+  ): Message {
+    const message: Message = { content, sender, refrencedTexts };
     this.messages.push(message);
     this.save();
     notifyCompleteMessage(this.courseId, this.chatId, message);

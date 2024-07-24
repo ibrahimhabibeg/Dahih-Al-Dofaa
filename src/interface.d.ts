@@ -33,6 +33,7 @@ interface IChatAPI {
 }
 
 interface IDocumentAPI {
+  get: (courseId: string, docId: string) => Promise<Doc>;
   getAll: (courseId: string) => Promise<Doc[]>;
   add: (courseId: string) => Promise<void>;
   rename: (courseId: string, docId: string, newTitle: string) => Promise<void>;
@@ -109,6 +110,12 @@ declare global {
   interface Message {
     content: string;
     sender: "human" | "bot";
+    refrencedTexts: RefrencedText[];
+  }
+
+  interface RefrencedText {
+    text: string;
+    documentId: string;
   }
 
   type Course = Course;

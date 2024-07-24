@@ -57,7 +57,7 @@ const sendMessage = async (
     notifyPartialMessage(courseId, chatId, answer);
   }
   notifyPartialMessage(courseId, chatId, "");
-  messageDB.addMessage(answer, "bot");
+  messageDB.addMessage(answer, "bot", documents);
   loadingMessage.removeLoadingMessageChat(courseId, chatId);
 };
 

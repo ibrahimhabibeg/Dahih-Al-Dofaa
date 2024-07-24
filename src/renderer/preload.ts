@@ -66,6 +66,8 @@ const chat = {
 };
 
 const document = {
+  get: (courseId: string, documentId: string) =>
+    ipcRenderer.invoke("document:get", courseId, documentId),
   getAll: (courseId: string) => ipcRenderer.invoke("document:getAll", courseId),
   add: (courseId: string) => ipcRenderer.invoke("document:add", courseId),
   rename: (courseId: string, documentId: string, newTitle: string) =>

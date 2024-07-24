@@ -45,6 +45,12 @@ ipcMain.handle(
     documentLoading.isLoading(courseId, documentId)
 );
 
+ipcMain.handle(
+  "document:get",
+  async (event, courseId: string, documentId: string) =>
+    DocDB.getInstance(courseId).getDocument(documentId)
+);
+
 /**
  * This function opens a dialog to get the path of the document from the user.
  * @returns {Promise<string>} The path of the document selected by the user.

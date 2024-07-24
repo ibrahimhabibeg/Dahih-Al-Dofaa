@@ -5,6 +5,7 @@ import { ContentCopy, Done, Person } from "@mui/icons-material";
 // @ts-ignore
 import Logo from "../../assets/logo.svg";
 import Markdown from "react-markdown";
+import RefrencedTexts from "./RefrencedTexts";
 
 const Message = ({ message }: { message: Message }) => {
   const theme = useTheme();
@@ -46,6 +47,7 @@ const Message = ({ message }: { message: Message }) => {
       </Box>
       <Box width={"80%"}>
         <Markdown>{message.content}</Markdown>
+        <RefrencedTexts refrencedTexts={message.refrencedTexts} />
       </Box>
       <Box width={"10%"}>
         <IconButton onClick={copyToClipboard}>

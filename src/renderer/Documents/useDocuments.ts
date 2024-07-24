@@ -9,8 +9,6 @@ const useDocuments = (courseID: string) => {
     });
 
     window.api.document.subscribeToAllDocuments(courseID, (event, documents)=>{
-      console.log("Documents updated");
-      console.log(documents);
       setDocuments(documents);
     });
 
