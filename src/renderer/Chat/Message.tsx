@@ -11,7 +11,12 @@ const Message = ({ message }: { message: Message }) => {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(message.content).then(() => setCopied(true));
+    navigator.clipboard.writeText(message.content).then(() => {
+      setCopied(true);
+      setTimeout(() => {
+        setCopied(false);
+      }, 1000);
+    });
   };
 
   return (
