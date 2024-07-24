@@ -4,6 +4,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
+  Navigate,
 } from "react-router-dom";
 import HomeLayout from "./HomeLayout";
 import GetStartedPage from "./GetStartedPage";
@@ -18,6 +19,7 @@ const router = createBrowserRouter(
       <Route path="/documents/:courseId" element={<DocumentsPage />} />
       <Route path="/chat/:courseId/:chatId" element={<Chat />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="*" element={<Navigate to="/main_window" replace={true} />} />
     </Route>
   )
 );

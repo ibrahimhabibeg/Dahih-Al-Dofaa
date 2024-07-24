@@ -13,6 +13,7 @@ import fs from "fs";
 import {
   restoreFromFile,
   persistToFile,
+// eslint-disable-next-line import/no-unresolved
 } from "@orama/plugin-data-persistence/server";
 
 const schema = {
@@ -52,7 +53,10 @@ class VectorDB {
       }
       const filePath = path.join(folderPath, "vectorDB.json");
       if (fs.existsSync(filePath)) {
-        const db = await restoreFromFile("json", filePath);
+        const db: Orama<typeof schema> = await restoreFromFile(
+          "json",
+          filePath
+        );
         VectorDB.instanceMap.set(
           courseId,
           new VectorDB(courseId, db, filePath)
