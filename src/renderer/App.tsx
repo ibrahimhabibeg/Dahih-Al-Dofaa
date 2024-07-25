@@ -10,11 +10,7 @@ const App = () => {
   return (
     <ThemeProvider>
       <ErrorBoundary fallback={<ErrorPage />}>
-        <OllamaStarter>
-          <OllamaSetup>
-            <Router />
-          </OllamaSetup>
-        </OllamaStarter>
+        <Router />
       </ErrorBoundary>
     </ThemeProvider>
   );

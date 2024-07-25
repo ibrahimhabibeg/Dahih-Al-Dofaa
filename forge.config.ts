@@ -16,7 +16,10 @@ const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
     icon: path.join(process.cwd(), "public", "icon.png"),
-    extraResource: [path.join(process.cwd(), "public", "icon.png")],
+    extraResource: [
+      path.join(process.cwd(), "public", "icon.png"),
+      "./extraResources/ollama",
+    ],
   },
   rebuildConfig: {},
   makers: [

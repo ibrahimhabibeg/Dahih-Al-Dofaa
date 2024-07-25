@@ -5,7 +5,7 @@ import {
   search,
   removeMultiple,
 } from "@orama/orama";
-import { embed } from "../../ollama";
+
 import TextIdsDB from "./textIdsDB";
 import path from "path";
 import { app } from "electron";
@@ -13,7 +13,7 @@ import fs from "fs";
 import {
   restoreFromFile,
   persistToFile,
-// eslint-disable-next-line import/no-unresolved
+  // eslint-disable-next-line import/no-unresolved
 } from "@orama/plugin-data-persistence/server";
 
 const schema = {
@@ -21,6 +21,10 @@ const schema = {
   embedding: "vector[768]",
   documentId: "string",
 } as const;
+
+const embed = async (textArray: string[]): Promise<number[][]> => {
+  throw new Error("Not implemented");
+};
 
 class VectorDB {
   private static instanceMap: Map<string, VectorDB> = new Map<

@@ -5,11 +5,11 @@ import {
   MessagesPlaceholder,
 } from "@langchain/core/prompts";
 import { ChatOllama } from "@langchain/ollama";
-import { getHost } from "../ollama";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import VectorDB from "../documents/vectorDB";
 import loadingMessage from "./loadingMessages";
 import { notifyPartialMessage } from "./messageNotifier";
+import ollamaStarter from "../ollama/OllamaStarter";
 
 const sendMessage = async (
   courseId: string,
@@ -27,10 +27,10 @@ const sendMessage = async (
         ? new HumanMessage(message.content)
         : new AIMessage(message.content)
     );
-
+  console.log(`Ollama host: ${ollamaStarter.getHost()}`);
   const llm = new ChatOllama({
     model: "llama3.1",
-    baseUrl: getHost(),
+    baseUrl: ollamaStarter.getHost(),
   });
 
   let contextualizedQuestion = message;
@@ -53,6 +53,7 @@ const sendMessage = async (
 
   let answer = "";
   for await (const chunk of stream) {
+    console.log(chunk);
     answer += chunk;
     notifyPartialMessage(courseId, chatId, answer);
   }
