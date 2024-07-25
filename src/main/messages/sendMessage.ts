@@ -27,7 +27,6 @@ const sendMessage = async (
         ? new HumanMessage(message.content)
         : new AIMessage(message.content)
     );
-  console.log(`Ollama host: ${ollamaStarter.getHost()}`);
   const llm = new ChatOllama({
     model: "llama3.1",
     baseUrl: ollamaStarter.getHost(),
@@ -53,7 +52,6 @@ const sendMessage = async (
 
   let answer = "";
   for await (const chunk of stream) {
-    console.log(chunk);
     answer += chunk;
     notifyPartialMessage(courseId, chatId, answer);
   }

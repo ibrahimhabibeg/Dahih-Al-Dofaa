@@ -15,16 +15,13 @@ import {
   persistToFile,
   // eslint-disable-next-line import/no-unresolved
 } from "@orama/plugin-data-persistence/server";
+import embed from "../embed";
 
 const schema = {
   text: "string",
   embedding: "vector[768]",
   documentId: "string",
 } as const;
-
-const embed = async (textArray: string[]): Promise<number[][]> => {
-  throw new Error("Not implemented");
-};
 
 class VectorDB {
   private static instanceMap: Map<string, VectorDB> = new Map<
