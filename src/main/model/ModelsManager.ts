@@ -161,6 +161,13 @@ class ModelsManager {
 
   public deleteModel(modelId: ModelID): void {
     log(`Deleting model ${modelId}`);
+    const model = this.models.find((model) => model.id === modelId);
+    if (!model) {
+      log(`Model ${modelId} not found`);
+      return;
+    }
+    if (model.isSelectedLlm) this.resetSelectedLLM();
+    if (model.isSelectedEmbedding) this.resetSelectedEmbedding();
     this.ollama.delete({ model: modelId }).then(() => {
       this.setModelStatus(modelId, "not downloaded");
     });
@@ -215,6 +222,30 @@ class ModelsManager {
           ? { ...model, isSelectedEmbedding: false }
           : model.id === modelId
           ? { ...model, isSelectedLlm: true }
+          : model
+      )
+    );
+  }
+
+  private resetSelectedLLM(): void {
+    log(`Resetting selected LLM model`);
+    this.selectedLLM = null;
+    fs.writeFileSync(this.selectedLLMFilePath, "");
+    this.setModels(
+      this.models.map((model) =>
+        model.isSelectedLlm ? { ...model, isSelectedLlm: false } : model
+      )
+    );
+  }
+
+  private resetSelectedEmbedding(): void {
+    log(`Resetting selected embedding model`);
+    this.selectedEmbedding = null;
+    fs.writeFileSync(this.selectedEmbeddingFilePath, "");
+    this.setModels(
+      this.models.map((model) =>
+        model.isSelectedEmbedding
+          ? { ...model, isSelectedEmbedding: false }
           : model
       )
     );
