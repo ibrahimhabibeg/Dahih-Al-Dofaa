@@ -11,13 +11,13 @@ const ChatTopBar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    window.api.getChat(courseId, chatId).then((chat) => {
+    window.api.chat.getChat(courseId, chatId).then((chat) => {
       setChatName(chat.title);
     });
   }, [chatId, courseId]);
 
   const handleDelete = () => {
-    window.api.removeChat(courseId, chatId);
+    window.api.chat.removeChat(courseId, chatId);
     navigate(`/main_window`);
   };
 
@@ -33,7 +33,7 @@ const ChatTopBar = () => {
 
   const submitRename = () => {
     setIsEditing(false);
-    window.api.renameChat(courseId, chatId, chatName);
+    window.api.chat.renameChat(courseId, chatId, chatName);
   };
 
   return (

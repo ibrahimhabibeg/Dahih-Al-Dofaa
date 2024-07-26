@@ -30,6 +30,15 @@ interface IChatAPI {
     listener: (_event: IpcRendererEvent, chats: ChatType[]) => void
   ) => void;
   unsubscribeFromChats: (courseId: string) => void;
+  getChats: (courseId: string) => Promise<ChatType[]>;
+  addChat: (courseId: string, chatName?: string) => Promise<ChatType>;
+  removeChat: (courseId: string, chatId: string) => Promise<ChatType[]>;
+  getChat: (courseId: string, chatId: string) => Promise<ChatType>;
+  renameChat: (
+    courseId: string,
+    chatId: string,
+    newTitle: string
+  ) => Promise<void>;
 }
 
 interface IDocumentAPI {
@@ -76,15 +85,6 @@ interface IOllamAPI {
 }
 
 export interface IAPI {
-  getChats: (courseId: string) => Promise<ChatType[]>;
-  addChat: (courseId: string, chatName?: string) => Promise<ChatType>;
-  removeChat: (courseId: string, chatId: string) => Promise<ChatType[]>;
-  getChat: (courseId: string, chatId: string) => Promise<ChatType>;
-  renameChat: (
-    courseId: string,
-    chatId: string,
-    newTitle: string
-  ) => Promise<void>;
   message: IMessageAPI;
   chat: IChatAPI;
   document: IDocumentAPI;

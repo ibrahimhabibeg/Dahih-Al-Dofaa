@@ -23,7 +23,7 @@ const ChatList = ({ course }: PropsType) => {
   const navigate = useNavigate();
 
   const addChat = () => {
-    window.api.addChat(course.id).then((chat) => {
+    window.api.chat.addChat(course.id).then((chat) => {
       navigate(`/chat/${course.id}/${chat.id}`);
     });
   };
