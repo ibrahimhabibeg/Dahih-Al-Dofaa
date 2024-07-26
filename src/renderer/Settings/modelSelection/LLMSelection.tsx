@@ -1,5 +1,5 @@
 import React from "react";
-import useLLMs from "../../backend/useLLMs";
+import { useLLMs } from "../../backend/model";
 import { Box, Typography } from "@mui/material";
 import ModelCard from "./ModelCard";
 import useScrollbarStyle from "../../UI/useScrollbarStyle";

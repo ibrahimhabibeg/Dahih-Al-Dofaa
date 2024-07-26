@@ -11,6 +11,9 @@ interface IModelAPI {
     listener: (_event: IpcRendererEvent, status: ProgressResponse) => void
   ) => void;
   unsubscribeFromDownloadProgress: (modelId: ModelID) => void;
+  download: (modelId: string) => void;
+  abortDownloading: (modelId: string) => void;
+  delete: (modelId: string) => void;
 }
 
 interface IMessageAPI {

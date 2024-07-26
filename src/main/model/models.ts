@@ -133,3 +133,7 @@ export const isEmbeddingModelId = (modelId: string): modelId is ModelID => {
       description.id === modelId && description.type === "embedding"
   );
 };
+
+export const isModelId = (modelId: string): modelId is ModelID => {
+  return modelsDescription.some((description) => description.id === modelId);
+};

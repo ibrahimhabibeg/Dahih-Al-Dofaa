@@ -22,6 +22,12 @@ const model = {
     // Warning: Removing ALL listeners may cause unintended side effects
     ipcRenderer.removeAllListeners(`model:downloading:${modelId}`);
   },
+  download: async (modelId: string) =>
+    ipcRenderer.invoke("model:download", modelId),
+  abortDownloading: async (modelId: string) =>
+    ipcRenderer.invoke("model:abortDownloading", modelId),
+  delete: async (modelId: string) =>
+    ipcRenderer.invoke("model:delete", modelId),
 };
 
 export default model;

@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import ModelCard from "./ModelCard";
 import useScrollbarStyle from "../../UI/useScrollbarStyle";
-import useEmbeddingModels from "../../backend/useEmbeddingModels";
+import { useEmbeddingModels } from "../../backend/model";
 
 const EmbeddingsSelection = () => {
   const embeddingModels = useEmbeddingModels();
