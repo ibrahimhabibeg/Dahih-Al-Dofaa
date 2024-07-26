@@ -1,7 +1,7 @@
 import React from "react";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import useDocument from "./useDocument";
+import useDocument from "../backend/useDocument";
 import { useParams } from "react-router-dom";
 import Markdown from "react-markdown";
 

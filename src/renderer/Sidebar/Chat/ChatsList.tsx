@@ -1,5 +1,5 @@
 import React from "react";
-import useChats from "./useChats";
+import useChats from "../../backend/useChats";
 import ChatItem from "./ChatItem";
 import { Add } from "@mui/icons-material";
 import {

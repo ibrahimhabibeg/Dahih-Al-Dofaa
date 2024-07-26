@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { IconButton, InputAdornment, OutlinedInput } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { Send } from "@mui/icons-material";
-import useIsLoadingMessage from "./useIsLoadingMessage";
+import useIsLoadingMessage from "../backend/useIsLoadingMessage";
 
 const SubmitButton = () => {
   const { courseId, chatId } = useParams();

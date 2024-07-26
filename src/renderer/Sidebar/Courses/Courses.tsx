@@ -11,7 +11,7 @@ import { Add } from "@mui/icons-material";
 import AddCourseModal from "./AddCourseModal";
 import useScrollbarStyle from "../../UI/useScrollbarStyle";
 import CourseItem from "./CourseItem";
-import useCourses from "./useCourses";
+import useCourses from "../../backend/useCourses";
 import SettingsButton from "./SettingsButton";
 
 type CoursesProps = {

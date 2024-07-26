@@ -3,9 +3,9 @@ import { Box } from "@mui/material";
 import { useParams } from "react-router-dom";
 import Message from "./Message";
 import LoadingBotMessage from "./LoadingBotMessage";
-import useMessages from "./useMessages";
-import useIsLoadingMessage from "./useIsLoadingMessage";
-import usePartialMessage from "./usePartialMessage";
+import useMessages from "../backend/useMessages";
+import useIsLoadingMessage from "../backend/useIsLoadingMessage";
+import usePartialMessage from "../backend/usePartialMessage";
 import PartialMessage from "./PartialMessage";
 
 const ChatList = () => {
