@@ -1,5 +1,3 @@
-import { ModelDescription, ModelID } from "./types";
-
 export const modelsDescription: ModelDescription[] = [
   {
     id: "llama3.1:8b",

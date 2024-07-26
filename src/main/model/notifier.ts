@@ -1,11 +1,19 @@
 import { ProgressResponse } from "ollama";
-import { Model } from "./types";
+import { webContents } from "electron";
 
-export const notifyDownloadingStatus = (status: ProgressResponse) => {
-  // Not implemented
-  console.log(status);
+export const notifyDownloadingStatus = (
+  modelId: ModelID,
+  status: ProgressResponse
+) => {
+  const windows = webContents.getAllWebContents();
+  windows.forEach((window) => {
+    window.send(`model:downloading:${modelId}`, status);
+  });
 };
 
 export const notifyModelsUpdate = (models: Model[]) => {
-  // Not implemented
+  const windows = webContents.getAllWebContents();
+  windows.forEach((window) => {
+    window.send("model:update", models);
+  });
 };

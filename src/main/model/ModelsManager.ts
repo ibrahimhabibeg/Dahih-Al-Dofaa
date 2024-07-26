@@ -1,5 +1,4 @@
 import { ModelResponse, Ollama } from "ollama";
-import { ModelID, Model, ModelStatus } from "./types";
 import { modelsDescription, isLLMModelId, isEmbeddingModelId } from "./models";
 import { notifyDownloadingStatus, notifyModelsUpdate } from "./notifier";
 import log from "../utils/log";
@@ -136,7 +135,7 @@ class ModelsManager {
       try {
         this.setModelStatus(modelId, "downloading");
         for await (const chunk of stream) {
-          notifyDownloadingStatus(chunk);
+          notifyDownloadingStatus(modelId, chunk);
         }
         this.downloaingModelsAbort.delete(modelId);
         this.setModelStatus(modelId, "downloaded");
