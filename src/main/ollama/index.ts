@@ -15,3 +15,8 @@ export const stopOllama = () => {
   const ollama = OllamaStarter.getInstance();
   ollama.stop();
 };
+
+export const getOllamaHost = () => {
+  const ollama = OllamaStarter.getInstance();
+  return ollama.getHost();
+};

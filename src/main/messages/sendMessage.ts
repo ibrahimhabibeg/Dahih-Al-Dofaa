@@ -9,8 +9,8 @@ import { StringOutputParser } from "@langchain/core/output_parsers";
 import VectorDB from "../documents/vectorDB";
 import loadingMessage from "./loadingMessages";
 import { notifyPartialMessage } from "./messageNotifier";
-import ollamaStarter from "../ollama/OllamaStarter";
 import { getLLM } from "../model";
+import { getOllamaHost } from "../ollama";
 
 const sendMessage = async (
   courseId: string,
@@ -31,7 +31,7 @@ const sendMessage = async (
   const model = await getLLM();
   const llm = new ChatOllama({
     model,
-    baseUrl: ollamaStarter.getHost(),
+    baseUrl: getOllamaHost(),
   });
 
   let contextualizedQuestion = message;

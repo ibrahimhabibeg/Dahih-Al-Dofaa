@@ -1,5 +1,4 @@
 import { ModelResponse, Ollama } from "ollama";
-import ollamaStarter from "../ollama/OllamaStarter";
 import { ModelID, Model, ModelStatus } from "./types";
 import { modelsDescription, isLLMModelId, isEmbeddingModelId } from "./models";
 import { notifyDownloadingStatus, notifyModelsUpdate } from "./notifier";
@@ -7,6 +6,7 @@ import log from "../utils/log";
 import { app } from "electron";
 import path from "path";
 import fs from "fs";
+import { getOllamaHost } from "../ollama";
 
 class ModelsManager {
   private static instance: ModelsManager;
@@ -20,7 +20,7 @@ class ModelsManager {
   private selectedEmbeddingFilePath: string;
 
   private constructor() {
-    this.ollama = new Ollama({ host: ollamaStarter.getHost() });
+    this.ollama = new Ollama({ host: getOllamaHost() });
     this.downloaingModelsAbort = new Map();
     this.selectedLLMFilePath = path.join(
       app.getPath("userData"),
@@ -118,8 +118,7 @@ class ModelsManager {
   }
 
   private async getInitialOnDeviceModels(): Promise<void> {
-    const ollama = new Ollama({ host: ollamaStarter.getHost() });
-    const { models } = await ollama.list();
+    const { models } = await this.ollama.list();
     this.inititalOnDeviceModels = models;
   }
 
