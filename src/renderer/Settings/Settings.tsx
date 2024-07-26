@@ -1,6 +1,7 @@
 import { Box, List, Typography } from "@mui/material";
 import React from "react";
 import ChangeTheme from "./ChangeTheme";
+import OllamaStatus from "./OllamaStatus";
 
 const Settings = () => {
   return (
@@ -18,6 +19,7 @@ const Settings = () => {
         <List>
           <ChangeTheme />
         </List>
+        <OllamaStatus />
       </Box>
     </Box>
   );

@@ -69,9 +69,13 @@ interface ICourseAPI {
   unsubscribeFromAllCourses: () => void;
 }
 
+interface IOllamAPI {
+  isReady: () => Promise<boolean>;
+  subscribeToReady: (listener: (_event: IpcRendererEvent) => void) => void;
+  unsubscribeFromReady: () => void;
+}
+
 export interface IAPI {
-  startOllama: () => Promise<void>;
-  setupOllama: () => Promise<void>;
   getChats: (courseId: string) => Promise<ChatType[]>;
   addChat: (courseId: string, chatName?: string) => Promise<ChatType>;
   removeChat: (courseId: string, chatId: string) => Promise<ChatType[]>;
@@ -85,6 +89,7 @@ export interface IAPI {
   chat: IChatAPI;
   document: IDocumentAPI;
   course: ICourseAPI;
+  ollama: IOllamAPI;
 }
 
 declare global {

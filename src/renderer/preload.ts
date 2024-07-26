@@ -65,6 +65,17 @@ const chat = {
   },
 };
 
+const ollama = {
+  isReady: () => ipcRenderer.invoke("ollama:isReady"),
+  subscribeToReady: (listener: (_event: IpcRendererEvent) => void) => {
+    ipcRenderer.on("ollama:ready", listener);
+  },
+  unsubscribeFromReady: () => {
+    // Warning: Removing ALL listeners may cause unintended side effects
+    ipcRenderer.removeAllListeners("ollama:ready");
+  },
+};
+
 const document = {
   get: (courseId: string, documentId: string) =>
     ipcRenderer.invoke("document:get", courseId, documentId),
@@ -133,8 +144,6 @@ const course = {
 };
 
 const api: Window["api"] = {
-  startOllama: () => ipcRenderer.invoke("ollama:start"),
-  setupOllama: () => ipcRenderer.invoke("ollama:setup"),
   getChats: (courseId: string) => ipcRenderer.invoke("chat:getAll", courseId),
   getChat: (courseId: string, chatId: string) =>
     ipcRenderer.invoke("chat:get", courseId, chatId),
@@ -148,6 +157,7 @@ const api: Window["api"] = {
   chat,
   document,
   course,
+  ollama,
 };
 
 contextBridge.exposeInMainWorld("api", api);
