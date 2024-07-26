@@ -1,12 +1,14 @@
 import { Ollama } from "ollama";
 import ollamaStarter from "../ollama/OllamaStarter";
+import { getEmbeddingsModel } from "../model";
 
 const embed = async (textArray: string[]): Promise<number[][]> => {
   const ollama = new Ollama({ host: ollamaStarter.getHost() });
   const embeddings = [];
+  const model = await getEmbeddingsModel();
   for (const text of textArray) {
     const response = await ollama.embeddings({
-      model: "nomic-embed-text",
+      model,
       prompt: text,
     });
     embeddings.push(response.embedding);

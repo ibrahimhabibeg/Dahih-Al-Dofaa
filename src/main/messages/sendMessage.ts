@@ -10,6 +10,7 @@ import VectorDB from "../documents/vectorDB";
 import loadingMessage from "./loadingMessages";
 import { notifyPartialMessage } from "./messageNotifier";
 import ollamaStarter from "../ollama/OllamaStarter";
+import { getLLM } from "../model";
 
 const sendMessage = async (
   courseId: string,
@@ -27,8 +28,9 @@ const sendMessage = async (
         ? new HumanMessage(message.content)
         : new AIMessage(message.content)
     );
+  const model = await getLLM();
   const llm = new ChatOllama({
-    model: "llama3.1",
+    model,
     baseUrl: ollamaStarter.getHost(),
   });
 
