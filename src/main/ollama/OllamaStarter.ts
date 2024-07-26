@@ -5,6 +5,7 @@ import fs from "fs";
 import log from "../utils/log";
 import os from "os";
 import dotenv from "dotenv";
+import { notifyOllamaReady } from "./notifier";
 dotenv.config();
 
 type OllamaInstanceType = "readyOnDevice" | "startedFromDevice" | "prepackaged";
@@ -69,6 +70,7 @@ class OllamaStarter {
     try {
       await this.attemptStartReadyOnDevice();
       log("Connected to server on device");
+      notifyOllamaReady();
       return this.instanceType;
     } catch (error) {
       // If the server is not running, try to start it from the device
@@ -77,6 +79,7 @@ class OllamaStarter {
     try {
       await this.attemptStartStartedFromDevice();
       log("Started server from device");
+      notifyOllamaReady();
       return this.instanceType;
     } catch (error) {
       // If ollama is not installed on the device, try to start the prepackaged server
@@ -85,6 +88,7 @@ class OllamaStarter {
     try {
       await this.attemptStartPrepackaged();
       log("Prepackaged server started");
+      notifyOllamaReady();
       return this.instanceType;
     } catch (error) {
       log(`Could not start prepackaged server: ${error}`);
@@ -211,5 +215,4 @@ class OllamaStarter {
   }
 }
 
-const ollamaStarter = OllamaStarter.getInstance();
-export default ollamaStarter;
+export default OllamaStarter;
