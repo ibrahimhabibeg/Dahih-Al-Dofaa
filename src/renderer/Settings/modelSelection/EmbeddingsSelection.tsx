@@ -3,6 +3,7 @@ import { Box, Typography } from "@mui/material";
 import ModelCard from "./ModelCard";
 import useScrollbarStyle from "../../UI/useScrollbarStyle";
 import { useEmbeddingModels } from "../../backend/model";
+import requiresOllama from "../../Requirers/RequiresOllama";
 
 const EmbeddingsSelection = () => {
   const embeddingModels = useEmbeddingModels();
@@ -41,4 +42,4 @@ const EmbeddingsSelection = () => {
   );
 };
 
-export default EmbeddingsSelection;
+export default requiresOllama(EmbeddingsSelection);

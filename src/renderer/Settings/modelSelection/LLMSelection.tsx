@@ -3,6 +3,7 @@ import { useLLMs } from "../../backend/model";
 import { Box, Typography } from "@mui/material";
 import ModelCard from "./ModelCard";
 import useScrollbarStyle from "../../UI/useScrollbarStyle";
+import requiresOllama from "../../Requirers/RequiresOllama";
 
 const LLMSelection = () => {
   const llms = useLLMs();
@@ -41,4 +42,4 @@ const LLMSelection = () => {
   );
 };
 
-export default LLMSelection;
+export default requiresOllama(LLMSelection);
