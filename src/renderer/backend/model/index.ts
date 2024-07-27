@@ -1,7 +1,8 @@
 import useLLMs from "./useLLMs";
 import useEmbeddingModels from "./useEmbeddingModels";
+import useDownloadingModelProgress from "./useDownloadingModelProgress";
 
-export { useLLMs, useEmbeddingModels };
+export { useLLMs, useEmbeddingModels, useDownloadingModelProgress };
 export const downloadModel = (modelId: string) => {
   window.api.model.download(modelId);
 };

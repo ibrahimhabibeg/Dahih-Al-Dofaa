@@ -5,6 +5,7 @@ import { Memory, Storage } from "@mui/icons-material";
 import LLMRadio from "./LLMRadio";
 import EmbeddingsRadio from "./EmbeddingsRadio";
 import humanizeSize from "../../utils/humanizeSize";
+import ModelDownloadProgress from "./ModelDownloadProgress";
 
 type PropsType = {
   model: Model;
@@ -71,6 +72,9 @@ const ModelCard = ({ model, type }: PropsType) => {
             </Typography>
           </Box>
         </Box>
+        {model.status === "downloading" && (
+          <ModelDownloadProgress modelId={model.id} />
+        )}
       </Box>
       <Box
         sx={{

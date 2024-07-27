@@ -13,12 +13,12 @@ const model = {
     ipcRenderer.removeAllListeners("model:update");
   },
   subscribeToDownloadProgress: (
-    modelId: ModelID,
+    modelId: string,
     listener: (_event: IpcRendererEvent, status: ProgressResponse) => void
   ) => {
     ipcRenderer.on(`model:downloading:${modelId}`, listener);
   },
-  unsubscribeFromDownloadProgress: (modelId: ModelID) => {
+  unsubscribeFromDownloadProgress: (modelId: string) => {
     // Warning: Removing ALL listeners may cause unintended side effects
     ipcRenderer.removeAllListeners(`model:downloading:${modelId}`);
   },

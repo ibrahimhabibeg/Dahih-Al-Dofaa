@@ -7,10 +7,10 @@ interface IModelAPI {
   ) => void;
   unsubscribeFromAll: () => void;
   subscribeToDownloadProgress: (
-    modelId: ModelID,
+    modelId: string,
     listener: (_event: IpcRendererEvent, status: ProgressResponse) => void
   ) => void;
-  unsubscribeFromDownloadProgress: (modelId: ModelID) => void;
+  unsubscribeFromDownloadProgress: (modelId: string) => void;
   download: (modelId: string) => void;
   abortDownloading: (modelId: string) => void;
   delete: (modelId: string) => void;
