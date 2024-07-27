@@ -14,6 +14,8 @@ interface IModelAPI {
   download: (modelId: string) => void;
   abortDownloading: (modelId: string) => void;
   delete: (modelId: string) => void;
+  setSelectedEmbedding: (modelId: string) => void;
+  setSelectedLLM: (modelId: string) => void;
 }
 
 interface IMessageAPI {

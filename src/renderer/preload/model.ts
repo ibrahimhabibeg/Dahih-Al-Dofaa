@@ -28,6 +28,10 @@ const model = {
     ipcRenderer.invoke("model:abortDownloading", modelId),
   delete: async (modelId: string) =>
     ipcRenderer.invoke("model:delete", modelId),
+  setSelectedEmbedding: async (modelId: string) =>
+    ipcRenderer.invoke("model:setSelectedEmbedding", modelId),
+  setSelectedLLM: async (modelId: string) =>
+    ipcRenderer.invoke("model:setSelectedLLM", modelId),
 };
 
 export default model;

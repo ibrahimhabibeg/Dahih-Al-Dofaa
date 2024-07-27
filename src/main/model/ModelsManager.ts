@@ -186,6 +186,7 @@ class ModelsManager {
   }
 
   public selectLLM(modelId: ModelID): void {
+    log(`Selecting LLM model ${modelId}`);
     const isDownloaded =
       this.models.find((model) => model.id === modelId).status === "downloaded";
     if (!isDownloaded) {
@@ -207,6 +208,7 @@ class ModelsManager {
   }
 
   public selectEmbedding(modelId: ModelID): void {
+    log(`Selecting embedding model ${modelId}`);
     const isDownloaded =
       this.models.find((model) => model.id === modelId).status === "downloaded";
     if (!isDownloaded) {
