@@ -1,6 +1,6 @@
 import React from "react";
 import { Close, Delete, Download } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import {
   abortDownloadingModel,
   downloadModel,
@@ -14,21 +14,27 @@ type PropsType = {
 const ModelDownloadIcon = ({ model }: PropsType) => {
   if (model.status === "downloading") {
     return (
-      <IconButton onClick={() => abortDownloadingModel(model.id)}>
-        <Close />
-      </IconButton>
+      <Tooltip title="Cancel Download">
+        <IconButton onClick={() => abortDownloadingModel(model.id)}>
+          <Close />
+        </IconButton>
+      </Tooltip>
     );
   } else if (model.status === "downloaded") {
     return (
-      <IconButton onClick={() => deleteModel(model.id)}>
-        <Delete />
-      </IconButton>
+      <Tooltip title="Delete Model">
+        <IconButton onClick={() => deleteModel(model.id)}>
+          <Delete />
+        </IconButton>
+      </Tooltip>
     );
   } else {
     return (
-      <IconButton onClick={() => downloadModel(model.id)}>
-        <Download />
-      </IconButton>
+      <Tooltip title="Download Model">
+        <IconButton onClick={() => downloadModel(model.id)}>
+          <Download />
+        </IconButton>
+      </Tooltip>
     );
   }
 };
