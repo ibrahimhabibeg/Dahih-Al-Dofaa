@@ -221,7 +221,7 @@ class ModelsManager {
         model.id === previousSelectedEmbedding
           ? { ...model, isSelectedEmbedding: false }
           : model.id === modelId
-          ? { ...model, isSelectedLlm: true }
+          ? { ...model, isSelectedEmbedding: true }
           : model
       )
     );
