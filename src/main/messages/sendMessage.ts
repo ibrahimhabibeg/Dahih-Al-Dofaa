@@ -5,11 +5,12 @@ import {
   MessagesPlaceholder,
 } from "@langchain/core/prompts";
 import { ChatOllama } from "@langchain/ollama";
-import { getHost } from "../ollama";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import VectorDB from "../documents/vectorDB";
 import loadingMessage from "./loadingMessages";
 import { notifyPartialMessage } from "./messageNotifier";
+import { getLLM } from "../model";
+import { getOllamaHost } from "../ollama";
 
 const sendMessage = async (
   courseId: string,
@@ -27,10 +28,10 @@ const sendMessage = async (
         ? new HumanMessage(message.content)
         : new AIMessage(message.content)
     );
-
+  const model = await getLLM();
   const llm = new ChatOllama({
-    model: "llama3.1",
-    baseUrl: getHost(),
+    model,
+    baseUrl: getOllamaHost(),
   });
 
   let contextualizedQuestion = message;

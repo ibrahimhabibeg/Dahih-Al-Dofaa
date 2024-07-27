@@ -2,9 +2,10 @@ import React from "react";
 import { Typography, Box, List, Divider } from "@mui/material";
 import { useParams } from "react-router-dom";
 import DocumentView from "./DocumentView";
-import useDocuments from "./useDocuments";
+import useDocuments from "../backend/useDocuments";
 import ImportDocumentButton from "./ImportDocumentButton";
-import useCourse from "../Sidebar/Courses/useCourse";
+import useCourse from "../backend/useCourse";
+import requiresEmbeddings from "../Requirers/RequiresEmbeddings";
 
 const DocumentsPage = () => {
   const { courseId } = useParams();
@@ -37,4 +38,4 @@ const DocumentsPage = () => {
   );
 };
 
-export default DocumentsPage;
+export default requiresEmbeddings(DocumentsPage);

@@ -1,5 +1,5 @@
 import React from "react";
-import useChats from "./useChats";
+import useChats from "../../backend/useChats";
 import ChatItem from "./ChatItem";
 import { Add } from "@mui/icons-material";
 import {
@@ -23,7 +23,7 @@ const ChatList = ({ course }: PropsType) => {
   const navigate = useNavigate();
 
   const addChat = () => {
-    window.api.addChat(course.id).then((chat) => {
+    window.api.chat.addChat(course.id).then((chat) => {
       navigate(`/chat/${course.id}/${chat.id}`);
     });
   };

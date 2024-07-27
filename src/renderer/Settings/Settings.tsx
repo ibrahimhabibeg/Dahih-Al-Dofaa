@@ -1,8 +1,18 @@
-import { Box, List, Typography } from "@mui/material";
+import {
+  Box,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import ChangeTheme from "./ChangeTheme";
+import { ArrowForward, AutoAwesome, Calculate } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const Settings = () => {
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -17,6 +27,20 @@ const Settings = () => {
         <Typography variant="h4">Settings</Typography>
         <List>
           <ChangeTheme />
+          <ListItemButton onClick={() => navigate("/settings/llm")}>
+            <ListItemIcon>
+              <AutoAwesome />
+            </ListItemIcon>
+            <ListItemText primary="LLM Selection" />
+            <ArrowForward />
+          </ListItemButton>
+          <ListItemButton onClick={() => navigate("/settings/embeddings")}>
+            <ListItemIcon>
+              <Calculate />
+            </ListItemIcon>
+            <ListItemText primary="Embeddings Model Selection" />
+            <ArrowForward />
+          </ListItemButton>
         </List>
       </Box>
     </Box>

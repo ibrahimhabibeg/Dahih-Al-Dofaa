@@ -4,7 +4,7 @@ const useChats = (courseId: string) => {
   const [chats, setChats] = useState<ChatType[]>([]);
 
   useEffect(() => {
-    window.api.getChats(courseId).then((chats) => {
+    window.api.chat.getChats(courseId).then((chats) => {
       setChats(chats);
     });
 

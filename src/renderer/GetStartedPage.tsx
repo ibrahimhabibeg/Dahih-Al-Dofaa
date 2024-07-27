@@ -9,7 +9,7 @@ const GetStartedPage = () => {
   return (
     <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
       <Box marginTop={10} textAlign={"center"}>
-        <img src={Logo} alt="Ollama Logo" width={150} />
+        <img src={Logo} alt="App Logo" width={150} />
         <Typography variant="h4" marginTop={3}>
           Dahih Al-Dofaa
         </Typography>

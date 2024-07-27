@@ -1,14 +1,22 @@
 import { ipcMain } from "electron";
-import ollamaManager from "./ollama";
+import OllamaStarter from "./OllamaStarter";
 
-ipcMain.handle("ollama:start", () => {
-  ollamaManager.start();
+ipcMain.handle("ollama:isReady", async () => {
+  const ollama = OllamaStarter.getInstance();
+  return ollama.getOllamaStatus() === "running";
 });
 
-ipcMain.handle("ollama:setup", () => {
-  ollamaManager.setup();
-});
+export const startOllama = async () => {
+  const ollama = OllamaStarter.getInstance();
+  await ollama.start();
+};
 
-export const embed = (textArray: string[]) => ollamaManager.embed(textArray);
-export const stopOllama = () => ollamaManager.stop();
-export const getHost = () => ollamaManager.getHost();
+export const stopOllama = () => {
+  const ollama = OllamaStarter.getInstance();
+  ollama.stop();
+};
+
+export const getOllamaHost = () => {
+  const ollama = OllamaStarter.getInstance();
+  return ollama.getHost();
+};

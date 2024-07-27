@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import DocumentIcon from "./DocumentIcon";
-import useIsLoadingDocument from "./useIsLoadingDocument";
+import useIsLoadingDocument from "../backend/useIsLoadingDocument";
 
 type DocumentViewProps = {
   document: Doc;
