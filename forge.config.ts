@@ -29,6 +29,8 @@ const config: ForgeConfig = {
     new MakerDeb({
       options: {
         icon: path.join(process.cwd(), "public", "icon.png"),
+        productName: "Dahih Al-Dofaa",
+        genericName: "AI Assistant",
       },
     }),
   ],

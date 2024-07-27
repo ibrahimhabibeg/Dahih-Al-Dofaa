@@ -2,7 +2,7 @@
   "name": "dahih-al-dofaa",
   "productName": "dahih-al-dofaa",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Dahih is your AI-powered study companion for university students.",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
