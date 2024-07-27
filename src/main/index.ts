@@ -1,4 +1,5 @@
 import { app, BrowserWindow } from "electron";
+if (require("electron-squirrel-startup")) app.quit();
 
 // IPC handlers
 import "./documents";

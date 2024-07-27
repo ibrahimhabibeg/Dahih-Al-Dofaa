@@ -182,16 +182,25 @@ class OllamaStarter {
    * @returns The path to the Ollama binary
    */
   private getPathToBinary(): string {
+    let folderPath = "";
     if (app.isPackaged) {
-      return path.join(process.resourcesPath, "ollama", "ollama-linux-amd64");
+      folderPath = path.join(process.resourcesPath, "ollama");
     } else {
-      return path.join(
-        __dirname,
-        "../../extraResources",
-        "ollama",
-        "ollama-linux-amd64"
+      folderPath = path.join(__dirname, "../../extraResources", "ollama");
+    }
+    let fileName = "";
+    if (process.platform === "linux") {
+      fileName = "ollama-linux-amd64";
+    } else if (process.platform === "win32") {
+      fileName = "ollama.exe";
+    } else {
+      log("Operating system isn't supported. Ollama won't be able to start.");
+      throw new Error(
+        "Operating system isn't supported. Ollama won't be able to start."
       );
     }
+    const filePath = path.join(folderPath, fileName);
+    return filePath;
   }
 
   /**

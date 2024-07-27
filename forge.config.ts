@@ -15,7 +15,7 @@ import path from "path";
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
-    icon: path.join(process.cwd(), "public", "icon.png"),
+    icon: path.join(process.cwd(), "public", "icon"),
     extraResource: [
       path.join(process.cwd(), "public", "icon.png"),
       "./extraResources/ollama",
@@ -23,7 +23,11 @@ const config: ForgeConfig = {
   },
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({}),
+    new MakerSquirrel({
+      setupIcon: path.join(process.cwd(), "public", "icon.ico"),
+      iconUrl: path.join(process.cwd(), "public", "icon.ico"),
+      title: "Dahih Al-Dofaa",
+    }),
     new MakerZIP({}, ["darwin"]),
     new MakerRpm({}),
     new MakerDeb({
