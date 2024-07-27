@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, ListItem, Typography } from "@mui/material";
 import ModelDownloadIcon from "./ModelDownloadIcon";
 import { Memory, Storage } from "@mui/icons-material";
 import LLMRadio from "./LLMRadio";
@@ -14,14 +14,19 @@ type PropsType = {
 
 const ModelCard = ({ model, type }: PropsType) => {
   return (
-    <Box
+    <ListItem
       sx={{
         width: "100%",
         display: "flex",
         flexDirection: "row",
         marginTop: 3,
         marginBottom: 3,
+        borderRadius: 2,
       }}
+      selected={
+        (type === "llm" && model.isSelectedLlm) ||
+        (type === "embeddings" && model.isSelectedEmbedding)
+      }
     >
       <Box sx={{ width: "10%" }}>
         {type === "llm" ? (
@@ -87,7 +92,7 @@ const ModelCard = ({ model, type }: PropsType) => {
       >
         <ModelDownloadIcon model={model} />
       </Box>
-    </Box>
+    </ListItem>
   );
 };
 
