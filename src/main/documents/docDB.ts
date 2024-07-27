@@ -4,6 +4,7 @@ import { app } from "electron";
 import { v4 as uuidv4 } from "uuid";
 import { validExtensions } from ".";
 import { notifyDocumentsUpdate } from "./documentNotifier";
+import log from "../utils/log";
 
 /**
  * This class manages the documents in the application.
@@ -64,25 +65,21 @@ class DocDB {
       this.documentsFolderPath,
       id + "." + this.extractExtension(originalPath)
     );
+    log(`Copying document from ${originalPath} to ${newPath}`);
     fs.copyFileSync(originalPath, newPath);
     return newPath;
   }
 
-  private extractExtension(path: string): DocType {
-    const parts = path.split(".");
-    const extension = parts[parts.length - 1];
+  private extractExtension(filePath: string): DocType {
+    const extension = path.extname(filePath).substring(1);
     if (!validExtensions.includes(extension)) {
       throw new Error("Invalid document type");
     }
-    return parts[parts.length - 1] as DocType;
+    return extension as DocType;
   }
 
-  private extractTitle(path: string): string {
-    const parts = path.split("/");
-    const nameWithExtension = parts[parts.length - 1];
-    const nameParts = nameWithExtension.split(".");
-    const title = nameParts.slice(0, nameParts.length - 1).join(".");
-    return title;
+  private extractTitle(filePath: string): string {
+    return path.basename(filePath).split(".")[0];
   }
 
   deleteDocument(documentId: string) {
