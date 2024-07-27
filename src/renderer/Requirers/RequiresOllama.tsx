@@ -43,26 +43,40 @@ const RequiresOllama = ({ children }: PropsType) => {
     return (
       <Box
         sx={{
+          width: "100%",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          height: "100vh",
-          width: "80%",
         }}
       >
-        <img src={Logo} alt="App Logo" width={150} style={{ marginTop: 50 }} />
-        <Typography variant="h5" marginTop={5}>
-          Please wait while app is getting ready...
-        </Typography>
-        <LinearProgress
+        <Box
           sx={{
-            width: "100%",
-            marginTop: 5,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            height: "100vh",
+            width: "80%",
           }}
-        />
-        <Typography variant="body1" marginTop={2}>
-          {loadingStatement}
-        </Typography>
+        >
+          <img
+            src={Logo}
+            alt="App Logo"
+            width={150}
+            style={{ marginTop: 50 }}
+          />
+          <Typography variant="h5" marginTop={5}>
+            Please wait while app is getting ready...
+          </Typography>
+          <LinearProgress
+            sx={{
+              width: "100%",
+              marginTop: 5,
+            }}
+          />
+          <Typography variant="body1" marginTop={2}>
+            {loadingStatement}
+          </Typography>
+        </Box>
       </Box>
     );
   }
