@@ -5,6 +5,7 @@ import DocumentView from "./DocumentView";
 import useDocuments from "../backend/useDocuments";
 import ImportDocumentButton from "./ImportDocumentButton";
 import useCourse from "../backend/useCourse";
+import requiresEmbeddings from "../Requirers/RequiresEmbeddings";
 
 const DocumentsPage = () => {
   const { courseId } = useParams();
@@ -37,4 +38,4 @@ const DocumentsPage = () => {
   );
 };
 
-export default DocumentsPage;
+export default requiresEmbeddings(DocumentsPage);

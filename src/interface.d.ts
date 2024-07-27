@@ -16,6 +16,16 @@ interface IModelAPI {
   delete: (modelId: string) => void;
   setSelectedEmbedding: (modelId: string) => void;
   setSelectedLLM: (modelId: string) => void;
+  getSelectedEmbedding: () => Promise<string>;
+  getSelectedLLM: () => Promise<string>;
+  subscribeToSelectedEmbedding: (
+    listener: (_event: IpcRendererEvent, modelId: string) => void
+  ) => void;
+  unsubscribeFromSelectedEmbedding: () => void;
+  subscribeToSelectedLLM: (
+    listener: (_event: IpcRendererEvent, modelId: string) => void
+  ) => void;
+  unsubscribeFromSelectedLLM: () => void;
 }
 
 interface IMessageAPI {

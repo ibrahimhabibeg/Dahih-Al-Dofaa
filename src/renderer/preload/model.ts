@@ -32,6 +32,27 @@ const model = {
     ipcRenderer.invoke("model:setSelectedEmbedding", modelId),
   setSelectedLLM: async (modelId: string) =>
     ipcRenderer.invoke("model:setSelectedLLM", modelId),
+  getSelectedEmbedding: async () =>
+    ipcRenderer.invoke("model:getSelectedEmbedding"),
+  getSelectedLLM: async () => ipcRenderer.invoke("model:getSelectedLLM"),
+  subscribeToSelectedEmbedding: (
+    listener: (_event: IpcRendererEvent, modelId: string) => void
+  ) => {
+    ipcRenderer.on("model:selectedEmbedding", listener);
+  },
+  unsubscribeFromSelectedEmbedding: () => {
+    // Warning: Removing ALL listeners may cause unintended side effects
+    ipcRenderer.removeAllListeners("model:selectedEmbedding");
+  },
+  subscribeToSelectedLLM: (
+    listener: (_event: IpcRendererEvent, modelId: string) => void
+  ) => {
+    ipcRenderer.on("model:selectedLLM", listener);
+  },
+  unsubscribeFromSelectedLLM: () => {
+    // Warning: Removing ALL listeners may cause unintended side effects
+    ipcRenderer.removeAllListeners("model:selectedLLM");
+  },
 };
 
 export default model;

@@ -4,6 +4,8 @@ import ChatTopBar from "./ChatTopBar";
 import useScrollbarStyle from "../UI/useScrollbarStyle";
 import SubmitButton from "./SubmitButton";
 import ChatList from "./ChatList";
+import requiresLLM from "../Requirers/RequiresLLM";
+import requiresEmbeddings from "../Requirers/RequiresEmbeddings";
 
 const Chat = () => {
   const scrollbarStyle = useScrollbarStyle();
@@ -57,4 +59,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default requiresLLM(requiresEmbeddings(Chat));

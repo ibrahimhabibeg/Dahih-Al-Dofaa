@@ -37,6 +37,16 @@ ipcMain.handle("model:setSelectedLLM", async (event, modelId: string) => {
   modelManager.selectLLM(modelId);
 });
 
+ipcMain.handle("model:getSelectedEmbedding", async () => {
+  const modelManager = await ModelsManager.getInstance();
+  return modelManager.getSelectedEmbedding();
+});
+
+ipcMain.handle("model:getSelectedLLM", async () => {
+  const modelManager = await ModelsManager.getInstance();
+  return modelManager.getSelectedLLM();
+});
+
 export const getEmbeddingsModel = async () => {
   const modelManager = await ModelsManager.getInstance();
   return modelManager.getSelectedEmbedding();

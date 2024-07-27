@@ -17,3 +17,17 @@ export const notifyModelsUpdate = (models: Model[]) => {
     window.send("model:update", models);
   });
 };
+
+export const notifySelectedEmbeddingUpdate = (modelId: ModelID) => {
+  const windows = webContents.getAllWebContents();
+  windows.forEach((window) => {
+    window.send("model:selectedEmbedding", modelId);
+  });
+};
+
+export const notifySelectedLLMUpdate = (modelId: ModelID) => {
+  const windows = webContents.getAllWebContents();
+  windows.forEach((window) => {
+    window.send("model:selectedLLM", modelId);
+  });
+}

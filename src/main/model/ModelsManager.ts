@@ -1,6 +1,11 @@
 import { ModelResponse, Ollama } from "ollama";
 import { modelsDescription, isLLMModelId, isEmbeddingModelId } from "./models";
-import { notifyDownloadingStatus, notifyModelsUpdate } from "./notifier";
+import {
+  notifyDownloadingStatus,
+  notifyModelsUpdate,
+  notifySelectedEmbeddingUpdate,
+  notifySelectedLLMUpdate,
+} from "./notifier";
 import log from "../utils/log";
 import { app } from "electron";
 import path from "path";
@@ -195,6 +200,7 @@ class ModelsManager {
     }
     const previousSelectedLLM = this.selectedLLM;
     this.selectedLLM = modelId;
+    notifySelectedLLMUpdate(modelId);
     fs.writeFileSync(this.selectedLLMFilePath, modelId);
     this.setModels(
       this.models.map((model) =>
@@ -217,6 +223,7 @@ class ModelsManager {
     }
     const previousSelectedEmbedding = this.selectedEmbedding;
     this.selectedEmbedding = modelId;
+    notifySelectedEmbeddingUpdate(modelId);
     fs.writeFileSync(this.selectedEmbeddingFilePath, modelId);
     this.setModels(
       this.models.map((model) =>
@@ -232,6 +239,7 @@ class ModelsManager {
   private resetSelectedLLM(): void {
     log(`Resetting selected LLM model`);
     this.selectedLLM = null;
+    notifySelectedLLMUpdate(null);
     fs.writeFileSync(this.selectedLLMFilePath, "");
     this.setModels(
       this.models.map((model) =>
@@ -243,6 +251,7 @@ class ModelsManager {
   private resetSelectedEmbedding(): void {
     log(`Resetting selected embedding model`);
     this.selectedEmbedding = null;
+    notifySelectedEmbeddingUpdate(null);
     fs.writeFileSync(this.selectedEmbeddingFilePath, "");
     this.setModels(
       this.models.map((model) =>
