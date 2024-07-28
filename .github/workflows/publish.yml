@@ -42,6 +42,8 @@ jobs:
         run: curl -L https://github.com/ollama/ollama/releases/latest/download/ollama-windows-amd64.zip -o extraResources/ollama/ollama-windows-amd64.zip
       - name: unzip ollama binary
         run: Expand-Archive -Path extraResources/ollama/ollama-windows-amd64.zip -DestinationPath extraResources/ollama
+      - name: delete zip file
+        run: Remove-Item extraResources/ollama/ollama-windows-amd64.zip
       - name: publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
