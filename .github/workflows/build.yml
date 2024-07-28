@@ -13,6 +13,10 @@ jobs:
         run: npm install -g yarn
       - name: install dependencies
         run: yarn install
+      - name: create ollama directory under extraResources
+        run: mkdir -p extraResources/ollama
+      - name: download latest ollama binary
+        run: curl -L https://github.com/ollama/ollama/releases/latest/download/ollama-linux-amd64 -o extraResources/ollama/ollama-linux-amd64
       - name: build
         run: yarn make
 
@@ -27,5 +31,11 @@ jobs:
         run: npm install -g yarn
       - name: install dependencies
         run: yarn install
+      - name: create ollama directory under extraResources
+        run: mkdir -p extraResources/ollama
+      - name: download latest ollama binary
+        run: curl -L https://github.com/ollama/ollama/releases/latest/download/ollama-windows-amd64.zip -o extraResources/ollama/ollama-windows-amd64.zip
+      - name: unzip ollama binary
+        run: Expand-Archive -Path extraResources/ollama/ollama-windows-amd64.zip -DestinationPath extraResources/ollama
       - name: build
         run: yarn make
