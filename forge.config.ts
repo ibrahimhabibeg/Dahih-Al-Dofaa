@@ -75,7 +75,7 @@ const config: ForgeConfig = {
       config: {
         repository: {
           owner: "ibrahimhabibeg",
-          name: "electron-release-test",
+          name: "Dahih-Al-Dofaa",
           token: process.env.GITHUB_TOKEN,
         },
         prerelease: false,
