@@ -1,6 +1,9 @@
 import { app, BrowserWindow } from "electron";
 if (require("electron-squirrel-startup")) app.quit();
 
+import { updateElectronApp } from "update-electron-app";
+updateElectronApp();
+
 // IPC handlers
 import "./documents";
 import "./chats";

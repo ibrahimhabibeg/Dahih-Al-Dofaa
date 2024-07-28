@@ -11,6 +11,7 @@ import { FuseV1Options, FuseVersion } from "@electron/fuses";
 import { mainConfig } from "./webpack.main.config";
 import { rendererConfig } from "./webpack.renderer.config";
 import path from "path";
+import "dotenv/config";
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -67,6 +68,20 @@ const config: ForgeConfig = {
       [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
       [FuseV1Options.OnlyLoadAppFromAsar]: true,
     }),
+  ],
+  publishers: [
+    {
+      name: "@electron-forge/publisher-github",
+      config: {
+        repository: {
+          owner: "ibrahimhabibeg",
+          name: "electron-release-test",
+          token: process.env.GITHUB_TOKEN,
+        },
+        prerelease: false,
+        draft: true,
+      },
+    },
   ],
 };
 
