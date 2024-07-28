@@ -1,5 +1,8 @@
-name: Build
-on: [push]
+name: Publish
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build_on_linux:
@@ -17,8 +20,10 @@ jobs:
         run: mkdir -p extraResources/ollama
       - name: download latest ollama binary
         run: curl -L https://github.com/ollama/ollama/releases/latest/download/ollama-linux-amd64 -o extraResources/ollama/ollama-linux-amd64
-      - name: build
-        run: yarn make
+      - name: publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn run publish
 
   build_on_win:
     runs-on: windows-latest
@@ -37,5 +42,7 @@ jobs:
         run: curl -L https://github.com/ollama/ollama/releases/latest/download/ollama-windows-amd64.zip -o extraResources/ollama/ollama-windows-amd64.zip
       - name: unzip ollama binary
         run: Expand-Archive -Path extraResources/ollama/ollama-windows-amd64.zip -DestinationPath extraResources/ollama
-      - name: build
-        run: yarn make
+      - name: publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn run publish
