@@ -25,8 +25,8 @@ const sendMessage = async (
     .getMessages()
     .map((message) =>
       message.sender === "human"
-        ? new HumanMessage(message.content)
-        : new AIMessage(message.content)
+        ? new HumanMessage(sanitize(message.content))
+        : new AIMessage(sanitize(message.content))
     );
   const model = await getLLM();
   const llm = new ChatOllama({
@@ -37,7 +37,7 @@ const sendMessage = async (
   let contextualizedQuestion = message;
   if (chatHistory.length > 0)
     contextualizedQuestion = await contextualizeQuestion(
-      contextualizedQuestion,
+      sanitize(contextualizedQuestion),
       chatHistory,
       llm
     );
@@ -46,8 +46,8 @@ const sendMessage = async (
   const documents = await vectorDB.search(contextualizedQuestion);
 
   const stream = await respondToQuestion(
-    message,
-    documents.map((doc) => doc.text),
+    sanitize(message),
+    documents.map((doc) => sanitize(doc.text)),
     chatHistory,
     llm
   );
@@ -128,3 +128,7 @@ the smartest student in class. You are an A+ student at the university and you a
 you can answer any university related. question. You are given a conversation between you and
 one of your classmates related to university topics. You should answer your classmate's question
 as best as you can. Keep your answer clear, concise, and to the point.`;
+
+const sanitize = (text: string) => {
+  return text.replace(/{/g, "{{").replace(/}/g, "}}");
+};
