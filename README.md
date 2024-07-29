@@ -128,6 +128,15 @@ Before running or building Dahih, you need to download and add the appropriate O
    - **Windows:** Download the `ollama-windows-amd64.zip` file, and extract its contents.
 3. Place the downloaded executables (Linux) or extracted files (Windows) inside the `extraResources/ollama` directory within the Dahih project.
 
+
+**Environment Setup**
+
+For development purposes, you can customize the Ollama host URL by creating a `.env` file at the root of the project and adding the following line:
+```
+OLLAMA_HOST=http://your_ollama_host:port
+```
+If this environment variable is not set, the app will default to `http://localhost:11434`.
+
 **Installation:**
 
 1. Clone the repository:
