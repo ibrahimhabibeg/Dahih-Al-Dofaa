@@ -1,8 +1,18 @@
 import React from "react";
 import Courses from "./Courses/Courses";
 import Chat from "./Chat/Chat";
+import { IconButton, Box } from "@mui/material";
+import { Menu } from "@mui/icons-material";
+import useScrollbarStyle from "../UI/useScrollbarStyle";
 
-const Sidebar = () => {
+type PropsType = {
+  isOpen: boolean;
+  toggleSidebar: () => void;
+};
+
+const Sidebar = ({ isOpen, toggleSidebar }: PropsType) => {
+  const scrollBarStyle = useScrollbarStyle();
+
   const [course, setCourse] = React.useState<{ title: string; id: string }>(
     null
   );
@@ -15,10 +25,60 @@ const Sidebar = () => {
     setCourse(null);
   };
 
-  if (course) {
-    return <Chat course={course} handleBackClick={handleBackClick} />;
+  if (!isOpen) {
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-start",
+        }}
+      >
+        <IconButton sx={{ mt: 3, ml: 2 }} onClick={toggleSidebar}>
+          <Menu />
+        </IconButton>
+      </Box>
+    );
   } else {
-    return <Courses handleCourseClick={handleCourseClick} />;
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          height: "100vh",
+          overflowY: "auto",
+          ...scrollBarStyle,
+        }}
+      >
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            height: "7vh",
+          }}
+        >
+          <Box>
+            <IconButton sx={{ mt: 3, ml: 2 }} onClick={toggleSidebar}>
+              <Menu />
+            </IconButton>
+          </Box>
+        </Box>
+
+        <Box height={"93vh"}>
+          {course ? (
+            <Chat course={course} handleBackClick={handleBackClick} />
+          ) : (
+            <Courses handleCourseClick={handleCourseClick} />
+          )}
+        </Box>
+      </Box>
+    );
   }
 };
 

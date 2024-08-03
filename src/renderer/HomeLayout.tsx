@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar/Sidebar";
 import { Box } from "@mui/material";
@@ -7,12 +7,17 @@ import Navbar from "./Navbar";
 
 const HomeLayout = () => {
   const scrollBarStyle = useScrollbarStyle();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
 
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"row"}>
       <Box
         sx={{
-          width: "20%",
+          width: isSidebarOpen ? "20%" : "5%",
           borderRight: 1,
           borderColor: "divider",
           height: "100vh",
@@ -20,11 +25,11 @@ const HomeLayout = () => {
           ...scrollBarStyle,
         }}
       >
-        <Sidebar />
+        <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       </Box>
       <Box
         sx={{
-          width: "80%",
+          width: isSidebarOpen ? "80%" : "95%",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",

@@ -22,7 +22,7 @@ const Chat = ({ course, handleBackClick }: ChatProps) => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        height: "100vh",
+        height: "100%",
         overflowY: "auto",
         ...scrollbarStyle,
       }}
