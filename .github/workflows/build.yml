@@ -1,0 +1,53 @@
+name: build
+on: workflow_dispatch
+
+jobs:
+  build_on_linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@master
+        with:
+          node-version: 22
+      - name: install yarn
+        run: npm install -g yarn
+      - name: install dependencies
+        run: yarn install
+      - name: create ollama directory under extraResources
+        run: mkdir -p extraResources/ollama
+      - name: download latest ollama binary
+        run: curl -L https://github.com/ollama/ollama/releases/latest/download/ollama-linux-amd64 -o extraResources/ollama/ollama-linux-amd64
+      - name: build
+        run: yarn run make
+      - name: Archive Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dahih-linux
+          path: out/make
+
+  build_on_win:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@master
+        with:
+          node-version: 22
+      - name: install yarn
+        run: npm install -g yarn
+      - name: install dependencies
+        run: yarn install
+      - name: create ollama directory under extraResources
+        run: mkdir -p extraResources/ollama
+      - name: download latest ollama binary
+        run: curl -L https://github.com/ollama/ollama/releases/latest/download/ollama-windows-amd64.zip -o extraResources/ollama/ollama-windows-amd64.zip
+      - name: unzip ollama binary
+        run: Expand-Archive -Path extraResources/ollama/ollama-windows-amd64.zip -DestinationPath extraResources/ollama
+      - name: delete zip file
+        run: Remove-Item extraResources/ollama/ollama-windows-amd64.zip
+      - name: build
+        run: yarn run make
+      - name: Archive Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dahih-win
+          path: out/make
