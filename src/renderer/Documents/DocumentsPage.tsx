@@ -14,7 +14,7 @@ const DocumentsPage = () => {
   const documents = useDocuments(courseId);
 
   return (
-    <Box display={"flex"} flexDirection={"column"} width={"90%"}>
+    <Box display={"flex"} flexDirection={"column"} width={"80%"}>
       <Box
         display={"flex"}
         flexDirection={"row"}

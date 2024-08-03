@@ -13,7 +13,7 @@ const Chat = () => {
   return (
     <Box
       sx={{
-        height: "100vh",
+        height: "100%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -22,7 +22,7 @@ const Chat = () => {
     >
       <Box
         sx={{
-          height: "10vh",
+          height: "10%",
           width: "100%",
           display: "flex",
           flexDirection: "column",
@@ -33,7 +33,7 @@ const Chat = () => {
       </Box>
       <Box
         sx={{
-          height: "75vh",
+          height: "75%",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -46,7 +46,7 @@ const Chat = () => {
       </Box>
       <Box
         sx={{
-          height: "15vh",
+          height: "15%",
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",

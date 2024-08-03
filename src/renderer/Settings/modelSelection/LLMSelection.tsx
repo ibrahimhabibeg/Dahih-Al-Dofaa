@@ -2,12 +2,10 @@ import React from "react";
 import { useLLMs } from "../../backend/model";
 import { Box, Typography } from "@mui/material";
 import ModelCard from "./ModelCard";
-import useScrollbarStyle from "../../UI/useScrollbarStyle";
 import requiresOllama from "../../Requirers/RequiresOllama";
 
 const LLMSelection = () => {
   const llms = useLLMs();
-  const scrollBarStyle = useScrollbarStyle();
 
   return (
     <Box
@@ -16,9 +14,6 @@ const LLMSelection = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        height: "100vh",
-        overflowY: "auto",
-        ...scrollBarStyle,
       }}
     >
       <Box

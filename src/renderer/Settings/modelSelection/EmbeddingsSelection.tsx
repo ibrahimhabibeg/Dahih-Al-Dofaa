@@ -1,13 +1,11 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import ModelCard from "./ModelCard";
-import useScrollbarStyle from "../../UI/useScrollbarStyle";
 import { useEmbeddingModels } from "../../backend/model";
 import requiresOllama from "../../Requirers/RequiresOllama";
 
 const EmbeddingsSelection = () => {
   const embeddingModels = useEmbeddingModels();
-  const scrollBarStyle = useScrollbarStyle();
 
   return (
     <Box
@@ -16,9 +14,6 @@ const EmbeddingsSelection = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        height: "100vh",
-        overflowY: "auto",
-        ...scrollBarStyle,
       }}
     >
       <Box
