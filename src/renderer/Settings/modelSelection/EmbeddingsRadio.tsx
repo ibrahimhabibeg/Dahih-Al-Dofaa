@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Radio } from "@mui/material";
 import { setSelectedEmbedding } from "../../backend/model";
+import ModelRadio from "./ModelRadio";
 
 type PropsType = {
   model: Model;
@@ -13,17 +13,15 @@ const EmbeddingsRadio = ({ model }: PropsType) => {
     setIsSelected(model.isSelectedEmbedding);
   }, [model.isSelectedEmbedding]);
 
-  const handleClick = () => {
-    if (!isSelected) {
-      setSelectedEmbedding(model.id);
-    }
+  const setSelectedModel = (modelId: string) => {
+    setSelectedEmbedding(modelId);
   };
 
   return (
-    <Radio
-      checked={isSelected}
-      disabled={model.status != "downloaded"}
-      onClick={handleClick}
+    <ModelRadio
+      model={model}
+      isSelected={isSelected}
+      setSelectedModel={setSelectedModel}
     />
   );
 };
