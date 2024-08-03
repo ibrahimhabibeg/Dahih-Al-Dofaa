@@ -1,7 +1,7 @@
 {
   "name": "dahih-al-dofaa",
   "productName": "dahih-al-dofaa",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Dahih is your AI-powered study companion for university students.",
   "main": ".webpack/main",
   "scripts": {
