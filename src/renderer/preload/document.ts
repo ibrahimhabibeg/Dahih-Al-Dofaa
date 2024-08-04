@@ -37,6 +37,8 @@ const document = {
     // Warning: Removing ALL listeners may cause unintended side effects
     ipcRenderer.removeAllListeners(`document:update:${courseId}`);
   },
+  open: (courseId: string, documentId: string) =>
+    ipcRenderer.invoke("document:open", courseId, documentId),
 };
 
 export default document;
