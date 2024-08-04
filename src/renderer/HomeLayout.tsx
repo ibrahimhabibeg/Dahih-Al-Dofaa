@@ -31,8 +31,8 @@ const HomeLayout = () => {
         sx={{
           width: isSidebarOpen ? "80%" : "95%",
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          flexDirection: "row",
+          alignItems: "flex-start",
           height: "100vh",
           overflowY: "auto",
           ...scrollBarStyle,
@@ -40,12 +40,11 @@ const HomeLayout = () => {
       >
         <Box
           sx={{
-            width: "100%",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "flex-start",
-            height: "5vh",
+            width: "5%",
           }}
         >
           <Navbar />
@@ -56,8 +55,8 @@ const HomeLayout = () => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "flex-start",
-            height: "95vh",
-            width: "100%",
+            height: "100%",
+            width: "95%",
           }}
         >
           <Outlet />

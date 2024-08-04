@@ -46,6 +46,7 @@ const Courses = ({ handleCourseClick }: CoursesProps) => {
           flexDirection: "column",
           justifyContent: "space-between",
           overflowY: "auto",
+          width: "100%",
           ...scrollbarStyle,
         }}
       >
