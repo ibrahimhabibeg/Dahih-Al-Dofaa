@@ -6,7 +6,8 @@ import {
   notifySelectedEmbeddingUpdate,
   notifySelectedLLMUpdate,
 } from "./notifier";
-import log from "../utils/log";
+import logger from "electron-log";
+const log = logger.log;
 import { app } from "electron";
 import path from "path";
 import fs from "fs";

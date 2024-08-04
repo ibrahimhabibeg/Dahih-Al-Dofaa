@@ -4,7 +4,8 @@ import { app } from "electron";
 import { v4 as uuidv4 } from "uuid";
 import { validExtensions } from ".";
 import { notifyDocumentsUpdate } from "./documentNotifier";
-import log from "../utils/log";
+import logger from "electron-log";
+const log = logger.log;
 
 /**
  * This class manages the documents in the application.
