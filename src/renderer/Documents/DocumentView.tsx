@@ -7,10 +7,12 @@ import {
   TextField,
   Typography,
   CircularProgress,
+  ListItemButton,
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import DocumentIcon from "./DocumentIcon";
 import useIsLoadingDocument from "../backend/useIsLoadingDocument";
+import openDocument from "../backend/openDocument";
 
 type DocumentViewProps = {
   document: Doc;
@@ -42,29 +44,36 @@ const DocumentView = ({ document, courseId }: DocumentViewProps) => {
     handleRename(title);
     setIsEditing(false);
   };
-
-  return (
-    <>
+  if (isEditing) {
+    return (
       <ListItem>
-        <ListItemIcon>
-          <DocumentIcon docType={document.docType} />
-        </ListItemIcon>
-        <ListItemText>
-          {isEditing ? (
-            <TextField
-              defaultValue={document.title}
-              onChange={(e) => setTitle(e.target.value)}
-              onBlur={handleSave}
-              value={title}
-              focused={true}
-            />
-          ) : (
+        <TextField
+          defaultValue={document.title}
+          onChange={(e) => setTitle(e.target.value)}
+          onBlur={handleSave}
+          value={title}
+          focused={true}
+        />
+      </ListItem>
+    );
+  } else {
+    return (
+      <ListItem>
+        <ListItemButton onClick={() => openDocument(courseId, document.id)}>
+          <ListItemIcon>
+            <DocumentIcon docType={document.docType} />
+          </ListItemIcon>
+          <ListItemText>
             <Typography>{document.title}</Typography>
+          </ListItemText>
+          {isLoading && (
+            <CircularProgress
+              size={24}
+              sx={{ marginRight: 2 }}
+              color="inherit"
+            />
           )}
-        </ListItemText>
-        {isLoading && (
-          <CircularProgress size={24} sx={{ marginRight: 2 }} color="inherit" />
-        )}
+        </ListItemButton>
         <ListItemIcon>
           <IconButton onClick={handleEdit} sx={{ marginRight: 2 }}>
             <Edit />
@@ -74,8 +83,8 @@ const DocumentView = ({ document, courseId }: DocumentViewProps) => {
           </IconButton>
         </ListItemIcon>
       </ListItem>
-    </>
-  );
+    );
+  }
 };
 
 export default DocumentView;

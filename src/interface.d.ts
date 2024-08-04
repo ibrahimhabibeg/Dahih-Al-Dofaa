@@ -87,6 +87,7 @@ interface IDocumentAPI {
     listener: (_event: IpcRendererEvent, documents: Doc[]) => void
   ) => void;
   unsubscribeFromAllDocuments: (courseId: string) => void;
+  open: (courseId: string, docId: string) => void;
 }
 
 interface ICourseAPI {

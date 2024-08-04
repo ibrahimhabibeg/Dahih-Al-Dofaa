@@ -1,4 +1,4 @@
-import { ipcMain, dialog } from "electron";
+import { ipcMain, dialog, shell } from "electron";
 import DocDB from "./docDB";
 import VectorDB from "./vectorDB";
 import parseDocument from "./parsers";
@@ -49,6 +49,14 @@ ipcMain.handle(
   "document:get",
   async (event, courseId: string, documentId: string) =>
     DocDB.getInstance(courseId).getDocument(documentId)
+);
+
+ipcMain.handle(
+  "document:open",
+  async (event, courseId: string, documentId: string) => {
+    const document = DocDB.getInstance(courseId).getDocument(documentId);
+    shell.openPath(document.path);
+  }
 );
 
 /**

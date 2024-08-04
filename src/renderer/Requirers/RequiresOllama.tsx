@@ -54,7 +54,7 @@ const RequiresOllama = ({ children }: PropsType) => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            height: "100vh",
+            height: "100%",
             width: "80%",
           }}
         >

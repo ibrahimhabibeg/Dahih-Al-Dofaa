@@ -33,6 +33,7 @@ const createWindow = (): void => {
     },
     icon: "../../public/icon.png",
   });
+  mainWindow.removeMenu();
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 };

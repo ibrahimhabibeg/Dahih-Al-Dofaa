@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Radio } from "@mui/material";
 import { setSelectedLLM } from "../../backend/model";
+import ModelRadio from "./ModelRadio";
 
 type PropsType = {
   model: Model;
@@ -13,17 +13,15 @@ const LLMRadio = ({ model }: PropsType) => {
     setIsSelected(model.isSelectedLlm);
   }, [model.isSelectedLlm]);
 
-  const handleClick = () => {
-    if (!isSelected) {
-      setSelectedLLM(model.id);
-    }
+  const setSelectedModel = (modelId: string) => {
+    setSelectedLLM(modelId);
   };
 
   return (
-    <Radio
-      checked={isSelected}
-      disabled={model.status != "downloaded"}
-      onClick={handleClick}
+    <ModelRadio
+      model={model}
+      isSelected={isSelected}
+      setSelectedModel={setSelectedModel}
     />
   );
 };
