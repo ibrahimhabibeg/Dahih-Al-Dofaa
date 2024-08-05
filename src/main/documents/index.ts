@@ -10,11 +10,13 @@ export const validExtensions = ["pdf", "pptx", "docx"];
 ipcMain.handle(
   "document:add",
   async (event, courseId: string): Promise<Doc[]> => {
-    const path = await getDocumentPathFromUser();
+    const paths = await getDocumentPathFromUser();
     const docDb = DocDB.getInstance(courseId);
-    if (!path) return docDb.getDocuments();
-    const { document } = await docDb.addDocument(path);
-    addDocumentToVectorDB(courseId, document);
+    if (!paths) return docDb.getDocuments();
+    for (const path of paths) {
+      const { document } = docDb.addDocument(path);
+      addDocumentToVectorDB(courseId, document);
+    }
   }
 );
 
@@ -61,11 +63,11 @@ ipcMain.handle(
 
 /**
  * This function opens a dialog to get the path of the document from the user.
- * @returns {Promise<string>} The path of the document selected by the user.
+ * @returns {Promise<string[]>} The path of the document selected by the user.
  */
-const getDocumentPathFromUser = async (): Promise<string> => {
+const getDocumentPathFromUser = async (): Promise<string[]> => {
   const { canceled, filePaths } = await dialog.showOpenDialog({
-    properties: ["openFile"],
+    properties: ["openFile", "multiSelections"],
     filters: [
       {
         name: "Supported Documents",
@@ -74,8 +76,7 @@ const getDocumentPathFromUser = async (): Promise<string> => {
     ],
   });
   if (!canceled) {
-    const [path] = filePaths;
-    return path;
+    return filePaths;
   }
   return undefined;
 };
