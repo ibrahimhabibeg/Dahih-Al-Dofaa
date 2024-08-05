@@ -1,8 +1,11 @@
 import { app, BrowserWindow } from "electron";
 if (require("electron-squirrel-startup")) app.quit();
 
+import logger from "electron-log";
+logger.initialize();
+
 import { updateElectronApp } from "update-electron-app";
-updateElectronApp();
+updateElectronApp({ logger });
 
 // IPC handlers
 import "./documents";

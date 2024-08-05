@@ -1,7 +1,8 @@
 import { Ollama } from "ollama";
 import { getEmbeddingsModel } from "../model";
 import { getOllamaHost } from "../ollama";
-import log from "../utils/log";
+import logger from "electron-log";
+const log = logger.log;
 
 const embed = async (textArray: string[]): Promise<number[][]> => {
   const ollama = new Ollama({ host: getOllamaHost() });
