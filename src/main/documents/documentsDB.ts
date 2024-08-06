@@ -129,6 +129,19 @@ class DocumentsDB {
   public getDocumentById(docId: string): Doc | undefined {
     return this.documents.find((doc) => doc.id === docId);
   }
+
+  public deleteDocument(docId: string): void {
+    this.deletePhysicalDocument(docId);
+    this.documents = this.documents.filter((doc) => doc.id !== docId);
+    this.saveDocumentsToFile();
+  }
+
+  private deletePhysicalDocument(docID: string): void {
+    const document = this.getDocumentById(docID);
+    if (document) {
+      fs.unlinkSync(document.path);
+    }
+  }
 }
 
 const documentsDB = DocumentsDB.getInstance();

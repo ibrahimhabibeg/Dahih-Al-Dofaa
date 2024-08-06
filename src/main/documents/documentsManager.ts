@@ -2,7 +2,7 @@ import { readPaths } from "./pathsReader";
 import documentsDB from "./documentsDB";
 import { parseDocument } from "./documentParser";
 import { generateExcerpts } from "./excerptsGenerator";
-import excerptsDB from "./excerptDB";
+import ExcerptsDB from "./excerptDB";
 import { embed } from "./embeddings";
 import { shell } from "electron";
 
@@ -14,7 +14,7 @@ export const importDocuments = async (courseID: string): Promise<void> => {
   for (const document of documents) {
     const parsedDocument = await parseDocument(document);
     const excerpts = await generateExcerpts(parsedDocument, document);
-    const excerptDB = await excerptsDB.getInstance();
+    const excerptDB = await ExcerptsDB.getInstance();
     await excerptDB.insert(excerpts);
   }
 };
@@ -30,7 +30,7 @@ export const getDocument = async (docID: string) => {
 };
 
 export const searchExcerpts = async (query: string, courseID: string) => {
-  const excerptDB = await excerptsDB.getInstance();
+  const excerptDB = await ExcerptsDB.getInstance();
   const vector = await embed(query);
   const excerpts = await excerptDB.search(query, vector, courseID);
   return excerpts;
@@ -41,4 +41,10 @@ export const openDocument = async (docID: string) => {
   if (document) {
     shell.openPath(document.path);
   }
+};
+
+export const deleteDocument = async (docID: string) => {
+  documentsDB.deleteDocument(docID);
+  const excerptsDB = await ExcerptsDB.getInstance();
+  excerptsDB.deleteExcerptsFromDocument(docID);
 };

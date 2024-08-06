@@ -1,4 +1,10 @@
-import { create, insertMultiple, Orama, search } from "@orama/orama";
+import {
+  create,
+  insertMultiple,
+  Orama,
+  removeMultiple,
+  search,
+} from "@orama/orama";
 import path from "path";
 import { app } from "electron";
 import fs from "fs";
@@ -101,6 +107,20 @@ class ExcerptsDB {
       limit: 3,
     });
     return result.hits.map((hit) => hit.document);
+  }
+
+  /**
+   * Deletes all excerpts from a document
+   * @param documentId The id of the document to delete excerpts from
+   */
+  public async deleteExcerptsFromDocument(documentId: string) {
+    const result = await search(this.db, {
+      where: {
+        documentId,
+      },
+    });
+    const ids = result.hits.map((hit) => hit.id);
+    await removeMultiple(this.db, ids);
   }
 }
 
