@@ -2,6 +2,7 @@ import path from "path";
 import fs from "fs";
 import { app } from "electron";
 import { v4 as uuidv4 } from "uuid";
+import { notifyDocumentsUpdate } from "./notifier";
 
 class DocumentsDB {
   private static instance: DocumentsDB | null = null;
@@ -154,6 +155,7 @@ class DocumentsDB {
 
   private updateDocuments(documents: Doc[]): void {
     this.documents = documents;
+    notifyDocumentsUpdate(this.documents);
     this.saveDocumentsToFile();
   }
 

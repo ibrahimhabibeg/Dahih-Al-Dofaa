@@ -16,6 +16,15 @@ const document = {
   delete: (documentId: string): void => {
     ipcRenderer.invoke("document:delete", documentId);
   },
+  subuscribeToAll: (callback: (documents: Doc[]) => void): void => {
+    ipcRenderer.on("document:update:all", (_, documents) => {
+      callback(documents);
+    });
+  },
+  unsubscribeFromAll: (): void => {
+    // Warning: Removing ALL listeners may cause unintended side effects
+    ipcRenderer.removeAllListeners("document:update:all");
+  },
 };
 
 export type IDocumentAPI = typeof document;
