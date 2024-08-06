@@ -11,6 +11,7 @@ import { notifyPartialMessage } from "./messageNotifier";
 import { getLLM } from "../model";
 import { getOllamaHost } from "../ollama";
 import { searchExcerpts } from "../documents";
+import Logger from "electron-log";
 
 const sendMessage = async (
   courseId: string,
@@ -46,7 +47,7 @@ const sendMessage = async (
 
   const stream = await respondToQuestion(
     sanitize(message),
-    excerpts.map((excerpt) => sanitize(excerpt.text)),
+    excerpts,
     chatHistory,
     llm
   );
@@ -73,6 +74,7 @@ const contextualizeQuestion = async (
   chatHistory: (HumanMessage | AIMessage)[],
   llm: ChatOllama
 ): Promise<string> => {
+  Logger.info(`Contextualizing question: ${question}`);
   const systemPrompt = `Given a chat history and the latest user question
 which might reference context in the chat history, formulate a standalone question
 which can be understood without the chat history. Do NOT answer the question,
@@ -85,22 +87,24 @@ just reformulate it if needed and otherwise return it as is.`;
   ]);
 
   const chain = prompt.pipe(llm).pipe(new StringOutputParser());
-
-  return chain.invoke({
+  const start = Date.now();
+  const contextualizedQuestion = await chain.invoke({
     chatHistory,
     question,
   });
+  const end = Date.now();
+  Logger.info(`Contextualization took ${end - start}ms`);
+  Logger.info(`Contextualized question: ${contextualizedQuestion}`);
+  Logger.info();
+  return contextualizedQuestion;
 };
 
 const respondToQuestion = async (
   question: string,
-  documents: string[],
+  excerpts: Excerpt[],
   chatHistory: (HumanMessage | AIMessage)[],
   llm: ChatOllama
 ) => {
-  const systemPrompt =
-    documents.length > 0 ? promptWithContext : promptWithoutContext;
-
   const prompt = ChatPromptTemplate.fromMessages([
     ["system", systemPrompt],
     new MessagesPlaceholder("chatHistory"),
@@ -108,32 +112,34 @@ const respondToQuestion = async (
   ]);
 
   const chain = prompt.pipe(llm).pipe(new StringOutputParser());
+  const context = excerpts
+    .map(
+      (excerpt) =>
+        `Document Title: ${excerpt.documentTitle}\nExcerpt:${excerpt.text}`
+    )
+    .join("\n\n");
 
-  const data =
-    documents.length > 0
-      ? { question, chatHistory, context: documents.join("\n") }
-      : { question, chatHistory };
-
-  return chain.stream(data);
+  return chain.stream({
+    question: sanitize(question),
+    chatHistory,
+    context: sanitize(context),
+  });
 };
 
 export default sendMessage;
 
-const promptWithContext = `You're name is 'Dahih Al-Dofaa' which is arabic for
-the smartest student in class. You are an A+ student at the university and you are so smart
-you can answer any university related. question. You are given a conversation between you and
-one of your classmates related to university topics. You extracted the following context from
-your professor's lecture notes. You should answer your classmate's question from this context.
-Keep your answer clear, concise, and to the point.
+const systemPrompt = `You're name is 'Dahih Al-Dofaa' which is arabic for
+the smartest student in class. You are given a conversation between you and
+one of your classmates related to university studies. Your classmate provided you
+with multiple documents prior to the conversation which he may refrence. Your task 
+is to answer the questions asked by your classmate based on the conversation and the documents.
+You won't be given the full documents, but you will be given important excerpts 
+from the documents to help you answer the questions. If you find the excerpts irrelevant,
+you can ignore them. Your answers should be concise and to the point. 
+If you don't know the answer, say you don't know.
 
-Context:
+Excerpts:
 {context}`;
-
-const promptWithoutContext = `You're name is 'Dahih Al-Dofaa' which is arabic for
-the smartest student in class. You are an A+ student at the university and you are so smart
-you can answer any university related. question. You are given a conversation between you and
-one of your classmates related to university topics. You should answer your classmate's question
-as best as you can. Keep your answer clear, concise, and to the point.`;
 
 const sanitize = (text: string) => {
   return text.replace(/{/g, "{{").replace(/}/g, "}}");
