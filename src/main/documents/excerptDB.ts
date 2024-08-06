@@ -1,4 +1,4 @@
-import { create, insertMultiple, Orama } from "@orama/orama";
+import { create, insertMultiple, Orama, search } from "@orama/orama";
 import path from "path";
 import { app } from "electron";
 import fs from "fs";
@@ -61,8 +61,8 @@ class ExcerptsDB {
 
   /**
    * Saves the excerpt to the database
-   * @param excerpts The excerpts to be saved
-   * @returns The ids of the saved excerpts in order
+   * @param excerpts The excerpts to be saved. The embeddings must be of length 768.
+   * @returns The ids of the saved excerpts in order.
    */
   public async insert(excerpts: Excerpt[]) {
     const ids = await insertMultiple<typeof this.db>(this.db, excerpts);
@@ -72,6 +72,35 @@ class ExcerptsDB {
 
   private async persist() {
     await persistToFile(this.db, "binary", this.filePath);
+  }
+
+  /**
+   * Searches the database for excerpts that match the query and are from the requested course
+   * @param query The text to search for
+   * @param vector Embeddings of the query. Must be of length 768. Must be from the same model as the embeddings in the database
+   * @param courseId The id of the course to search in
+   * @returns The top 3 excerpts that match the query. May return less than 3 if there are not enough matches.
+   */
+  public async search(
+    query: string,
+    vector: number[],
+    courseId: string
+  ): Promise<Excerpt[]> {
+    const result = await search(this.db, {
+      mode: "hybrid",
+      term: query,
+      vector: {
+        value: vector,
+        property: "embeddings",
+      },
+      properties: ["documentTitle", "text"],
+      where: {
+        courseId,
+      },
+      similarity: 0.7,
+      limit: 3,
+    });
+    return result.hits.map((hit) => hit.document);
   }
 }
 
