@@ -1,18 +1,8 @@
-import React, { useEffect, useState } from "react";
-import {
-  IconButton,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  TextField,
-  Typography,
-  ListItemButton,
-} from "@mui/material";
-import { Delete, Edit } from "@mui/icons-material";
-import DocumentIcon from "./DocumentIcon";
-import openDocument from "../backend/documents/openDocument";
-import deleteDocument from "../backend/documents/deleteDocument";
-import renameDocument from "../backend/documents/renameDocument";
+import React, { useState } from "react";
+import DocumentEditing from "./DocumentEditing";
+import FinishedDocument from "./FinishedDocument";
+import useDocumentImportState from "../backend/documents/useDocumentImportState";
+import LoadingDocument from "./LoadingDocument";
 
 type DocumentViewProps = {
   document: Doc;
@@ -21,61 +11,24 @@ type DocumentViewProps = {
 
 const DocumentView = ({ document }: DocumentViewProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [title, setTitle] = useState(document.title);
-
-  useEffect(() => {
-    setTitle(document.title);
-  }, [document]);
+  const importState = useDocumentImportState(document.id);
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
-  const handleDelete = () => {
-    deleteDocument(document.id);
-  };
-
-  const handleRename = (newTitle: string) => {
-    renameDocument(document.id, newTitle);
-  };
-
-  const handleSave = () => {
-    handleRename(title);
+  const handleEditFinished = () => {
     setIsEditing(false);
   };
-  if (isEditing) {
+
+  if (importState) {
+    return <LoadingDocument document={document} importState={importState} />;
+  } else if (isEditing) {
     return (
-      <ListItem>
-        <TextField
-          defaultValue={document.title}
-          onChange={(e) => setTitle(e.target.value)}
-          onBlur={handleSave}
-          value={title}
-          focused={true}
-        />
-      </ListItem>
+      <DocumentEditing document={document} onFinished={handleEditFinished} />
     );
   } else {
-    return (
-      <ListItem>
-        <ListItemButton onClick={() => openDocument(document.id)}>
-          <ListItemIcon>
-            <DocumentIcon docType={document.docType} />
-          </ListItemIcon>
-          <ListItemText>
-            <Typography>{document.title}</Typography>
-          </ListItemText>
-        </ListItemButton>
-        <ListItemIcon>
-          <IconButton onClick={handleEdit} sx={{ marginRight: 2 }}>
-            <Edit />
-          </IconButton>
-          <IconButton onClick={handleDelete}>
-            <Delete />
-          </IconButton>
-        </ListItemIcon>
-      </ListItem>
-    );
+    return <FinishedDocument document={document} handleEdit={handleEdit} />;
   }
 };
 
