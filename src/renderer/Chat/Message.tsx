@@ -47,7 +47,7 @@ const Message = ({ message }: { message: Message }) => {
       </Box>
       <Box width={"80%"}>
         <Markdown>{message.content}</Markdown>
-        <RefrencedTexts refrencedTexts={message.refrencedTexts} />
+        <RefrencedTexts citations={message.citations} />
       </Box>
       <Box width={"10%"}>
         <IconButton onClick={copyToClipboard}>

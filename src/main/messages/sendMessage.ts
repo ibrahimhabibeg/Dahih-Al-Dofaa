@@ -62,7 +62,7 @@ const sendMessage = async (
     "bot",
     excerpts.map((excerpt) => ({
       text: excerpt.text,
-      documentId: excerpt.documentId,
+      documentTitle: excerpt.documentTitle,
     }))
   );
   loadingMessage.removeLoadingMessageChat(courseId, chatId);

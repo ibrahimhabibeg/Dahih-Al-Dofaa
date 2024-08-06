@@ -38,12 +38,12 @@ declare global {
   interface Message {
     content: string;
     sender: "human" | "bot";
-    refrencedTexts: RefrencedText[];
+    citations: Citation[];
   }
 
-  interface RefrencedText {
+  interface Citation {
+    documentTitle: string;
     text: string;
-    documentId: string;
   }
 
   type Course = Course;

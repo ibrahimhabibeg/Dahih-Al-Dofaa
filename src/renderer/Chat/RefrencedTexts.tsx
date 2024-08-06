@@ -3,13 +3,13 @@ import { Box, Typography } from "@mui/material";
 import RefrencedText from "./RefrencedText";
 
 type PropsType = {
-  refrencedTexts: RefrencedText[];
+  citations: Citation[];
 };
 
-const RefrencedTexts = ({ refrencedTexts }: PropsType) => {
+const RefrencedTexts = ({ citations }: PropsType) => {
   return (
     <Box width="100%">
-      {refrencedTexts.length !== 0 && (
+      {citations.length !== 0 && (
         <>
           <Typography
             variant="subtitle1"
@@ -20,8 +20,8 @@ const RefrencedTexts = ({ refrencedTexts }: PropsType) => {
           >
             Refrences
           </Typography>
-          {refrencedTexts.map((refrencedText, index) => (
-            <RefrencedText key={index} refrencedText={refrencedText} />
+          {citations.map((refrencedText, index) => (
+            <RefrencedText key={index} citation={refrencedText} />
           ))}
         </>
       )}
