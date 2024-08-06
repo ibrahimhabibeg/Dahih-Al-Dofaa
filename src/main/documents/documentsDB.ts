@@ -34,7 +34,11 @@ class DocumentsDB {
   }
 
   private static generateFilePath(): string {
-    return path.join(app.getPath("userData"), "documents", "documents.json");
+    const folderPath = path.join(app.getPath("userData"), "documents");
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath, { recursive: true });
+    }
+    return path.join(folderPath, "documents.json");
   }
 
   private documents: Doc[];
