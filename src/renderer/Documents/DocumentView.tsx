@@ -13,6 +13,7 @@ import { Delete, Edit } from "@mui/icons-material";
 import DocumentIcon from "./DocumentIcon";
 import useIsLoadingDocument from "../backend/useIsLoadingDocument";
 import openDocument from "../backend/documents/openDocument";
+import deleteDocument from "../backend/documents/deleteDocument";
 
 type DocumentViewProps = {
   document: Doc;
@@ -33,7 +34,7 @@ const DocumentView = ({ document, courseId }: DocumentViewProps) => {
   };
 
   const handleDelete = () => {
-    window.api.document.delete(courseId, document.id);
+    deleteDocument(document.id);
   };
 
   const handleRename = (newTitle: string) => {
