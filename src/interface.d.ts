@@ -127,10 +127,11 @@ declare global {
     api: IAPI;
   }
 
-  type DocType = "pdf" | "docx" | "pptx";
+  type DocType = "pdf" | "docx" | "pptx" | "other";
 
   interface Doc {
     id: string;
+    courseId: string;
     title: string;
     path: string;
     docType: DocType;
