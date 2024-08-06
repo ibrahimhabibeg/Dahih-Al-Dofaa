@@ -14,6 +14,7 @@ import DocumentIcon from "./DocumentIcon";
 import useIsLoadingDocument from "../backend/useIsLoadingDocument";
 import openDocument from "../backend/documents/openDocument";
 import deleteDocument from "../backend/documents/deleteDocument";
+import renameDocument from "../backend/documents/renameDocument";
 
 type DocumentViewProps = {
   document: Doc;
@@ -38,7 +39,7 @@ const DocumentView = ({ document, courseId }: DocumentViewProps) => {
   };
 
   const handleRename = (newTitle: string) => {
-    window.api.document.rename(courseId, document.id, newTitle);
+    renameDocument(document.id, newTitle);
   };
 
   const handleSave = () => {
