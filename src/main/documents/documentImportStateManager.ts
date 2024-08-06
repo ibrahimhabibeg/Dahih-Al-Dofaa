@@ -79,6 +79,10 @@ class DocumentImportStateManager {
     this.documentStates.delete(documentID);
     notifyDocumentImportUpdate(documentID, null);
   }
+
+  public getAllLoadingDocuments(): string[] {
+    return Array.from(this.documentStates.keys());
+  }
 }
 
 const documentImportStateManager = DocumentImportStateManager.getInstance();

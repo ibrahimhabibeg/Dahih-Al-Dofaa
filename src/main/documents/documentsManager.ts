@@ -76,3 +76,10 @@ export const getDocumentImportState = async (
   logger.info(`Getting import state for document ${docID}`);
   return documentImportStateManager.getDocumentState(docID);
 };
+
+export const deleteAllCurrentlyImportingDocuments = async () => {
+  logger.info("Deleting all documents currently being imported");
+  const documentIDs = documentImportStateManager.getAllLoadingDocuments();
+  const promises = documentIDs.map((docID) => deleteDocument(docID));
+  await Promise.all(promises);
+};

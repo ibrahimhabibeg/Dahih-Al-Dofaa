@@ -5,8 +5,6 @@ import {
   importDocuments,
   openDocument,
   renameDocument,
-  searchExcerpts,
-  deleteCourse,
   getDocumentImportState,
 } from "./documentsManager";
 import { ipcMain } from "electron";
@@ -39,4 +37,8 @@ ipcMain.handle("document:importState", (event, documentId) => {
   return getDocumentImportState(documentId);
 });
 
-export { searchExcerpts, deleteCourse };
+export {
+  searchExcerpts,
+  deleteCourse,
+  deleteAllCurrentlyImportingDocuments,
+} from "./documentsManager";
