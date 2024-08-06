@@ -70,7 +70,7 @@ const Sidebar = ({ isOpen, toggleSidebar }: PropsType) => {
           </Box>
         </Box>
 
-        <Box height={"93vh"}>
+        <Box height={"93vh"} width={"100%"}>
           {course ? (
             <Chat course={course} handleBackClick={handleBackClick} />
           ) : (

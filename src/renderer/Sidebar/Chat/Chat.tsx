@@ -19,6 +19,7 @@ const Chat = ({ course, handleBackClick }: ChatProps) => {
   return (
     <Box
       sx={{
+        width: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
@@ -27,7 +28,11 @@ const Chat = ({ course, handleBackClick }: ChatProps) => {
         ...scrollbarStyle,
       }}
     >
-      <Box>
+      <Box
+        sx={{
+          width: "100%",
+        }}
+      >
         <TopBar handleBackClick={handleBackClick} course={course} />
         <ChatList course={course} />
       </Box>
