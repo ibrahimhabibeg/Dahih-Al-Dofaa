@@ -2,6 +2,7 @@ import { readPaths } from "./pathsReader";
 import documentsDB from "./documentsDB";
 import { parseDocument } from "./documentParser";
 import { generateExcerpts } from "./excerptsGenerator";
+import excerptsDB from "./excerptDB";
 
 export const importDocuments = async (courseID: string): Promise<void> => {
   const paths = await readPaths();
@@ -11,5 +12,7 @@ export const importDocuments = async (courseID: string): Promise<void> => {
   for (const document of documents) {
     const parsedDocument = await parseDocument(document);
     const excerpts = await generateExcerpts(parsedDocument, document);
+    const excerptDB = await excerptsDB.getInstance();
+    await excerptDB.insert(excerpts);
   }
 };
