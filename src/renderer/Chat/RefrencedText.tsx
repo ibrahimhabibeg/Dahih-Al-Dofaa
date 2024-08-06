@@ -1,8 +1,7 @@
 import React from "react";
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import useDocument from "../backend/useDocument";
-import { useParams } from "react-router-dom";
+import useDocument from "../backend/documents/useDocument";
 import Markdown from "react-markdown";
 
 type PropsType = {
@@ -10,11 +9,7 @@ type PropsType = {
 };
 
 const RefrencedText = ({ refrencedText }: PropsType) => {
-  const { courseId } = useParams();
-  const document = useDocument({
-    courseId,
-    documentId: refrencedText.documentId,
-  });
+  const document = useDocument(refrencedText.documentId);
   if (!document) return null;
   else
     return (
