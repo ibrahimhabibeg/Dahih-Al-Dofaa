@@ -113,13 +113,8 @@ class DocumentsDB {
     return destination;
   }
 
-  private saveDocumentsToFile(): void {
-    fs.writeFileSync(this.filePath, JSON.stringify(this.documents));
-  }
-
   public addDocument(document: Doc): void {
-    this.documents.push(document);
-    this.saveDocumentsToFile();
+    this.updateDocuments([...this.documents, document]);
   }
 
   public getDocumentsByCourseId(courseId: string): Doc[] {
@@ -132,8 +127,7 @@ class DocumentsDB {
 
   public deleteDocument(docId: string): void {
     this.deletePhysicalDocument(docId);
-    this.documents = this.documents.filter((doc) => doc.id !== docId);
-    this.saveDocumentsToFile();
+    this.updateDocuments(this.documents.filter((doc) => doc.id !== docId));
   }
 
   private deletePhysicalDocument(docID: string): void {
@@ -151,10 +145,20 @@ class DocumentsDB {
   }
 
   public renameDocument(docId: string, newName: string): void {
-    this.documents = this.documents.map((doc) =>
-      doc.id === docId ? { ...doc, title: newName } : doc
+    this.updateDocuments(
+      this.documents.map((doc) =>
+        doc.id === docId ? { ...doc, title: newName } : doc
+      )
     );
+  }
+
+  private updateDocuments(documents: Doc[]): void {
+    this.documents = documents;
     this.saveDocumentsToFile();
+  }
+
+  private saveDocumentsToFile(): void {
+    fs.writeFileSync(this.filePath, JSON.stringify(this.documents));
   }
 }
 
