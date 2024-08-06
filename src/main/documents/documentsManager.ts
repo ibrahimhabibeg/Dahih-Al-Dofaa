@@ -4,6 +4,7 @@ import { parseDocument } from "./documentParser";
 import { generateExcerpts } from "./excerptsGenerator";
 import excerptsDB from "./excerptDB";
 import { embed } from "./embeddings";
+import { shell } from "electron";
 
 export const importDocuments = async (courseID: string): Promise<void> => {
   const paths = await readPaths();
@@ -33,4 +34,11 @@ export const searchExcerpts = async (query: string, courseID: string) => {
   const vector = await embed(query);
   const excerpts = await excerptDB.search(query, vector, courseID);
   return excerpts;
+};
+
+export const openDocument = async (docID: string) => {
+  const document = documentsDB.getDocumentById(docID);
+  if (document) {
+    shell.openPath(document.path);
+  }
 };
