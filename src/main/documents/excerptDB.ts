@@ -136,6 +136,22 @@ class ExcerptsDB {
     const ids = result.hits.map((hit) => hit.id);
     await removeMultiple(this.db, ids);
   }
+
+  public async renameDocument(documentId: string, newTitle: string) {
+    const result = await search(this.db, {
+      where: {
+        documentId,
+      },
+    });
+    const ids = result.hits.map((hit) => hit.id);
+    await removeMultiple(this.db, ids);
+    const newExcerpts = result.hits.map((hit) => ({
+      ...hit.document,
+      documentTitle: newTitle,
+    }));
+    await insertMultiple<typeof this.db>(this.db, newExcerpts);
+    await this.persist();
+  }
 }
 
 export default ExcerptsDB;

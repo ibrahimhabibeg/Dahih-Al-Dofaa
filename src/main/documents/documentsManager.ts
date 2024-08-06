@@ -54,3 +54,9 @@ export const deleteCourse = async (courseID: string) => {
   const excerptsDB = await ExcerptsDB.getInstance();
   excerptsDB.deleteExcerptsFromCourse(courseID);
 };
+
+export const renameDocument = async (docID: string, newName: string) => {
+  documentsDB.renameDocument(docID, newName);
+  const excerptsDB = await ExcerptsDB.getInstance();
+  excerptsDB.renameDocument(docID, newName);
+};

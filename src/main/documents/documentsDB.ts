@@ -149,6 +149,13 @@ class DocumentsDB {
       this.deleteDocument(document.id);
     }
   }
+
+  public renameDocument(docId: string, newName: string): void {
+    this.documents = this.documents.map((doc) =>
+      doc.id === docId ? { ...doc, title: newName } : doc
+    );
+    this.saveDocumentsToFile();
+  }
 }
 
 const documentsDB = DocumentsDB.getInstance();
