@@ -1,4 +1,5 @@
 import { Course } from "./main/courses/courses";
+import { IDocumentAPI } from "./renderer/preload/document";
 
 interface IModelAPI {
   getAll: () => Promise<Model[]>;
@@ -67,27 +68,6 @@ interface IChatAPI {
     chatId: string,
     newTitle: string
   ) => Promise<void>;
-}
-
-interface IDocumentAPI {
-  get: (courseId: string, docId: string) => Promise<Doc>;
-  getAll: (courseId: string) => Promise<Doc[]>;
-  add: (courseId: string) => Promise<void>;
-  rename: (courseId: string, docId: string, newTitle: string) => Promise<void>;
-  delete: (courseId: string, docId: string) => Promise<void>;
-  isLoading: (courseId: string, documentId: string) => Promise<boolean>;
-  subscribeToIsLoading: (
-    courseId: string,
-    docId: string,
-    listener: (_event: IpcRendererEvent, isLoading: boolean) => void
-  ) => void;
-  unsubscribeFromIsLoading: (courseId: string, docId: string) => void;
-  subscribeToAllDocuments: (
-    courseId: string,
-    listener: (_event: IpcRendererEvent, documents: Doc[]) => void
-  ) => void;
-  unsubscribeFromAllDocuments: (courseId: string) => void;
-  open: (courseId: string, docId: string) => void;
 }
 
 interface ICourseAPI {
