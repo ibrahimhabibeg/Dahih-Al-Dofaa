@@ -142,6 +142,7 @@ class ExcerptsDB {
       where: {
         documentId,
       },
+      includeVectors: true,
     });
     const ids = result.hits.map((hit) => hit.id);
     await removeMultiple(this.db, ids);
