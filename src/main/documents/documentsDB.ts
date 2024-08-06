@@ -142,6 +142,13 @@ class DocumentsDB {
       fs.unlinkSync(document.path);
     }
   }
+
+  public deleteDocumentsByCourseId(courseId: string): void {
+    const documents = this.getDocumentsByCourseId(courseId);
+    for (const document of documents) {
+      this.deleteDocument(document.id);
+    }
+  }
 }
 
 const documentsDB = DocumentsDB.getInstance();

@@ -48,3 +48,9 @@ export const deleteDocument = async (docID: string) => {
   const excerptsDB = await ExcerptsDB.getInstance();
   excerptsDB.deleteExcerptsFromDocument(docID);
 };
+
+export const deleteCourse = async (courseID: string) => {
+  documentsDB.deleteDocumentsByCourseId(courseID);
+  const excerptsDB = await ExcerptsDB.getInstance();
+  excerptsDB.deleteExcerptsFromCourse(courseID);
+};

@@ -122,6 +122,20 @@ class ExcerptsDB {
     const ids = result.hits.map((hit) => hit.id);
     await removeMultiple(this.db, ids);
   }
+
+  /**
+   * Deletes all excerpts from a course
+   * @param courseId The id of the course to delete excerpts from
+   */
+  public async deleteExcerptsFromCourse(courseId: string) {
+    const result = await search(this.db, {
+      where: {
+        courseId,
+      },
+    });
+    const ids = result.hits.map((hit) => hit.id);
+    await removeMultiple(this.db, ids);
+  }
 }
 
 export default ExcerptsDB;
