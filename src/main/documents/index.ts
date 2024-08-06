@@ -7,6 +7,7 @@ import {
   renameDocument,
   searchExcerpts,
   deleteCourse,
+  getDocumentImportState,
 } from "./documentsManager";
 import { ipcMain } from "electron";
 
@@ -32,6 +33,10 @@ ipcMain.handle("document:delete", (event, documentId) => {
 
 ipcMain.handle("document:open", (event, documentId) => {
   return openDocument(documentId);
+});
+
+ipcMain.handle("document:importState", (event, documentId) => {
+  return getDocumentImportState(documentId);
 });
 
 export { searchExcerpts, deleteCourse };

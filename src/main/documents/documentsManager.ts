@@ -6,6 +6,7 @@ import ExcerptsDB from "./excerptDB";
 import { embed } from "./embeddings";
 import { shell } from "electron";
 import logger from "electron-log";
+import documentImportStateManager from "./documentImportStateManager";
 
 export const importDocuments = async (courseID: string): Promise<void> => {
   logger.info(`Importing documents for course ${courseID}`);
@@ -14,21 +15,40 @@ export const importDocuments = async (courseID: string): Promise<void> => {
   const documents = paths.map((path) =>
     documentsDB.createDocument(path, courseID)
   );
-  logger.info(`Created ${documents.length} documents`);
   for (const document of documents) {
+    documentImportStateManager.addDocumentToImporting(document.id);
+  }
+  for (const document of documents) {
+    documentImportStateManager.updateDocumentImportState(
+      document.id,
+      "Parse",
+      "In Progress"
+    );
     const parsedDocument = await parseDocument(document);
-    logger.info(`Parsed document ${document.id}`);
-    const startTimestamp = Date.now();
+    documentImportStateManager.updateDocumentImportState(
+      document.id,
+      "Parse",
+      "Finished"
+    );
+    documentImportStateManager.updateDocumentImportState(
+      document.id,
+      "Generate Excerpts",
+      "In Progress"
+    );
     const excerpts = await generateExcerpts(parsedDocument, document);
-    const endTimestamp = Date.now();
-    logger.info(
-      `Generated ${excerpts.length} excerpts for document ${document.id} in ${
-        endTimestamp - startTimestamp
-      }ms`
+    documentImportStateManager.updateDocumentImportState(
+      document.id,
+      "Generate Excerpts",
+      "Finished"
+    );
+    documentImportStateManager.updateDocumentImportState(
+      document.id,
+      "Save Excerpts",
+      "In Progress"
     );
     const excerptDB = await ExcerptsDB.getInstance();
     await excerptDB.insert(excerpts);
-    logger.info(`Inserted ${excerpts.length} excerpts into the database`);
+    documentImportStateManager.removeDocumentFromImporting(document.id);
   }
 };
 
@@ -93,4 +113,11 @@ export const renameDocument = async (docID: string, newName: string) => {
   documentsDB.renameDocument(docID, newName);
   const excerptsDB = await ExcerptsDB.getInstance();
   excerptsDB.renameDocument(docID, newName);
+};
+
+export const getDocumentImportState = async (
+  docID: string
+): Promise<DocumentImportState> => {
+  logger.info(`Getting import state for document ${docID}`);
+  return documentImportStateManager.getDocumentState(docID);
 };

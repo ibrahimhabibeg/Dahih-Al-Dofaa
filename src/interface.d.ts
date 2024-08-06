@@ -100,4 +100,16 @@ declare global {
     documentId: string;
     embeddings: number[];
   }
+
+  type DocumentImportState = Array<{
+    stage: DocumentImportStage;
+    progress: DocumentImportProgress;
+  }>;
+
+  type DocumentImportStage =
+    | "Initialize"
+    | "Parse"
+    | "Generate Excerpts"
+    | "Save Excerpts";
+  type DocumentImportProgress = "Not Started" | "In Progress" | "Finished";
 }

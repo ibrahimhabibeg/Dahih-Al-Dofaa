@@ -19,6 +19,9 @@ const document = {
   open: (documentId: string): void => {
     ipcRenderer.invoke("document:open", documentId);
   },
+  importState: async (documentId: string): Promise<DocumentImportState> => {
+    return ipcRenderer.invoke("document:importState", documentId);
+  },
   subuscribeToAll: (callback: (documents: Doc[]) => void): void => {
     ipcRenderer.on("document:update:all", (_, documents) => {
       callback(documents);
@@ -39,6 +42,18 @@ const document = {
   unsubscribeFromCourseDocuments: (courseId: string): void => {
     // Warning: Removing ALL listeners may cause unintended side effects
     ipcRenderer.removeAllListeners(`document:update:course:${courseId}`);
+  },
+  subscribeToDocumentImport: (
+    documentId: string,
+    callback: (importState: DocumentImportState) => void
+  ): void => {
+    ipcRenderer.on(`document:update:import:${documentId}`, (_, importState) => {
+      callback(importState);
+    });
+  },
+  unsubscribeFromDocumentImport: (documentId: string): void => {
+    // Warning: Removing ALL listeners may cause unintended side effects
+    ipcRenderer.removeAllListeners(`document:update:import:${documentId}`);
   },
 };
 

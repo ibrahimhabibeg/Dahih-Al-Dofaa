@@ -16,3 +16,13 @@ export const notifyCourseDocumentsUpdate = (
     webContents.send(`document:update:course:${courseId}`, documents);
   });
 };
+
+export const notifyDocumentImportUpdate = (
+  documentId: string,
+  importState: DocumentImportState
+) => {
+  const windows = webContents.getAllWebContents();
+  windows.forEach((webContents) => {
+    webContents.send(`document:update:import:${documentId}`, importState);
+  });
+};
