@@ -2,7 +2,7 @@ import { IDocumentAPI } from "./renderer/preload/document";
 import { IChatAPI } from "./renderer/preload/chat";
 import { IMessageAPI } from "./renderer/preload/message";
 import { ICourseAPI } from "./renderer/preload/course";
-import { IOllamAPI } from "./renderer/preload/ollama";
+import { IOllamaAPI } from "./renderer/preload/ollama";
 import { IModelAPI } from "./renderer/preload/model";
 
 export interface IAPI {
@@ -10,7 +10,7 @@ export interface IAPI {
   chat: IChatAPI;
   document: IDocumentAPI;
   course: ICourseAPI;
-  ollama: IOllamAPI;
+  ollama: IOllamaAPI;
   model: IModelAPI;
 }
 

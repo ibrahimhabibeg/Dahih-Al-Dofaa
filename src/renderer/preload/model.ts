@@ -2,7 +2,7 @@ import { ipcRenderer, IpcRendererEvent } from "electron";
 import { type ProgressResponse } from "ollama";
 
 const model = {
-  getAll: async () => ipcRenderer.invoke("model:getAll"),
+  getAll: async (): Promise<Model[]> => ipcRenderer.invoke("model:getAll"),
   subscribeToAll: (
     listener: (_event: IpcRendererEvent, models: Model[]) => void
   ) => {
@@ -22,19 +22,20 @@ const model = {
     // Warning: Removing ALL listeners may cause unintended side effects
     ipcRenderer.removeAllListeners(`model:downloading:${modelId}`);
   },
-  download: async (modelId: string) =>
+  download: async (modelId: string): Promise<void> =>
     ipcRenderer.invoke("model:download", modelId),
-  abortDownloading: async (modelId: string) =>
+  abortDownloading: async (modelId: string): Promise<void> =>
     ipcRenderer.invoke("model:abortDownloading", modelId),
-  delete: async (modelId: string) =>
+  delete: async (modelId: string): Promise<void> =>
     ipcRenderer.invoke("model:delete", modelId),
-  setSelectedEmbedding: async (modelId: string) =>
+  setSelectedEmbedding: async (modelId: string): Promise<void> =>
     ipcRenderer.invoke("model:setSelectedEmbedding", modelId),
-  setSelectedLLM: async (modelId: string) =>
+  setSelectedLLM: async (modelId: string): Promise<void> =>
     ipcRenderer.invoke("model:setSelectedLLM", modelId),
-  getSelectedEmbedding: async () =>
+  getSelectedEmbedding: async (): Promise<ModelID> =>
     ipcRenderer.invoke("model:getSelectedEmbedding"),
-  getSelectedLLM: async () => ipcRenderer.invoke("model:getSelectedLLM"),
+  getSelectedLLM: async (): Promise<ModelID> =>
+    ipcRenderer.invoke("model:getSelectedLLM"),
   subscribeToSelectedEmbedding: (
     listener: (_event: IpcRendererEvent, modelId: string) => void
   ) => {
