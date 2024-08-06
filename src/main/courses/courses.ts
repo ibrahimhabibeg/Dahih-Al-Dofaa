@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
 import { notifyCoursesUpdate, notifyCourseUpdate } from "./coursesNotifier";
+import { deleteCourse } from "../documents";
 
 export type Course = {
   id: string;
@@ -127,6 +128,7 @@ export const addCourse = async (courseTitle: string) => {
 
 export const removeCourse = async (courseId: string) => {
   const coursesManager = await CoursesManager.getInstance();
+  deleteCourse(courseId);
   return coursesManager.removeCourse(courseId);
 };
 

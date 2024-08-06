@@ -6,6 +6,7 @@ import {
   openDocument,
   renameDocument,
   searchExcerpts,
+  deleteCourse,
 } from "./documentsManager";
 import { ipcMain } from "electron";
 
@@ -33,4 +34,4 @@ ipcMain.handle("document:open", (event, documentId) => {
   return openDocument(documentId);
 });
 
-export { searchExcerpts };
+export { searchExcerpts, deleteCourse };
