@@ -28,4 +28,5 @@ const course = {
   },
 };
 
+export type ICourseAPI = typeof course;
 export default course;

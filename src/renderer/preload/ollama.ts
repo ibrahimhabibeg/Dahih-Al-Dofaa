@@ -11,4 +11,5 @@ const ollama = {
   },
 };
 
+export type IOllamaAPI = typeof ollama;
 export default ollama;

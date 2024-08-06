@@ -55,4 +55,5 @@ const model = {
   },
 };
 
+export type IModelAPI = typeof model;
 export default model;

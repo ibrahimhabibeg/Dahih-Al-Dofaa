@@ -22,4 +22,5 @@ const chat = {
     ipcRenderer.invoke("chat:rename", courseId, chatId, newTitle),
 };
 
+export type IChatAPI = typeof chat;
 export default chat;

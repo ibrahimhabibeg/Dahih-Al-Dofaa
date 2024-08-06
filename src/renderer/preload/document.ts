@@ -19,5 +19,4 @@ const document = {
 };
 
 export type IDocumentAPI = typeof document;
-
 export default document;
