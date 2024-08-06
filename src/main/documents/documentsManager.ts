@@ -16,3 +16,13 @@ export const importDocuments = async (courseID: string): Promise<void> => {
     await excerptDB.insert(excerpts);
   }
 };
+
+export const getDocumentsByCourse = async (courseID: string) => {
+  const documents = documentsDB.getDocumentsByCourseId(courseID);
+  return documents;
+};
+
+export const getDocument = async (docID: string) => {
+  const document = documentsDB.getDocumentById(docID);
+  return document;
+};

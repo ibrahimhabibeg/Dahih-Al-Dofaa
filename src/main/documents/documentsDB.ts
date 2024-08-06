@@ -121,6 +121,14 @@ class DocumentsDB {
     this.documents.push(document);
     this.saveDocumentsToFile();
   }
+
+  public getDocumentsByCourseId(courseId: string): Doc[] {
+    return this.documents.filter((doc) => doc.courseId === courseId);
+  }
+
+  public getDocumentById(docId: string): Doc | undefined {
+    return this.documents.find((doc) => doc.id === docId);
+  }
 }
 
 const documentsDB = DocumentsDB.getInstance();
