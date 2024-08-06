@@ -36,9 +36,9 @@ Dahih is available for download on Windows 💻, Debian-based Linux 🐧, and RP
 
 1. Visit our GitHub releases page: [Insert link to GitHub releases]
 2. Select the appropriate download for your operating system.
-   - **Windows**: dahih-al-dofaa-[Version Number].**Setup.exe**
-   - **Debian (Ubuntu)**: dahih-al-dofaa-[Version Number]_amd64.**deb**
-   - **RPM**: dahih-al-dofaa-[Version Number]-1.x86_64.**rpm**
+   - **Windows**: dahih-al-dofaa.Setup.exe
+   - **Debian (Ubuntu)**: dahih-al-dofaa_amd64.deb
+   - **RPM**: dahih-al-dofaa.x86_64.rpm
 3. Download the installation file. ⬇️
 4. Run the installer. 🚀
 5. Once installed, launch Dahih and start exploring its powerful features! 🤩
@@ -174,9 +174,9 @@ yarn make
 
 **Additional Notes:**
 
-Dahih utilizes GitHub Actions for automated builds and releases. The build process is defined in the .github/workflows/publish.yml file. This file outlines the steps involved in building the app for Windows and Linux platforms.
+Dahih utilizes GitHub Actions for automated builds and releases. The build process is defined in the .github/workflows/build.yml file. This file outlines the steps involved in building the app for Windows and Linux platforms.
 
-For detailed insights into the build process, please refer to the publish.yml file. Understanding its contents can be invaluable for troubleshooting build-related issues.
+For detailed insights into the build process, please refer to the build.yml file. Understanding its contents can be invaluable for troubleshooting build-related issues.
 
 By following these steps, you can successfully set up Dahih for development or build it for your system.
 
@@ -191,7 +191,7 @@ By following these steps, you can successfully set up Dahih for development or b
 - **Is Dahih free?**
   Yes, Dahih is completely free and open-source.
 - **What kind of documents can I upload?**
-  Dahih currently supports PDF, DOCX, and PPTX files. The app can only process text within these documents, so images and other non-textual content will be ignored.
+  Dahih currently supports PDF, DOCX, PPTX, EPUB, and TXT files. The app can only process text within these documents, so images and other non-textual content will be ignored.
 - **Is my data private?**
   Yes, your data is completely private. All processing is done locally on your device, and no data is sent to external servers.
 
