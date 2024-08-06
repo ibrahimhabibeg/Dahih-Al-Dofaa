@@ -1,7 +1,7 @@
 import { ipcRenderer, type IpcRendererEvent } from "electron";
 
 const ollama = {
-  isReady: () => ipcRenderer.invoke("ollama:isReady"),
+  isReady: (): Promise<boolean> => ipcRenderer.invoke("ollama:isReady"),
   subscribeToReady: (listener: (_event: IpcRendererEvent) => void) => {
     ipcRenderer.on("ollama:ready", listener);
   },
@@ -11,4 +11,5 @@ const ollama = {
   },
 };
 
+export type IOllamaAPI = typeof ollama;
 export default ollama;

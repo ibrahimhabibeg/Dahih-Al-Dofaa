@@ -1,124 +1,16 @@
-import { Course } from "./main/courses/courses";
-
-interface IModelAPI {
-  getAll: () => Promise<Model[]>;
-  subscribeToAll: (
-    listener: (_event: IpcRendererEvent, models: Model[]) => void
-  ) => void;
-  unsubscribeFromAll: () => void;
-  subscribeToDownloadProgress: (
-    modelId: string,
-    listener: (_event: IpcRendererEvent, status: ProgressResponse) => void
-  ) => void;
-  unsubscribeFromDownloadProgress: (modelId: string) => void;
-  download: (modelId: string) => void;
-  abortDownloading: (modelId: string) => void;
-  delete: (modelId: string) => void;
-  setSelectedEmbedding: (modelId: string) => void;
-  setSelectedLLM: (modelId: string) => void;
-  getSelectedEmbedding: () => Promise<string>;
-  getSelectedLLM: () => Promise<string>;
-  subscribeToSelectedEmbedding: (
-    listener: (_event: IpcRendererEvent, modelId: string) => void
-  ) => void;
-  unsubscribeFromSelectedEmbedding: () => void;
-  subscribeToSelectedLLM: (
-    listener: (_event: IpcRendererEvent, modelId: string) => void
-  ) => void;
-  unsubscribeFromSelectedLLM: () => void;
-}
-
-interface IMessageAPI {
-  getMessages: (courseId: string, chatId: string) => Promise<Message[]>;
-  isLoadingMessage: (courseId: string, chatId: string) => Promise<boolean>;
-  sendMessage: (courseId: string, chatId: string, message: string) => void;
-  subscribeToIsLoadingMessage: (
-    courseId: string,
-    chatId: string,
-    listener: (_event: IpcRendererEvent, isLoading: boolean) => void
-  ) => void;
-  unsubscribeFromIsLoadingMessage: (courseId: string, chatId: string) => void;
-  subscribeToCompleteMessage: (
-    courseId: string,
-    chatId: string,
-    listener: (_event: IpcRendererEvent, message: Message) => void
-  ) => void;
-  unsubscribeFromCompleteMessage: (courseId: string, chatId: string) => void;
-  subscribeToPartialMessage: (
-    courseId: string,
-    chatId: string,
-    listener: (_event: IpcRendererEvent, message: string) => void
-  ) => void;
-  unsubscribeFromPartialMessage: (courseId: string, chatId: string) => void;
-}
-
-interface IChatAPI {
-  subscribeToChats: (
-    courseId: string,
-    listener: (_event: IpcRendererEvent, chats: ChatType[]) => void
-  ) => void;
-  unsubscribeFromChats: (courseId: string) => void;
-  getChats: (courseId: string) => Promise<ChatType[]>;
-  addChat: (courseId: string, chatName?: string) => Promise<ChatType>;
-  removeChat: (courseId: string, chatId: string) => Promise<ChatType[]>;
-  getChat: (courseId: string, chatId: string) => Promise<ChatType>;
-  renameChat: (
-    courseId: string,
-    chatId: string,
-    newTitle: string
-  ) => Promise<void>;
-}
-
-interface IDocumentAPI {
-  get: (courseId: string, docId: string) => Promise<Doc>;
-  getAll: (courseId: string) => Promise<Doc[]>;
-  add: (courseId: string) => Promise<void>;
-  rename: (courseId: string, docId: string, newTitle: string) => Promise<void>;
-  delete: (courseId: string, docId: string) => Promise<void>;
-  isLoading: (courseId: string, documentId: string) => Promise<boolean>;
-  subscribeToIsLoading: (
-    courseId: string,
-    docId: string,
-    listener: (_event: IpcRendererEvent, isLoading: boolean) => void
-  ) => void;
-  unsubscribeFromIsLoading: (courseId: string, docId: string) => void;
-  subscribeToAllDocuments: (
-    courseId: string,
-    listener: (_event: IpcRendererEvent, documents: Doc[]) => void
-  ) => void;
-  unsubscribeFromAllDocuments: (courseId: string) => void;
-  open: (courseId: string, docId: string) => void;
-}
-
-interface ICourseAPI {
-  get: (courseId: string) => Promise<Course>;
-  getAll: () => Promise<Course[]>;
-  add: (courseTitle: string) => Promise<void>;
-  delete: (courseId: string) => Promise<void>;
-  rename: (courseId: string, courseTitle: string) => Promise<void>;
-  subscribeToCourse: (
-    courseId: string,
-    listener: (_event: IpcRendererEvent, course: Course) => void
-  ) => void;
-  unsubscribeFromCourse: (courseId: string) => void;
-  subscribeToAllCourses: (
-    listener: (_event: IpcRendererEvent, courses: Course[]) => void
-  ) => void;
-  unsubscribeFromAllCourses: () => void;
-}
-
-interface IOllamAPI {
-  isReady: () => Promise<boolean>;
-  subscribeToReady: (listener: (_event: IpcRendererEvent) => void) => void;
-  unsubscribeFromReady: () => void;
-}
+import { IDocumentAPI } from "./renderer/preload/document";
+import { IChatAPI } from "./renderer/preload/chat";
+import { IMessageAPI } from "./renderer/preload/message";
+import { ICourseAPI } from "./renderer/preload/course";
+import { IOllamaAPI } from "./renderer/preload/ollama";
+import { IModelAPI } from "./renderer/preload/model";
 
 export interface IAPI {
   message: IMessageAPI;
   chat: IChatAPI;
   document: IDocumentAPI;
   course: ICourseAPI;
-  ollama: IOllamAPI;
+  ollama: IOllamaAPI;
   model: IModelAPI;
 }
 
@@ -127,10 +19,11 @@ declare global {
     api: IAPI;
   }
 
-  type DocType = "pdf" | "docx" | "pptx";
+  type DocType = "pdf" | "docx" | "pptx" | "other";
 
   interface Doc {
     id: string;
+    courseId: string;
     title: string;
     path: string;
     docType: DocType;
@@ -145,12 +38,12 @@ declare global {
   interface Message {
     content: string;
     sender: "human" | "bot";
-    refrencedTexts: RefrencedText[];
+    citations: Citation[];
   }
 
-  interface RefrencedText {
+  interface Citation {
+    documentTitle: string;
     text: string;
-    documentId: string;
   }
 
   type Course = Course;
@@ -199,4 +92,24 @@ declare global {
     isSelectedLlm: boolean;
     isSelectedEmbedding: boolean;
   };
+
+  interface Excerpt {
+    text: string;
+    documentTitle: string;
+    courseId: string;
+    documentId: string;
+    embeddings: number[];
+  }
+
+  type DocumentImportState = Array<{
+    stage: DocumentImportStage;
+    progress: DocumentImportProgress;
+  }>;
+
+  type DocumentImportStage =
+    | "Initialize"
+    | "Parse"
+    | "Generate Excerpts"
+    | "Save Excerpts";
+  type DocumentImportProgress = "Not Started" | "In Progress" | "Finished";
 }

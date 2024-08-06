@@ -51,4 +51,5 @@ const message = {
   },
 };
 
+export type IMessageAPI = typeof message;
 export default message;

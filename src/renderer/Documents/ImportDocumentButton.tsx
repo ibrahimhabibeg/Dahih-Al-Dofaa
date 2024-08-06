@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@mui/material";
 import { Upload } from "@mui/icons-material";
+import importDocuments from "../backend/documents/importDocuments";
 
 type PropsType = {
   courseId: string;
@@ -8,7 +9,7 @@ type PropsType = {
 
 const ImportDocumentButton = ({ courseId }: PropsType) => {
   const handleImport = () => {
-    window.api.document.add(courseId);
+    importDocuments(courseId);
   };
 
   return (

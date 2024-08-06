@@ -1,92 +1,42 @@
-import { ipcMain, dialog, shell } from "electron";
-import DocDB from "./docDB";
-import VectorDB from "./vectorDB";
-import parseDocument from "./parsers";
-import split from "./split";
-import documentLoading from "./documentLoading";
+import {
+  deleteDocument,
+  getDocument,
+  getDocumentsByCourse,
+  importDocuments,
+  openDocument,
+  renameDocument,
+  searchExcerpts,
+  deleteCourse,
+  getDocumentImportState,
+} from "./documentsManager";
+import { ipcMain } from "electron";
 
-export const validExtensions = ["pdf", "pptx", "docx"];
+ipcMain.handle("document:get", async (event, documentId) => {
+  return getDocument(documentId);
+});
 
-ipcMain.handle(
-  "document:add",
-  async (event, courseId: string): Promise<Doc[]> => {
-    const paths = await getDocumentPathFromUser();
-    const docDb = DocDB.getInstance(courseId);
-    if (!paths) return docDb.getDocuments();
-    for (const path of paths) {
-      const { document } = docDb.addDocument(path);
-      addDocumentToVectorDB(courseId, document);
-    }
-  }
-);
+ipcMain.handle("document:getAllByCourse", async (event, courseId) => {
+  return getDocumentsByCourse(courseId);
+});
 
-ipcMain.handle(
-  "document:delete",
-  async (event, courseId: string, documentId: string) => {
-    const docDb = DocDB.getInstance(courseId);
-    await docDb.deleteDocument(documentId);
-    const vectorDb = await VectorDB.getInstance(courseId);
-    await vectorDb.deleteDocument(documentId);
-  }
-);
+ipcMain.handle("document:import", (event, courseId) => {
+  importDocuments(courseId);
+});
 
-ipcMain.handle(
-  "document:rename",
-  async (event, courseId: string, documentId: string, newTitle: string) => {
-    DocDB.getInstance(courseId).renameDocument(documentId, newTitle);
-  }
-);
+ipcMain.handle("document:rename", (event, documentId, newName) => {
+  renameDocument(documentId, newName);
+});
 
-ipcMain.handle("document:getAll", async (event, courseId: string) =>
-  DocDB.getInstance(courseId).getDocuments()
-);
+ipcMain.handle("document:delete", (event, documentId) => {
+  deleteDocument(documentId);
+});
 
-ipcMain.handle(
-  "document:isLoading",
-  async (event, courseId: string, documentId: string) =>
-    documentLoading.isLoading(courseId, documentId)
-);
+ipcMain.handle("document:open", (event, documentId) => {
+  return openDocument(documentId);
+});
 
-ipcMain.handle(
-  "document:get",
-  async (event, courseId: string, documentId: string) =>
-    DocDB.getInstance(courseId).getDocument(documentId)
-);
+ipcMain.handle("document:importState", (event, documentId) => {
+  return getDocumentImportState(documentId);
+});
 
-ipcMain.handle(
-  "document:open",
-  async (event, courseId: string, documentId: string) => {
-    const document = DocDB.getInstance(courseId).getDocument(documentId);
-    shell.openPath(document.path);
-  }
-);
-
-/**
- * This function opens a dialog to get the path of the document from the user.
- * @returns {Promise<string[]>} The path of the document selected by the user.
- */
-const getDocumentPathFromUser = async (): Promise<string[]> => {
-  const { canceled, filePaths } = await dialog.showOpenDialog({
-    properties: ["openFile", "multiSelections"],
-    filters: [
-      {
-        name: "Supported Documents",
-        extensions: validExtensions,
-      },
-    ],
-  });
-  if (!canceled) {
-    return filePaths;
-  }
-  return undefined;
-};
-
-const addDocumentToVectorDB = async (courseId: string, document: Doc) => {
-  documentLoading.addDocument(courseId, document.id);
-  const text = await parseDocument(document);
-  const splits = await split(text);
-  const vectorDb = await VectorDB.getInstance(courseId);
-  const ids = await vectorDb.insert(splits, document.id);
-  documentLoading.removeDocument(courseId, document.id);
-  return ids;
-};
+export { searchExcerpts, deleteCourse };

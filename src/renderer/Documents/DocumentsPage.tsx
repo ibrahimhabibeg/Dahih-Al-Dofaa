@@ -2,7 +2,7 @@ import React from "react";
 import { Typography, Box, List, Divider } from "@mui/material";
 import { useParams } from "react-router-dom";
 import DocumentView from "./DocumentView";
-import useDocuments from "../backend/useDocuments";
+import useCourseDocuments from "../backend/documents/useCourseDocuments";
 import ImportDocumentButton from "./ImportDocumentButton";
 import useCourse from "../backend/useCourse";
 import requiresEmbeddings from "../Requirers/RequiresEmbeddings";
@@ -11,7 +11,7 @@ const DocumentsPage = () => {
   const { courseId } = useParams();
   const course = useCourse(courseId);
 
-  const documents = useDocuments(courseId);
+  const documents = useCourseDocuments(courseId);
 
   return (
     <Box display={"flex"} flexDirection={"column"} width={"80%"}>

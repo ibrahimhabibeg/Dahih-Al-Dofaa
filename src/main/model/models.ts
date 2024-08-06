@@ -52,14 +52,6 @@ export const modelsDescription: ModelDescription[] = [
     minimumRAM: 8,
     type: "embedding",
   },
-  {
-    id: "mxbai-embed-large:335m",
-    name: "MXBAI Embed Large",
-    description: "State-of-the-art large embedding model from mixedbread.ai",
-    size: 670,
-    minimumRAM: 8,
-    type: "embedding",
-  },
 ];
 
 export const isLLMModelId = (modelId: string): modelId is ModelID => {

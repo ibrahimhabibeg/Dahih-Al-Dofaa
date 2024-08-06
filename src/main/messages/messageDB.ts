@@ -55,9 +55,9 @@ class MessageDB {
   public addMessage(
     content: string,
     sender: "human" | "bot",
-    refrencedTexts: RefrencedText[] = []
+    citations: Citation[] = []
   ): Message {
-    const message: Message = { content, sender, refrencedTexts };
+    const message: Message = { content, sender, citations };
     this.messages.push(message);
     this.save();
     notifyCompleteMessage(this.courseId, this.chatId, message);
