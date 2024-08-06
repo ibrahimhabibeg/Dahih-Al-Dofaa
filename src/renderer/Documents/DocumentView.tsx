@@ -12,7 +12,7 @@ import {
 import { Delete, Edit } from "@mui/icons-material";
 import DocumentIcon from "./DocumentIcon";
 import useIsLoadingDocument from "../backend/useIsLoadingDocument";
-import openDocument from "../backend/openDocument";
+import openDocument from "../backend/documents/openDocument";
 
 type DocumentViewProps = {
   document: Doc;
@@ -59,7 +59,7 @@ const DocumentView = ({ document, courseId }: DocumentViewProps) => {
   } else {
     return (
       <ListItem>
-        <ListItemButton onClick={() => openDocument(courseId, document.id)}>
+        <ListItemButton onClick={() => openDocument(document.id)}>
           <ListItemIcon>
             <DocumentIcon docType={document.docType} />
           </ListItemIcon>

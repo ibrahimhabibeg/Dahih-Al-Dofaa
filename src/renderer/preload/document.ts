@@ -16,6 +16,9 @@ const document = {
   delete: (documentId: string): void => {
     ipcRenderer.invoke("document:delete", documentId);
   },
+  open: (documentId: string): void => {
+    ipcRenderer.invoke("document:open", documentId);
+  },
   subuscribeToAll: (callback: (documents: Doc[]) => void): void => {
     ipcRenderer.on("document:update:all", (_, documents) => {
       callback(documents);
