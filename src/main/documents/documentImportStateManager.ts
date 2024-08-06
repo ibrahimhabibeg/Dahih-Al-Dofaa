@@ -11,7 +11,11 @@ const inititalState: DocumentImportState = [
     progress: "Not Started",
   },
   {
-    stage: "Generate Excerpts",
+    stage: "Split",
+    progress: "Not Started",
+  },
+  {
+    stage: "Embed",
     progress: "Not Started",
   },
   {
@@ -43,7 +47,9 @@ class DocumentImportStateManager {
   public updateDocumentImportState(
     documentID: string,
     stage: DocumentImportStage,
-    progress: DocumentImportProgress
+    progress: DocumentImportProgress,
+    completed?: number,
+    total?: number
   ) {
     Logger.info(
       `Updating document ${documentID} state to ${stage} - ${progress}`
@@ -58,6 +64,8 @@ class DocumentImportStateManager {
           return {
             ...step,
             progress,
+            completed,
+            total,
           };
         }
         return step;

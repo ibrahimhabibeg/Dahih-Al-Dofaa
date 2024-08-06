@@ -20,7 +20,7 @@ const LoadingDocument = ({ document, importState }: PropsType) => {
         <Typography>{document.title}</Typography>
       </ListItemText>
       <List>
-        {importState.map(({ stage, progress }, index) => (
+        {importState.map(({ stage, progress, completed, total }, index) => (
           <ListItem key={index}>
             <ListItemIcon>
               {progress === "Not Started" ? (
@@ -32,7 +32,9 @@ const LoadingDocument = ({ document, importState }: PropsType) => {
               )}
             </ListItemIcon>
             <ListItemText>
-              <Typography>{stage}</Typography>
+              <Typography>
+                {stage} {completed && total ? `${completed}/${total}` : ""}
+              </Typography>
             </ListItemText>
           </ListItem>
         ))}

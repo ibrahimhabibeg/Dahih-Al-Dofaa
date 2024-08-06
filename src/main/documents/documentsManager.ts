@@ -1,56 +1,11 @@
-import { readPaths } from "./pathsReader";
 import documentsDB from "./documentsDB";
-import { parseDocument } from "./documentParser";
-import { generateExcerpts } from "./excerptsGenerator";
 import ExcerptsDB from "./excerptDB";
 import { embed } from "./embeddings";
 import { shell } from "electron";
 import logger from "electron-log";
 import documentImportStateManager from "./documentImportStateManager";
 
-export const importDocuments = async (courseID: string): Promise<void> => {
-  logger.info(`Importing documents for course ${courseID}`);
-  const paths = await readPaths();
-  logger.info(`Found ${paths.length} documents`);
-  const documents = paths.map((path) =>
-    documentsDB.createDocument(path, courseID)
-  );
-  for (const document of documents) {
-    documentImportStateManager.addDocumentToImporting(document.id);
-  }
-  for (const document of documents) {
-    documentImportStateManager.updateDocumentImportState(
-      document.id,
-      "Parse",
-      "In Progress"
-    );
-    const parsedDocument = await parseDocument(document);
-    documentImportStateManager.updateDocumentImportState(
-      document.id,
-      "Parse",
-      "Finished"
-    );
-    documentImportStateManager.updateDocumentImportState(
-      document.id,
-      "Generate Excerpts",
-      "In Progress"
-    );
-    const excerpts = await generateExcerpts(parsedDocument, document);
-    documentImportStateManager.updateDocumentImportState(
-      document.id,
-      "Generate Excerpts",
-      "Finished"
-    );
-    documentImportStateManager.updateDocumentImportState(
-      document.id,
-      "Save Excerpts",
-      "In Progress"
-    );
-    const excerptDB = await ExcerptsDB.getInstance();
-    await excerptDB.insert(excerpts);
-    documentImportStateManager.removeDocumentFromImporting(document.id);
-  }
-};
+export { importDocuments } from "./documentImport";
 
 export const getDocumentsByCourse = async (courseID: string) => {
   logger.info(`Getting documents for course ${courseID}`);

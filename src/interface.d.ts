@@ -104,12 +104,15 @@ declare global {
   type DocumentImportState = Array<{
     stage: DocumentImportStage;
     progress: DocumentImportProgress;
+    completed?: number;
+    total?: number;
   }>;
 
   type DocumentImportStage =
     | "Initialize"
     | "Parse"
-    | "Generate Excerpts"
+    | "Split"
+    | "Embed"
     | "Save Excerpts";
   type DocumentImportProgress = "Not Started" | "In Progress" | "Finished";
 }
