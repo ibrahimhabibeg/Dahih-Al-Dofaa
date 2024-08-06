@@ -1,4 +1,3 @@
-import Logger from "electron-log";
 import { notifyDocumentImportUpdate } from "./notifier";
 
 const inititalState: DocumentImportState = [
@@ -51,9 +50,6 @@ class DocumentImportStateManager {
     completed?: number,
     total?: number
   ) {
-    Logger.info(
-      `Updating document ${documentID} state to ${stage} - ${progress}`
-    );
     if (!this.documentStates.has(documentID)) {
       this.addDocumentToImporting(documentID);
     }
@@ -75,13 +71,11 @@ class DocumentImportStateManager {
   }
 
   public addDocumentToImporting(documentID: string) {
-    Logger.info(`Adding document ${documentID} to importing`);
     this.documentStates.set(documentID, inititalState);
     notifyDocumentImportUpdate(documentID, inititalState);
   }
 
   public removeDocumentFromImporting(documentID: string) {
-    Logger.info(`Removing document ${documentID} from importing`);
     this.documentStates.delete(documentID);
     notifyDocumentImportUpdate(documentID, null);
   }
