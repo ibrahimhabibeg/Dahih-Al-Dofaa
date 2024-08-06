@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import { app } from "electron";
 import { v4 as uuidv4 } from "uuid";
-import { notifyDocumentsUpdate } from "./notifier";
+import { notifyCourseDocumentsUpdate, notifyDocumentsUpdate } from "./notifier";
 
 class DocumentsDB {
   private static instance: DocumentsDB | null = null;
@@ -116,6 +116,10 @@ class DocumentsDB {
 
   public addDocument(document: Doc): void {
     this.updateDocuments([...this.documents, document]);
+    notifyCourseDocumentsUpdate(
+      document.courseId,
+      this.getDocumentsByCourseId(document.courseId)
+    );
   }
 
   public getDocumentsByCourseId(courseId: string): Doc[] {
@@ -128,7 +132,14 @@ class DocumentsDB {
 
   public deleteDocument(docId: string): void {
     this.deletePhysicalDocument(docId);
-    this.updateDocuments(this.documents.filter((doc) => doc.id !== docId));
+    const document = this.getDocumentById(docId);
+    if (document) {
+      this.updateDocuments(this.documents.filter((doc) => doc.id !== docId));
+      notifyCourseDocumentsUpdate(
+        document.courseId,
+        this.getDocumentsByCourseId(document.courseId)
+      );
+    }
   }
 
   private deletePhysicalDocument(docID: string): void {
@@ -143,14 +154,25 @@ class DocumentsDB {
     for (const document of documents) {
       this.deleteDocument(document.id);
     }
+    notifyCourseDocumentsUpdate(
+      courseId,
+      this.getDocumentsByCourseId(courseId)
+    );
   }
 
   public renameDocument(docId: string, newName: string): void {
-    this.updateDocuments(
-      this.documents.map((doc) =>
-        doc.id === docId ? { ...doc, title: newName } : doc
-      )
-    );
+    const document = this.getDocumentById(docId);
+    if (document) {
+      this.updateDocuments(
+        this.documents.map((doc) =>
+          doc.id === docId ? { ...doc, title: newName } : doc
+        )
+      );
+      notifyCourseDocumentsUpdate(
+        document.courseId,
+        this.getDocumentsByCourseId(document.courseId)
+      );
+    }
   }
 
   private updateDocuments(documents: Doc[]): void {

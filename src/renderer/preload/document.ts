@@ -25,6 +25,18 @@ const document = {
     // Warning: Removing ALL listeners may cause unintended side effects
     ipcRenderer.removeAllListeners("document:update:all");
   },
+  subuscribeToCourseDocuments: (
+    courseId: string,
+    callback: (documents: Doc[]) => void
+  ): void => {
+    ipcRenderer.on(`document:update:course:${courseId}`, (_, documents) => {
+      callback(documents);
+    });
+  },
+  unsubscribeFromCourseDocuments: (courseId: string): void => {
+    // Warning: Removing ALL listeners may cause unintended side effects
+    ipcRenderer.removeAllListeners(`document:update:course:${courseId}`);
+  },
 };
 
 export type IDocumentAPI = typeof document;
