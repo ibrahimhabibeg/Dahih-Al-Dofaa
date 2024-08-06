@@ -200,4 +200,12 @@ declare global {
     isSelectedLlm: boolean;
     isSelectedEmbedding: boolean;
   };
+
+  interface Excerpt {
+    text: string;
+    documentTitle: string;
+    courseId: string;
+    documentId: string;
+    embeddings: number[];
+  }
 }
