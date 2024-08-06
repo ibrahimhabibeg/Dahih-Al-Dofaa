@@ -6,11 +6,11 @@ import {
 } from "@langchain/core/prompts";
 import { ChatOllama } from "@langchain/ollama";
 import { StringOutputParser } from "@langchain/core/output_parsers";
-import VectorDB from "../documents/vectorDB";
 import loadingMessage from "./loadingMessages";
 import { notifyPartialMessage } from "./messageNotifier";
 import { getLLM } from "../model";
 import { getOllamaHost } from "../ollama";
+import { searchExcerpts } from "../documents";
 
 const sendMessage = async (
   courseId: string,
@@ -42,12 +42,11 @@ const sendMessage = async (
       llm
     );
 
-  const vectorDB = await VectorDB.getInstance(courseId);
-  const documents = await vectorDB.search(contextualizedQuestion);
+  const excerpts = await searchExcerpts(contextualizedQuestion, courseId);
 
   const stream = await respondToQuestion(
     sanitize(message),
-    documents.map((doc) => sanitize(doc.text)),
+    excerpts.map((excerpt) => sanitize(excerpt.text)),
     chatHistory,
     llm
   );
@@ -58,7 +57,14 @@ const sendMessage = async (
     notifyPartialMessage(courseId, chatId, answer);
   }
   notifyPartialMessage(courseId, chatId, "");
-  messageDB.addMessage(answer, "bot", documents);
+  messageDB.addMessage(
+    answer,
+    "bot",
+    excerpts.map((excerpt) => ({
+      text: excerpt.text,
+      documentId: excerpt.documentId,
+    }))
+  );
   loadingMessage.removeLoadingMessageChat(courseId, chatId);
 };
 
