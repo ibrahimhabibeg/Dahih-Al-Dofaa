@@ -23,21 +23,9 @@ const setTheme = (theme: "light" | "dark"): void => {
  * @returns The folder where ollama models are installed
  */
 export const getModelInstallationFolder = (): string => {
-  return configFileManager.getKeyValue("modelInstallationLocation");
-};
-
-/**
- * Set the folder where ollama models are installed in the case of using the prepackaged server
- * If the folder does not exist, it will be created
- * @param location The folder where ollama models are installed
- */
-const setModelInstallationFolder = (location: string): void => {
-  const oldLocation = getModelInstallationFolder();
-  if (!fs.existsSync(location)) {
-    fs.mkdirSync(location, { recursive: true });
+  const folder = configFileManager.getKeyValue("modelInstallationLocation");
+  if (!fs.existsSync(folder)) {
+    fs.mkdirSync(folder, { recursive: true });
   }
-  fs.rmdirSync(location, { recursive: true });
-  fs.cpSync(oldLocation, location, { recursive: true });
-  fs.rmdirSync(oldLocation, { recursive: true });
-  configFileManager.setKeyValue("modelInstallationLocation", location);
+  return folder;
 };

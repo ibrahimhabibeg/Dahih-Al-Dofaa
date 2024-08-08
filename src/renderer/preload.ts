@@ -6,6 +6,7 @@ import document from "./preload/document";
 import course from "./preload/course";
 import model from "./preload/model";
 import config from "./preload/config";
+import modelsTransfer from "./preload/modelsTransfer";
 
 const api: Window["api"] = {
   message,
@@ -15,6 +16,7 @@ const api: Window["api"] = {
   ollama,
   model,
   config,
+  modelsTransfer,
 };
 
 contextBridge.exposeInMainWorld("api", api);
