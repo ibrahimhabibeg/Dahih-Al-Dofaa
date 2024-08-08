@@ -28,7 +28,8 @@ const sendMessage = async (
       message.sender === "human"
         ? new HumanMessage(sanitize(message.content))
         : new AIMessage(sanitize(message.content))
-    );
+    )
+    .slice(-8);
   const model = await getLLM();
   const llm = new ChatOllama({
     model,
