@@ -7,6 +7,7 @@ const log = logger.log;
 import os from "os";
 import dotenv from "dotenv";
 import { notifyOllamaReady } from "./notifier";
+import { getModelInstallationFolder } from "../config";
 dotenv.config();
 
 type OllamaInstanceType = "readyOnDevice" | "startedFromDevice" | "prepackaged";
@@ -150,7 +151,7 @@ class OllamaStarter {
   private async attemptStartPrepackaged(): Promise<void> {
     return new Promise((resolve, reject) => {
       const host = process.env.OLLAMA_HOST || "http://localhost:11434";
-      const modelPath = path.join(app.getPath("userData"), "ollama", "models");
+      const modelPath = getModelInstallationFolder();
       if (!fs.existsSync(modelPath)) {
         fs.mkdirSync(modelPath, { recursive: true });
       }

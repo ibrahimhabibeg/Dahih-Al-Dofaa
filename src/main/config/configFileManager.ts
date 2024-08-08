@@ -5,10 +5,16 @@ import Logger from "electron-log";
 
 interface IConfigFile {
   theme: "light" | "dark";
+  modelInstallationLocation: string;
 }
 
 const defaultConfig: IConfigFile = {
   theme: "dark",
+  modelInstallationLocation: path.join(
+    app.getPath("userData"),
+    "ollama",
+    "models"
+  ),
 };
 
 class ConfigFileManager {
@@ -76,7 +82,7 @@ class ConfigFileManager {
    * @param key The key to get the value for
    * @returns The value of the key
    */
-  public getKeyValue(key: keyof IConfigFile): IConfigFile[keyof IConfigFile] {
+  public getKeyValue<K extends keyof IConfigFile>(key: K): IConfigFile[K] {
     return this.config[key];
   }
 
@@ -85,9 +91,9 @@ class ConfigFileManager {
    * @param key The key to set the value for
    * @param value The value to set
    */
-  public setKeyValue(
-    key: keyof IConfigFile,
-    value: IConfigFile[keyof IConfigFile]
+  public setKeyValue<K extends keyof IConfigFile>(
+    key: K,
+    value: IConfigFile[K]
   ): void {
     this.config[key] = value;
     this.saveConfig();
