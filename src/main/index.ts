@@ -8,6 +8,8 @@ import { updateElectronApp } from "update-electron-app";
 updateElectronApp({ logger });
 
 // IPC handlers
+import "./modelsTransfer";
+import "./config";
 import "./chats";
 import "./messages";
 import "./courses";

@@ -12,6 +12,7 @@ import { getLLM } from "../model";
 import { getOllamaHost } from "../ollama";
 import { searchExcerpts } from "../documents";
 import Logger from "electron-log";
+import { getModelTemperature } from "../config";
 
 const sendMessage = async (
   courseId: string,
@@ -28,11 +29,13 @@ const sendMessage = async (
       message.sender === "human"
         ? new HumanMessage(sanitize(message.content))
         : new AIMessage(sanitize(message.content))
-    );
+    )
+    .slice(-8);
   const model = await getLLM();
   const llm = new ChatOllama({
     model,
     baseUrl: getOllamaHost(),
+    temperature: getModelTemperature(),
   });
 
   let contextualizedQuestion = message;
