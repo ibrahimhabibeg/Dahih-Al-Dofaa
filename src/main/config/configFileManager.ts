@@ -6,6 +6,7 @@ import Logger from "electron-log";
 interface IConfigFile {
   theme: "light" | "dark";
   modelInstallationLocation: string;
+  temperature: number;
 }
 
 const defaultConfig: IConfigFile = {
@@ -15,6 +16,7 @@ const defaultConfig: IConfigFile = {
     "ollama",
     "models"
   ),
+  temperature: 0.2,
 };
 
 class ConfigFileManager {
@@ -95,6 +97,7 @@ class ConfigFileManager {
     key: K,
     value: IConfigFile[K]
   ): void {
+    Logger.info(`Setting config key ${key} to ${value}`);
     this.config[key] = value;
     this.saveConfig();
   }

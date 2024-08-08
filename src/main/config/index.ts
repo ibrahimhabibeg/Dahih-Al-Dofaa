@@ -1,5 +1,6 @@
 import configFileManager from "./configFileManager";
 import { ipcMain } from "electron";
+import Logger from "electron-log";
 import fs from "fs";
 
 ipcMain.handle("config:theme:get", async () => {
@@ -9,6 +10,18 @@ ipcMain.handle("config:theme:get", async () => {
 ipcMain.handle("config:theme:set", async (_, theme: "light" | "dark") => {
   setTheme(theme);
 });
+
+ipcMain.handle("config:modelTemperature:get", async () => {
+  return getModelTemperature();
+});
+
+ipcMain.handle(
+  "config:modelTemperature:set",
+  async (_, temperature: number) => {
+    setModelTemperature(temperature);
+    return getModelTemperature();
+  }
+);
 
 const getTheme = (): "light" | "dark" => {
   return configFileManager.getKeyValue("theme");
@@ -28,4 +41,16 @@ export const getModelInstallationFolder = (): string => {
     fs.mkdirSync(folder, { recursive: true });
   }
   return folder;
+};
+
+export const getModelTemperature = (): number => {
+  return configFileManager.getKeyValue("temperature");
+};
+
+export const setModelTemperature = (temperature: number): void => {
+  if (temperature < 0 || temperature > 1) {
+    Logger.error(`Invalid temperature value: ${temperature}`);
+    return;
+  }
+  configFileManager.setKeyValue("temperature", temperature);
 };

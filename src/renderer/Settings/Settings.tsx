@@ -12,6 +12,7 @@ import { ArrowForward, AutoAwesome, Calculate } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import ExportModels from "./ExportModels";
 import ImportModels from "./ImportModels";
+import Temperature from "./Temperature";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -45,6 +46,7 @@ const Settings = () => {
           </ListItemButton>
           <ExportModels />
           <ImportModels />
+          <Temperature />
         </List>
       </Box>
     </Box>
