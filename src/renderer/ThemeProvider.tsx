@@ -4,6 +4,8 @@ import {
   createTheme,
 } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
+import getTheme from "./backend/config/getTheme";
+import setTheme from "./backend/config/setTheme";
 
 export const ThemeContext = createContext({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -35,27 +37,17 @@ const lightTheme = createTheme({
   },
 });
 
-const IS_DARK_KEY = "isDark";
-
 const ThemeProvider = ({ children }: { children: React.JSX.Element }) => {
   const [isDark, setIsDark] = useState<boolean>(true);
 
-  const setDefaultState = async (): Promise<void> => {
-    const cachedValue = localStorage.getItem(IS_DARK_KEY);
-    if (cachedValue == null) {
-      setIsDark(true);
-      localStorage.setItem(IS_DARK_KEY, "true");
-    } else {
-      setIsDark(cachedValue === "true");
-    }
-  };
-
   useEffect(() => {
-    setDefaultState();
+    getTheme().then((theme) => {
+      setIsDark(theme === "dark");
+    });
   }, []);
 
   const toggleTheme = (): void => {
-    localStorage.setItem(IS_DARK_KEY, String(!isDark));
+    setTheme(isDark ? "light" : "dark");
     setIsDark((val) => !val);
   };
 

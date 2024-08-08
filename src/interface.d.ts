@@ -4,6 +4,7 @@ import { IMessageAPI } from "./renderer/preload/message";
 import { ICourseAPI } from "./renderer/preload/course";
 import { IOllamaAPI } from "./renderer/preload/ollama";
 import { IModelAPI } from "./renderer/preload/model";
+import { IConfigAPI } from "./renderer/preload/config";
 
 export interface IAPI {
   message: IMessageAPI;
@@ -12,6 +13,7 @@ export interface IAPI {
   course: ICourseAPI;
   ollama: IOllamaAPI;
   model: IModelAPI;
+  config: IConfigAPI;
 }
 
 declare global {
