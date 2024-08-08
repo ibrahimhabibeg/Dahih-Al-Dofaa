@@ -33,13 +33,14 @@ class ConfigFileManager {
   /**
    * Load the config file from the given path if it exists.
    * Otherwise create a default config file at the given path and return it.
+   * If the config file is missing properties, they will be added with default values.
    * @param configFilePath The path to the config file
    * @returns The loaded or created config
    */
   private static loadConfigFromFile(configFilePath: string): IConfigFile {
     try {
       const config = JSON.parse(fs.readFileSync(configFilePath, "utf-8"));
-      return config;
+      return { ...defaultConfig, ...config };
     } catch (e) {
       Logger.error(`Failed to load config file: ${e}`);
       return ConfigFileManager.createDefaultConfigFile(configFilePath);
