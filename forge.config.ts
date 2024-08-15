@@ -38,6 +38,16 @@ const config: ForgeConfig = {
         genericName: "AI Assistant",
       },
     }),
+    {
+      name: "@electron-forge/maker-appx",
+      config: {
+        makeVersionWinStoreCompatible: true,
+        packageName: "IbrahimHabib.DahihAlDofaa",
+        packageDisplayName: "Dahih Al Dofaa",
+        publisher: "CN=DD491B5B-784B-4745-A126-1F3F7715F281",
+        publisherDisplayName: "Ibrahim Habib",
+      },
+    },
   ],
   plugins: [
     new AutoUnpackNativesPlugin({}),

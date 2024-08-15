@@ -9,10 +9,13 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "makeAppx": "electron-forge make --targets=\"@electron-forge/maker-appx\"",
+    "makeSquirrel": "electron-forge make --targets=\"@electron-forge/maker-squirrel\""
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.4.0",
+    "@electron-forge/maker-appx": "^7.4.0",
     "@electron-forge/maker-deb": "^7.4.0",
     "@electron-forge/maker-rpm": "^7.4.0",
     "@electron-forge/maker-squirrel": "^7.4.0",
