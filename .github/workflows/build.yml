@@ -47,7 +47,7 @@ jobs:
       - name: delete zip file
         run: Remove-Item extraResources/ollama/ollama-windows-amd64.zip
       - name: build
-        run: yarn run make
+        run: yarn run makeSquirrel
       - name: Archive Artifacts
         uses: actions/upload-artifact@v4
         with:
