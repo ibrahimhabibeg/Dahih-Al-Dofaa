@@ -46,6 +46,7 @@ const config: ForgeConfig = {
         packageDisplayName: "Dahih Al Dofaa",
         publisher: "CN=DD491B5B-784B-4745-A126-1F3F7715F281",
         publisherDisplayName: "Ibrahim Habib",
+        assets: './build/appx',
       },
     },
   ],
