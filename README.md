@@ -34,7 +34,7 @@ Experience the future of learning with Dahih. Get accurate answers, deepen your 
 
 Dahih is available for download on Windows 💻, Debian-based Linux 🐧, and RPM-based Linux systems 🖥️. To get started, follow these simple steps:
 
-1. Visit our GitHub releases page: [Insert link to GitHub releases]
+1. Visit our GitHub [releases page:](https://github.com/ibrahimhabibeg/Dahih-Al-Dofaa/releases)
 2. Select the appropriate download for your operating system.
    - **Windows**: dahih-al-dofaa.Setup.exe
    - **Debian (Ubuntu)**: dahih-al-dofaa_amd64.deb
